@@ -1,0 +1,10 @@
+.flex { display: flex; flex-direction: row; }
+.flex-v { display: flex; flex-direction: column; }
+.flex-between { justify-content: space-between; }
+.flex-around { justify-content: space-around; }
+.flex-grow { flex: 1; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+.flex-end { justify-content: flex-end; }
+
+.pointer { cursor: pointer; }
