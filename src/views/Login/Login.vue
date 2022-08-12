@@ -2,13 +2,11 @@
 import { onMounted, reactive, ref } from 'vue'
 import { getCode, ILoginForm } from '@/api/user'
 import UserStore from '@/store/user'
-import I18nStore from '@/store/i18n'
 import { FormInstance, FormRules } from 'element-plus'
-import i18n, { Lang } from '@/locale'
+import i18n from '@/locale'
 
 const t = i18n.global.t
 const userStore = UserStore()
-const i18nStore = I18nStore()
 const form = reactive<ILoginForm>({ username: 'admin', password: '123456', code: '' })
 const rules = reactive<FormRules>({
     username: [{ required: true, message: t('login.error.username'), trigger: 'blur' }],
@@ -21,10 +19,6 @@ const formRef = ref<FormInstance>()
 onMounted(() => {
     getCode_()
 })
-
-const langChange = (value: Lang) => {
-    i18nStore.changeLang(value)
-}
 
 const getCode_ = async () => {
     const { data } = await getCode()
@@ -42,17 +36,7 @@ const submit = () => {
 
 <template>
     <div class="login">
-        <div class="login-lang flex flex-end pointer">
-            <el-dropdown trigger="click" @command="langChange">
-                <SvgIcon name="lang" />
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item :command="Lang.ZH">简体中文</el-dropdown-item>
-                        <el-dropdown-item :command="Lang.EN">English</el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </el-dropdown>
-        </div>
+        <ChangeLocale class="login-change-locale" />
         <div class="login-form">
             <p class="login-form-title" v-t="'login.title'" />
             <el-form :model="form" :rules="rules" ref="formRef" size="large">
@@ -101,13 +85,10 @@ const submit = () => {
     height: 100%;
     background: url("/src/assets/svg/login_bg.svg") 15% 65% no-repeat;
     background-color: #fff;
-    .login-lang {
+    .login-change-locale {
         position: absolute;
-        top: 16px;
-        right: 16px;
-        .svg-icon {
-            outline: 0;
-        }
+        top: 15px;
+        right: 30px;
     }
     .login-form {
         position: absolute;
@@ -118,7 +99,6 @@ const submit = () => {
         top: calc(50% / 2);
         box-sizing: border-box;
         border-radius: 4px;
-        border: 4px solid rgb(153, 212, 252);
         backdrop-filter: blur(20px);
         .login-form-title {
             text-align: center;

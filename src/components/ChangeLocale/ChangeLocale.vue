@@ -1,0 +1,49 @@
+<script lang="ts" setup>
+import { useI18n } from 'vue-i18n'
+import I18nStore from '@/store/i18n'
+import { Lang } from '@/locale'
+
+const { showLocale } = defineProps({
+    showLocale: {
+        type: Boolean,
+        default: true
+    }
+})
+
+const i18nStore = I18nStore()
+const i18n = useI18n()
+
+const langChange = (value: Lang) => {
+    i18n.locale.value = value
+    i18nStore.changeLang(value)
+}
+</script>
+
+<template>
+    <div class="change-locale pointer">
+        <el-dropdown  trigger="click" @command="langChange">
+            <div class="flex flex-middle flex-end ">
+                <SvgIcon name="lang" />
+                <span class="show-locale" v-if="showLocale">{{ i18nStore.lang === 'zh' ? '简体中文' : 'English' }}</span>
+            </div>
+            <template #dropdown>
+                <el-dropdown-menu>
+                    <el-dropdown-item :command="Lang.ZH">简体中文</el-dropdown-item>
+                    <el-dropdown-item :command="Lang.EN">English</el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown>
+    </div>
+</template>
+
+<style lang="scss" scoped>
+.change-locale {
+    .svg-icon {
+        outline: 0;
+    }
+    .show-locale {
+        color: #606266;
+        font-size: 13px;
+    }
+}
+</style>
