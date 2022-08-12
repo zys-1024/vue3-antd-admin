@@ -40,9 +40,10 @@ const langChange = (value: Lang) => {
 .change-locale {
     .svg-icon {
         outline: 0;
+        color: var(--text-color);
     }
     .show-locale {
-        color: #606266;
+        color: var(--text-color);
         font-size: 13px;
     }
 }

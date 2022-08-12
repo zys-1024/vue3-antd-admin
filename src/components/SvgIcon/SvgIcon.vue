@@ -22,7 +22,7 @@ const svgClass = computed(() => {
 </script>
 
 <template>
-    <svg :class="svgClass" v-bind="$attrs" :style="{ color }">
+    <svg :class="svgClass" v-bind="$attrs">
         <use :xlink:href="iconName" />
     </svg>
 </template>

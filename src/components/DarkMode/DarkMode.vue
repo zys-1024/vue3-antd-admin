@@ -1,0 +1,54 @@
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue'
+import { useDark, useToggle } from '@vueuse/core'
+
+const isDark = useDark({
+    storageKey: 'theme-mode',
+    valueLight: 'light',
+    valueDark: 'dark'
+})
+const toggle = useToggle(isDark)
+const dark = ref<boolean>(false)
+
+onMounted(() => {
+	dark.value = window.localStorage.getItem('theme-mode') === 'dark'
+})
+
+const change = () => {
+	dark.value = toggle()
+}
+</script>
+
+<template>
+	<div class="z-switch pointer" @click="change">
+		<SvgIcon :name="dark ? 'moon' : 'sun'" :class="[dark ? 'dark' : '']" />
+	</div>
+</template>
+
+<style lang="scss" scoped>
+    .z-switch {
+        position: relative;
+        width: 40px;
+		height: 20px;
+        border-radius: 30px;
+        border: 1px solid var(--el-border-color);
+        background: var(--bg-color-mute);
+		transition: background .3s;
+        .svg-icon {
+			position: absolute;
+			width: 18px;
+			height: 18px;
+			left: 0;
+			border-radius: 50%;
+			color: var(--text-color);
+			background-color: var(--z-dark-switch-action-bg);
+			padding: 2px;
+			box-sizing: border-box;
+			margin: 0;
+			transition: all .3s;
+		}
+		.svg-icon.dark {
+			left: calc(100% - 18px);
+		}
+    }
+</style>

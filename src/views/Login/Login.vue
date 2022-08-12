@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch, nextTick } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { getCode, ILoginForm } from '@/api/user'
 import UserStore from '@/store/user'
-import { FormInstance, FormRules } from 'element-plus'
+import { FormInstance } from 'element-plus'
 import i18n from '@/locale'
 
 const t = i18n.global.t
@@ -44,7 +44,10 @@ const submit = () => {
 
 <template>
     <div class="login">
-        <ChangeLocale class="login-change-locale" />
+        <div class="login-other flex">
+            <DarkMode />
+            <ChangeLocale class="login-change-locale" />
+        </div>
         <div class="login-form">
             <p class="login-form-title" v-t="'login.title'" />
             <el-form :model="form" :rules="rules" ref="formRef" size="large">
@@ -92,11 +95,15 @@ const submit = () => {
     width: 100%;
     height: 100%;
     background: url("/src/assets/svg/login_bg.svg") 15% 65% no-repeat;
-    background-color: #fff;
-    .login-change-locale {
+    .login-other {
         position: absolute;
         top: 15px;
         right: 30px;
+        align-items: baseline;
+        .el-switch { display: block; }
+        .login-change-locale {
+            margin-left: 15px;
+        }
     }
     .login-form {
         position: absolute;
@@ -112,6 +119,7 @@ const submit = () => {
             text-align: center;
             font-size: 30px;
             margin-bottom: 50px;
+            color: var(--text-color);
         }
         .login-form-verify {
             width: 100%;
