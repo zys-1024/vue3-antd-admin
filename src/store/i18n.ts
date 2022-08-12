@@ -5,7 +5,7 @@ interface IState { lang: Lang }
 
 const i18nStore = defineStore('i18n', {
     state: (): IState => ({
-        lang: Lang.ZH
+        lang: (window.localStorage.getItem('lang') || window.navigator.language.toLocaleLowerCase().split('-')[0] || 'zh') as Lang
     }),
     actions: {
         changeLang(lang: Lang) {

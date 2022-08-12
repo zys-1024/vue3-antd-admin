@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch, nextTick } from 'vue'
 import { getCode, ILoginForm } from '@/api/user'
 import UserStore from '@/store/user'
 import { FormInstance, FormRules } from 'element-plus'
@@ -8,16 +8,24 @@ import i18n from '@/locale'
 const t = i18n.global.t
 const userStore = UserStore()
 const form = reactive<ILoginForm>({ username: 'admin', password: '123456', code: '' })
-const rules = reactive<FormRules>({
+// 语言变更时，表单验证信息跟着改变（不使用computed表单验证信息的语言不会跟着变）
+const rules = computed(() => ({
     username: [{ required: true, message: t('login.error.username'), trigger: 'blur' }],
     password: [{ required: true, message: t('login.error.password'), trigger: 'blur' }],
     code: [{ required: true, message: t('login.error.code'), trigger: 'blur' }]
-})
+}))
 const code = ref<string>('')
 const formRef = ref<FormInstance>()
 
 onMounted(() => {
     getCode_()
+})
+
+watch(() => i18n.global.locale.value , () => {
+    setTimeout(() => {
+        // 语言切换时会自动触发表单验证显示验证信息，使用clearValidate清理验证信息
+        formRef.value?.clearValidate()
+    }, 0)
 })
 
 const getCode_ = async () => {
