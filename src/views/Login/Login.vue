@@ -49,42 +49,51 @@ const submit = () => {
             <ChangeLocale class="login-change-locale" />
         </div>
         <div class="login-form">
-            <p class="login-form-title" v-t="'login.title'" />
-            <el-form :model="form" :rules="rules" ref="formRef" size="large">
-                <el-form-item prop="username">
-                    <el-input v-model="form.username" :placeholder="$t('login.placeholder.username')">
-                        <template #prefix>
-                            <el-icon>
-                                <i-ep-user />
-                            </el-icon>
-                        </template>
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input v-model="form.password" :placeholder="$t('login.placeholder.password')">
-                        <template #prefix>
-                            <el-icon>
-                                <i-ep-lock />
-                            </el-icon>
-                        </template>
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="code">
-                    <div class="login-form-verify flex flex-between flex-nowrap">
-                        <el-input v-model="form.code" :placeholder="$t('login.placeholder.code')">
+            <div class="login-form-header flex flex-center flex-middle">
+                <SvgIcon name="vite" />
+                <h1 class="login-form-title" v-t="'login.title'" />
+            </div>
+            <div class="flex">
+                <div class="login-form-left">
+                    <div></div>
+                </div>
+                <el-form :model="form" :rules="rules" ref="formRef" size="large">
+                    <h2>SignIn</h2>
+                    <el-form-item prop="username">
+                        <el-input v-model="form.username" :placeholder="$t('login.placeholder.username')">
                             <template #prefix>
                                 <el-icon>
-                                    <i-ep-basketball />
+                                    <i-ep-user />
                                 </el-icon>
                             </template>
                         </el-input>
-                        <span class="login-form-verify-code pointer" @click="getCode_" v-html="code"></span>
-                    </div>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" style="width: 100%;" @click="submit" v-t="'login.submit'" />
-                </el-form-item>
-            </el-form>
+                    </el-form-item>
+                    <el-form-item prop="password">
+                        <el-input v-model="form.password" :placeholder="$t('login.placeholder.password')">
+                            <template #prefix>
+                                <el-icon>
+                                    <i-ep-lock />
+                                </el-icon>
+                            </template>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="code">
+                        <div class="login-form-verify flex flex-between flex-nowrap">
+                            <el-input v-model="form.code" :placeholder="$t('login.placeholder.code')">
+                                <template #prefix>
+                                    <el-icon>
+                                        <i-ep-basketball />
+                                    </el-icon>
+                                </template>
+                            </el-input>
+                            <span class="login-form-verify-code pointer" @click="getCode_" v-html="code"></span>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" style="width: 100%;" @click="submit" v-t="'login.submit'" />
+                    </el-form-item>
+                </el-form>
+            </div>
         </div>
     </div>
 </template>
@@ -94,7 +103,19 @@ const submit = () => {
     position: relative;
     width: 100%;
     height: 100%;
-    background: url("/src/assets/svg/login_bg.svg") 15% 65% no-repeat;
+    background: var(--login-bg);
+    background-size: cover;
+    &::before {
+        position: absolute;
+        display: block;
+        content: "";
+        width: 100%;
+        height: 400px;
+        left: 0;
+        top: 0;
+        background: var(--login-before-bg);
+        border-bottom: 1px solid var(--login-form-border-color);
+    }
     .login-other {
         position: absolute;
         top: 15px;
@@ -107,31 +128,63 @@ const submit = () => {
     }
     .login-form {
         position: absolute;
-        width: 500px;
-        height: 460px;
-        padding: 30px 50px;
-        right: 200px;
-        top: calc(50% / 2);
+        width: 800px;   
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -70%);
         box-sizing: border-box;
-        border-radius: 4px;
-        backdrop-filter: blur(20px);
-        .login-form-title {
-            text-align: center;
-            font-size: 30px;
-            margin-bottom: 50px;
-            color: var(--text-color);
+        .login-form-header {
+            margin-bottom: 40px;
+            .svg-icon {
+                font-size: 45px;
+                margin-right: 15px;
+                filter: drop-shadow(0 0 4px);
+            }
+            .login-form-title {
+                margin: 7px 0 0 0;
+                color: var(--login-form-title-color);
+                text-shadow: var(--login-form-title-shadow);
+            }
         }
-        .login-form-verify {
-            width: 100%;
-            :deep(el-input) { flex: 1; }
-            .login-form-verify-code {
+        .login-form-header+div {
+            border-radius: 4px;
+            box-shadow: 0 0 0 1px var(--login-form-border-color);
+        }
+        .login-form-left {
+            position: relative;
+            width: 45%;
+            padding: 20px;
+            background: url('../../assets/svg/login_bg.svg') 50% 50% no-repeat;
+            background-size: 80%;
+            background-color: var(--login-form-left-bg);
+            &::after {
                 display: block;
-                border: 1px solid var(--z-border-color);
-                width: 150px;
-                height: 40px;
-                margin-left: 20px;
-                border-radius: 4px;
-                background-color: #fff;
+                content: "";
+                position: absolute;
+                width: 1px;
+                height: calc(90% - 20px);
+                right: 0;
+                top: 27px;
+                background: var(--login-form-left-after);
+            }
+        }
+        .el-form {
+            width: 55%;
+            padding: 20px;
+            background-color: var(--login-form-right-bg);
+            h2 { color: var(--text-color); }
+            .login-form-verify {
+                width: 100%;
+                :deep(el-input) { flex: 1; }
+                .login-form-verify-code {
+                    display: block;
+                    border: 1px solid var(--z-border-color);
+                    width: 150px;
+                    height: 40px;
+                    margin-left: 20px;
+                    border-radius: 4px;
+                    background-color: #fff;
+                }
             }
         }
     }

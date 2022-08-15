@@ -1,6 +1,17 @@
 .dark {
     --text-color: #E5EAF3;
-
     --bg-color-mute: #2c2c2c;
+    --border-color: #4C4D4F;
+    // DarkMode
     --z-dark-switch-action-bg: #000;
+    // Login
+    --login-bg: linear-gradient(25deg, rgb(19 11 21), rgb(14 29 42));
+    --login-before-bg: linear-gradient(45deg, rgb(43, 35, 56), rgb(21, 36, 48));
+    --login-form-right-bg: #202124;
+    --login-form-left-bg: #232a2f;
+    --login-form-left-after: none;
+    --login-form-title-shadow: none;
+    --login-form-title-color: var(--text-color);
+    --login-form-title-shadow: 2px 2px 3px #111;
+    --login-form-border-color: transparent
 }
