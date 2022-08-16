@@ -5,9 +5,15 @@ const { fail, success } = require('../utils/response')
 
 const router = express.Router()
 
-const userInfo = { username: 'admin' }
 const name = 'admin'
 const pwd = '123456'
+const userInfo = {
+    id: 1,
+    username: 'admin',
+    gender: 1,
+    email: 'admin@163.com',
+    avatar: 'http://192.168.0.110:9999/avatar/avatar.png'
+}
 let verifyCode = void 0
 
 router.get('/code', (req, res) => {

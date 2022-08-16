@@ -17,9 +17,7 @@ const rules = computed(() => ({
 const code = ref<string>('')
 const formRef = ref<FormInstance>()
 
-onMounted(() => {
-    getCode_()
-})
+onMounted(() => { getCode_() })
 
 watch(() => i18n.global.locale.value , () => {
     setTimeout(() => {
@@ -44,8 +42,8 @@ const submit = () => {
 
 <template>
     <div class="login">
-        <div class="login-other flex">
-            <DarkMode />
+        <div class="login-other flex flex-middle">
+            <DarkMode style="margin-top: -2px;" />
             <ChangeLocale class="login-change-locale" />
         </div>
         <div class="login-form">
@@ -58,7 +56,7 @@ const submit = () => {
                     <div></div>
                 </div>
                 <el-form :model="form" :rules="rules" ref="formRef" size="large">
-                    <h2>SignIn</h2>
+                    <h2>{{ $t('login.submit') }}</h2>
                     <el-form-item prop="username">
                         <el-input v-model="form.username" :placeholder="$t('login.placeholder.username')">
                             <template #prefix>
@@ -87,6 +85,19 @@ const submit = () => {
                                 </template>
                             </el-input>
                             <span class="login-form-verify-code pointer" @click="getCode_" v-html="code"></span>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <div class="flex flex-between" style="width: 100%;">
+                            <el-checkbox :label="t('login.remember')" />
+                            <span class="forget-password pointer">{{ $t('login.forget') }}</span>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <div class="flex flex-between" style="width: 100%;">
+                            <el-button size="default" class="flex-grow">{{ $t('login.phoneLogin') }}</el-button>
+                            <el-button size="default" class="flex-grow">{{ $t('login.qrcodeLogin') }}</el-button>
+                            <el-button size="default" class="flex-grow">{{ $t('login.register') }}</el-button>
                         </div>
                     </el-form-item>
                     <el-form-item>
@@ -120,7 +131,6 @@ const submit = () => {
         position: absolute;
         top: 15px;
         right: 30px;
-        align-items: baseline;
         .el-switch { display: block; }
         .login-change-locale {
             margin-left: 15px;
@@ -185,6 +195,9 @@ const submit = () => {
                     border-radius: 4px;
                     background-color: #fff;
                 }
+            }
+            .forget-password {
+                color: var(--primary-color);
             }
         }
     }

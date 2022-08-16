@@ -2,6 +2,7 @@
     --text-color: #E5EAF3;
     --bg-color-mute: #2c2c2c;
     --border-color: #4C4D4F;
+    --hover-bg: #2B2B2C;
     // DarkMode
     --z-dark-switch-action-bg: #000;
     // Login
@@ -14,4 +15,6 @@
     --login-form-title-color: var(--text-color);
     --login-form-title-shadow: 2px 2px 3px #111;
     --login-form-border-color: transparent
+    // Layout
+    --layout-bg: #f6f8f9;
 }

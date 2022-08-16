@@ -1,9 +1,5 @@
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-  color: #303133;
+  color: var(--text-color)
 }
 
 body {
@@ -17,4 +13,9 @@ div { box-sizing: border-box; }
   position: relative;
   width: 100vw;
   height: 100vh;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }

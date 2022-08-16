@@ -1,2 +1,6 @@
 @use "./light.scss";
 @use "./dark.scss";
+
+:root {
+    --primary-color: #409eff;
+}

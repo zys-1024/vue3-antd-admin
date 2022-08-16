@@ -1,17 +1,28 @@
 import { defineStore } from 'pinia'
 import { login, ILoginForm } from '@/api/user'
+import { IUserInfo } from '@/types/user'
+import { getToken, removeToken } from '@/utils/token'
+import router from '@/router'
+
+const userInfo = getToken()
 
 const userStore = defineStore('user', {
     state: () => ({
-        username: '',
+        userInfo: (userInfo ? JSON.parse(userInfo) : {}) as IUserInfo,
     }),
     actions: {
         async login(form: ILoginForm) {
             const { data, code, msg } = await login(form)
             ElMessage[code === 200 ? 'success' : 'error'](msg)
             if (code === 200) {
-                this.username = data.username
+                this.userInfo = data
+                router.push('/')
             }
+        },
+        logout() {
+            removeToken()
+            this.userInfo = {} as IUserInfo
+            router.push('/login')
         }
     }
 })

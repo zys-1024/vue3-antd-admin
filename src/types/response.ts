@@ -1,5 +1,5 @@
 export interface IResponseType<T = any> {
-    data: T,
-    code: number,
+    data: T
+    code: number
     msg: string
 }

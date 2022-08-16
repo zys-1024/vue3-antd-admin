@@ -1,9 +1,14 @@
 <script lang="ts" setup>
+import { PropType } from 'vue'
 import { useI18n } from 'vue-i18n'
 import I18nStore from '@/store/i18n'
 import { Lang } from '@/locale'
 
-const { showLocale } = defineProps({
+const { showLocale, trigger } = defineProps({
+    trigger: {
+        type: String as PropType<'click' | 'hover'>,
+        default: 'click',
+    },
     showLocale: {
         type: Boolean,
         default: true
@@ -20,8 +25,8 @@ const langChange = (value: Lang) => {
 </script>
 
 <template>
-    <div class="change-locale pointer">
-        <el-dropdown  trigger="click" @command="langChange">
+    <div class="change-locale pointer flex flex-middle">
+        <el-dropdown  :trigger="trigger" @command="langChange">
             <div class="flex flex-middle flex-end ">
                 <SvgIcon name="lang" />
                 <span class="show-locale" v-if="showLocale">{{ i18nStore.lang === 'zh' ? '简体中文' : 'English' }}</span>

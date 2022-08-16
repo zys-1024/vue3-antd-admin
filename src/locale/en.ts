@@ -11,6 +11,20 @@ export default {
             username: 'Please input the username' ,
             password: 'Please input the password',
             code: 'Please input the verify code'
-        }
+        },
+        remember: 'remember me',
+        forget: 'forgot password ?',
+        phoneLogin: 'Log in with phone',
+        qrcodeLogin: 'Log in with qrcode',
+        register: 'Register'
+    },
+    sidebar: {
+        home: 'Home'
+    },
+    header: {
+        home: 'Home',
+        personalCenter: 'Personal Center',
+        setting: 'Setting',
+        logout: 'Logout'
     }
 }
