@@ -1,6 +1,17 @@
 import { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
+import { getToken } from '@/utils/token'
+import addRoutes from '.'
 
-export const routes: RouteRecordRaw[] = [{
+export type TRoutes = RouteRecordRaw & {
+    meta?: {
+        name?: string
+        menu?: boolean
+        icon?: string 
+    }
+}
+
+export const routes: TRoutes[] = [{
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Login/Login.vue'),
@@ -12,15 +23,31 @@ export const routes: RouteRecordRaw[] = [{
     name: 'Layout',
     component: () => import('@/Layout/Layout.vue'),
     meta: {},
-    children: [{
-        path: '',
-        name: 'Home',
-        component: () => import('@/views/Home/Home.vue'),
-        meta: { 
-            title: '首页'
-        }
-    }, {
-        path: '/home',
-        redirect: ''
-    }]
+    children: []
 }]
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+})
+
+let isAdd = false
+router.beforeEach(async (to, from ,next) => {
+    if (to.path === '/login') {
+        next()
+    } else {
+        if (getToken()) {
+            // 防止路由跳转死循环
+            if (!isAdd) {
+                await addRoutes(router)
+                isAdd = true
+                router.push(to.fullPath)
+            }
+            next()
+        } else {
+            next('/login')
+        }
+    }
+})
+
+export default router

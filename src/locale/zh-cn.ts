@@ -19,13 +19,13 @@ export default {
         register: '注册',
         other: '其他登录方式'
     },
-    sidebar: {
-        home: '首页'
-    },
     header: {
         home: '首页',
         personalCenter: '个人中心',
         setting: '设置',
         logout: '退出登录'
+    },
+    menu: {
+        '仪表盘': '仪表盘'
     }
 }

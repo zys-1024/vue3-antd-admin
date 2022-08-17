@@ -27,7 +27,7 @@ instance.interceptors.response.use(response => {
             message = '资源不存在'
             break
         case 401:
-            message = '未授权'
+            message = '无效的令牌'
             break
         case 403:
             message = '禁止访问'

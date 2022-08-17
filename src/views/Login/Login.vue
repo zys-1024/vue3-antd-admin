@@ -53,7 +53,11 @@ const submit = () => {
     formRef.value?.validate(async (valid: boolean) => {
         if(valid) {
             loading.value = true
-            await userStore.login(form)
+            try {
+                await userStore.login(form)
+            } catch(e) {
+                loading.value = false
+            }
         } else {
             inputFocus()
         }

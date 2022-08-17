@@ -1,15 +1,17 @@
 <script lang="ts" setup>
-import { } from 'vue'
+import { computed } from 'vue'
+import router, { TRoutes } from '@/router/routes'
 
+const menus = computed(() => {
+    return (router.getRoutes() as TRoutes[]).filter(item => item.meta?.menu)
+})
 </script>
 
 <template>
     <el-menu default-active="1" >
-        <el-menu-item>
-            <el-icon>
-                <SvgIcon name="home" />
-            </el-icon>
-            <span>{{ $t('sidebar.home') }}</span>
+        <el-menu-item v-for="item of menus" :key="item.name">
+            <el-icon><SvgIcon :name="item.meta?.icon!" /></el-icon>
+            <span>{{ $t(`menu.${item.meta?.name}`) }}</span>
         </el-menu-item>
     </el-menu>
 </template>

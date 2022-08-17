@@ -19,13 +19,13 @@ export default {
         register: 'Register',
         other: 'Other login methods'
     },
-    sidebar: {
-        home: 'Home'
-    },
     header: {
         home: 'Home',
         personalCenter: 'Personal Center',
         setting: 'Setting',
         logout: 'Logout'
+    },
+    menu: {
+        '仪表盘': 'Dashboard'
     }
 }

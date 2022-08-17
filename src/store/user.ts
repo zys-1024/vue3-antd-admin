@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { login, ILoginForm } from '@/api/user'
 import { IUserInfo } from '@/types/user'
 import { getToken, removeToken } from '@/utils/token'
-import router from '@/router'
+import router from '@/router/routes'
 
 const userInfo = getToken()
 
