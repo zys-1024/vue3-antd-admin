@@ -16,7 +16,8 @@ export default {
         forget: '忘记密码？',
         phoneLogin: '手机登录',
         qrcodeLogin: '二维码登录',
-        register: '注册'
+        register: '注册',
+        other: '其他登录方式'
     },
     sidebar: {
         home: '首页'

@@ -8,13 +8,14 @@
     // Login
     --login-bg: url('../../assets/image/login_bg_dark.png');
     --login-before-bg: none;
-    --login-form-right-bg: #202124;
-    --login-form-left-bg: #232a2f;
-    --login-form-left-after: none;
+    --login-form-right-bg: transparent;
+    --login-form-left-bg: transparent;
+    --login-form-left-after: linear-gradient(to bottom, transparent, var(--border-color), transparent);
     --login-form-title-shadow: none;
     --login-form-title-color: var(--text-color);
-    --login-form-title-shadow: 2px 2px 3px #111;
-    --login-form-border-color: transparent
+    --login-form-title-shadow: 2px 2px 3px #003db8;
+    --login-form-border-color: transparent;
+    --login-divider-bg: #202124;
     // Layout
     --layout-bg: #f6f8f9;
 }

@@ -100,8 +100,22 @@ const submit = () => {
                             <el-button size="default" class="flex-grow">{{ $t('login.register') }}</el-button>
                         </div>
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item style="margin-bottom: 10px;">
                         <el-button type="primary" style="width: 100%;" @click="submit" v-t="'login.submit'" />
+                    </el-form-item>
+                    <el-form-item>
+                        <div class="divider flex flex-middle">
+                            <div class="divider-line flex-grow"></div>
+                            <span class="divider-text">{{ $t('login.other') }}</span>
+                            <div class="divider-line flex-grow"></div>
+                        </div>
+                        <div class="other-login flex flex-around">
+                            <SvgIcon name="qq" />
+                            <SvgIcon name="weixin" />
+                            <SvgIcon name="dd" />
+                            <SvgIcon name="vite" />
+                            <SvgIcon name="weibo" />
+                        </div>
                     </el-form-item>
                 </el-form>
             </div>
@@ -140,8 +154,8 @@ const submit = () => {
         position: absolute;
         width: 800px;   
         left: 50%;
-        top: 50%;
-        transform: translate(-50%, -70%);
+        top: 40%;
+        transform: translate(-50%, -40%);
         box-sizing: border-box;
         .login-form-header {
             margin-bottom: 40px;
@@ -159,6 +173,7 @@ const submit = () => {
         .login-form-header+div {
             border-radius: 4px;
             box-shadow: 0 0 0 1px var(--login-form-border-color);
+            background: linear-gradient(41deg, black, #3d4f774d);
         }
         .login-form-left {
             position: relative;
@@ -181,7 +196,7 @@ const submit = () => {
         .el-form {
             width: 55%;
             padding: 20px;
-            background-color: var(--login-form-right-bg);
+            background: var(--login-form-right-bg);
             h2 { color: var(--text-color); }
             .login-form-verify {
                 width: 100%;
@@ -198,6 +213,23 @@ const submit = () => {
             }
             .forget-password {
                 color: var(--primary-color);
+            }
+            
+            .divider {
+                width: 100%;
+                color: #989898;
+                margin-bottom: 10px;
+                .divider-text { margin: 0 15px; }
+                .divider-line {
+                    border-top: 1px solid var(--border-color);
+                }
+            }
+            .other-login {
+                width: 100%;
+                .svg-icon {
+                    font-size: 27px;
+                    cursor: pointer;
+                }
             }
         }
     }
