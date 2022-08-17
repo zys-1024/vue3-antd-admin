@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { getCode, ILoginForm } from '@/api/user'
 import UserStore from '@/store/user'
 import { FormInstance } from 'element-plus'
@@ -16,8 +16,15 @@ const rules = computed(() => ({
 }))
 const code = ref<string>('')
 const formRef = ref<FormInstance>()
+const loading = ref<boolean>(false)
 
-onMounted(() => { getCode_() })
+onMounted(() => { 
+    getCode_()
+    document.addEventListener('keyup', enter)
+})
+onUnmounted(() => {
+    document.removeEventListener('keyup', enter)
+})
 
 watch(() => i18n.global.locale.value , () => {
     setTimeout(() => {
@@ -26,15 +33,29 @@ watch(() => i18n.global.locale.value , () => {
     }, 0)
 })
 
+const enter = (e: KeyboardEvent) => {
+    if(e.key === 'Enter') {
+        submit()
+    }
+}
+
+const inputFocus = () => {
+    const input = document.querySelector('.el-form-item.is-error input') as HTMLInputElement
+    input?.focus()
+}
+
 const getCode_ = async () => {
     const { data } = await getCode()
     code.value = data
 }
 
 const submit = () => {
-    formRef.value?.validate((valid: boolean) => {
+    formRef.value?.validate(async (valid: boolean) => {
         if(valid) {
-            userStore.login(form)
+            loading.value = true
+            await userStore.login(form)
+        } else {
+            inputFocus()
         }
     })
 }
@@ -55,7 +76,7 @@ const submit = () => {
                 <div class="login-form-left">
                     <div></div>
                 </div>
-                <el-form :model="form" :rules="rules" ref="formRef" size="large">
+                <el-form :model="form" :rules="rules" status-icon ref="formRef" size="large">
                     <h2>{{ $t('login.submit') }}</h2>
                     <el-form-item prop="username">
                         <el-input v-model="form.username" :placeholder="$t('login.placeholder.username')">
@@ -101,7 +122,7 @@ const submit = () => {
                         </div>
                     </el-form-item>
                     <el-form-item style="margin-bottom: 10px;">
-                        <el-button type="primary" style="width: 100%;" @click="submit" v-t="'login.submit'" />
+                        <el-button type="primary" :loading="loading" style="width: 100%;" @click="submit">{{ $t('login.submit') }}</el-button>
                     </el-form-item>
                     <el-form-item>
                         <div class="divider flex flex-middle">
