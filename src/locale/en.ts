@@ -26,6 +26,17 @@ export default {
         logout: 'Logout'
     },
     menu: {
-        '仪表盘': 'Dashboard'
+        '仪表盘': 'Dashboard',
+        '分析页': 'Analyze',
+        '监控页': 'Monitor',
+        '工作台': 'Workbench',
+        '嵌套菜单': 'Nested Menus',
+        'Menu1': 'Menu1',
+        'Menu2': 'Menu2',
+        'Menu2_1': 'Menu2_1',
+        'Menu2_2': 'Menu2_2',
+        'Menu3': 'Menu3',
+        'Menu3_1': 'Menu3_1',
+        'Menu3_1_1': 'Menu3_1_1'
     }
 }

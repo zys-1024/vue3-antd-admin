@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { } from 'vue'
 
 </script>
 
 <template>
+    <div>Menu2</div>
     <RouterView />
 </template>
 

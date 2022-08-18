@@ -4,6 +4,7 @@ import { getToken } from '@/utils/token'
 import addRoutes from '.'
 
 export type TRoutes = RouteRecordRaw & {
+    children?: TRoutes[],
     meta?: {
         name?: string
         menu?: boolean
@@ -39,7 +40,7 @@ router.beforeEach(async (to, from ,next) => {
         if (getToken()) {
             // 防止路由跳转死循环
             if (!isAdd) {
-                await addRoutes(router)
+                await addRoutes()
                 isAdd = true
                 router.push(to.fullPath)
             }

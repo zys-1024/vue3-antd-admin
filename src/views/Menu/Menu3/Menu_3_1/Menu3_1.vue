@@ -4,7 +4,8 @@ import { } from 'vue'
 </script>
 
 <template>
-    <RouterView />
+  <div>Menu3_1</div>
+  <RouterView />
 </template>
 
 <style lang="scss" scoped>

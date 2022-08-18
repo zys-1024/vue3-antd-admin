@@ -4,6 +4,7 @@ import { } from 'vue'
 </script>
 
 <template>
+    <div>Menu3_1_1</div>
     <RouterView />
 </template>
 
