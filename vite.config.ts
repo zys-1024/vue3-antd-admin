@@ -51,4 +51,11 @@ export default defineConfig({
     server: {
         host: '0.0.0.0',
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: '@use "@/assets/style/mixin.scss" as *;'
+            }
+        }
+    }
 })

@@ -1,13 +1,25 @@
 <script lang="ts" setup>
 import UserStore from '@/store/user'
 
+const { isCollapse } = defineProps({
+	isCollapse: {
+		type: Boolean,
+		default: false
+	}
+})
+
+const emit = defineEmits<{
+    (event: 'collapseChange'): void
+}>()
+
 const userStore = UserStore()
 </script>
 
 <template>
     <div class="header flex flex-middle flex-between">
-        <el-icon class="sidebar-toggle pointer">
-			<i-ep-fold />
+        <el-icon class="sidebar-toggle pointer" @click="emit('collapseChange')">
+			<i-ep-expand v-show="isCollapse" />
+			<i-ep-fold v-show="!isCollapse" />
 		</el-icon>
         <div class="navbar">
 			<ul class="navbar-list flex">

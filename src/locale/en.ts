@@ -37,6 +37,18 @@ export default {
         'Menu2_2': 'Menu2_2',
         'Menu3': 'Menu3',
         'Menu3_1': 'Menu3_1',
-        'Menu3_1_1': 'Menu3_1_1'
+        'Menu3_1_1': 'Menu3_1_1',
+        '个人中心': 'Personal Center',
+        '个人信息': 'Personal Info',
+        '个人设置': 'Personal Setting',
+        '系统设置': 'System Setting',
+        '结果页': 'Result',
+        '成功页': 'Success',
+        '失败页': 'Error',
+        '异常页': 'Exception',
+        '403': '403',
+        '404': '404',
+        '500': '500',
+        '外链': 'External Link'
     }
 }
