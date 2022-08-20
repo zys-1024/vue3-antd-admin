@@ -25,7 +25,7 @@ const change = () => {
 	</div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
     .z-switch {
         position: relative;
         width: 40px;

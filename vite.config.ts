@@ -1,11 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
-import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 const resolve = (dir: string) => {
@@ -21,25 +18,12 @@ const alias: Record<string, string> = {
 export default defineConfig({
     plugins: [
         vue(),
-        AutoImport({
-            resolvers: [
-                // 自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox...
-                ElementPlusResolver(),
-                // 自动导入图标组件
-                IconsResolver({ prefix: 'Icon' })
-            ],
-        }),
         Components({
-            resolvers: [
-                // 自动注册图标组件
-                IconsResolver({ enabledCollections: ['ep'] }),
-                // 自动导入 Element Plus 组件
-                // 安装 @element-plus/icons-vue 没用，必需要安装 @iconify-json/ep
-                ElementPlusResolver()
-            ]
-        }),
-        Icons({
-            autoInstall: true
+            // 自动导入文件夹下的组件
+            dirs: ['src/components', 'src/views', 'src/Layout'],
+            extensions: ['vue'],
+            // 自动导入AntDesign Vue
+            resolvers: [AntDesignVueResolver({ importStyle: false })]
         }),
         createSvgIconsPlugin({
             // Specify the icon folder to be cached
@@ -53,8 +37,9 @@ export default defineConfig({
     },
     css: {
         preprocessorOptions: {
-            scss: {
-                additionalData: '@use "@/assets/style/mixin.scss" as *;'
+            less: {
+                // 开启less支持
+                javascriptEnabled: true
             }
         }
     }

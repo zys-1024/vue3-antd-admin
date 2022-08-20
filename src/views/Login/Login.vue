@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { getCode, ILoginForm } from '@/api/user'
 import UserStore from '@/store/user'
-import { FormInstance } from 'element-plus'
 import i18n from '@/locale'
+import { FormInstance } from 'ant-design-vue/es'
 
 const t = i18n.global.t
 const userStore = UserStore()
 const form = reactive<ILoginForm>({ username: 'admin', password: '123456', code: '' })
-// 语言变更时，表单验证信息跟着改变（不使用computed表单验证信息的语言不会跟着变）
-const rules = computed(() => ({
-    username: [{ required: true, message: t('login.error.username'), trigger: 'blur' }],
-    password: [{ required: true, message: t('login.error.password'), trigger: 'blur' }],
-    code: [{ required: true, message: t('login.error.code'), trigger: 'blur' }]
-}))
+const rules = {
+    username: [{ required: true, message: t('login.error.username') }],
+    password: [{ required: true, message: t('login.error.password') }],
+    code: [{ required: true, message: t('login.error.code') }]
+}
 const code = ref<string>('')
 const formRef = ref<FormInstance>()
 const loading = ref<boolean>(false)
@@ -40,7 +39,7 @@ const enter = (e: KeyboardEvent) => {
 }
 
 const inputFocus = () => {
-    const input = document.querySelector('.el-form-item.is-error input') as HTMLInputElement
+    const input = document.querySelector('.ant-form-item-has-error input') as HTMLInputElement
     input?.focus()
 }
 
@@ -49,19 +48,18 @@ const getCode_ = async () => {
     code.value = data
 }
 
-const submit = () => {
-    formRef.value?.validate(async (valid: boolean) => {
-        if(valid) {
-            loading.value = true
-            try {
-                await userStore.login(form)
-            } catch(e) {
-                loading.value = false
-            }
-        } else {
-            inputFocus()
+const submit = async () => {
+    try {
+        await formRef.value?.validateFields()
+        loading.value = true
+        try {
+            await userStore.login(form)
+        } catch(e) {
+            loading.value = false
         }
-    })
+    } catch(e) {
+         inputFocus()
+    }
 }
 </script>
 
@@ -72,6 +70,7 @@ const submit = () => {
             <ChangeLocale class="login-change-locale" />
         </div>
         <div class="login-form">
+            <Theme />
             <div class="login-form-header flex flex-center flex-middle">
                 <SvgIcon name="vite" />
                 <h1 class="login-form-title" v-t="'login.title'" />
@@ -80,55 +79,49 @@ const submit = () => {
                 <div class="login-form-left">
                     <div></div>
                 </div>
-                <el-form :model="form" :rules="rules" status-icon ref="formRef" size="large">
+                <a-form :model="form" ref="formRef">
                     <h2>{{ $t('login.submit') }}</h2>
-                    <el-form-item prop="username">
-                        <el-input v-model="form.username" :placeholder="$t('login.placeholder.username')">
+                    <a-form-item has-feedback name="username" :rules="rules.username">
+                        <a-input v-model:value="form.username" size="large" :placeholder="$t('login.placeholder.username')">
                             <template #prefix>
-                                <el-icon>
-                                    <i-ep-user />
-                                </el-icon>
+                                <SvgIcon name="user" />
                             </template>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="password">
-                        <el-input v-model="form.password" :placeholder="$t('login.placeholder.password')">
+                        </a-input>
+                    </a-form-item>
+                    <a-form-item has-feedback name="password" :rules="rules.password">
+                        <a-input-password v-model:value="form.password" size="large" :placeholder="$t('login.placeholder.password')">
                             <template #prefix>
-                                <el-icon>
-                                    <i-ep-lock />
-                                </el-icon>
+                                <SvgIcon name="lock" />
                             </template>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="code">
+                        </a-input-password>
+                    </a-form-item>
+                    <a-form-item has-feedback name="code" :rules="rules.code" class="verify-item">
                         <div class="login-form-verify flex flex-between flex-nowrap">
-                            <el-input v-model="form.code" :placeholder="$t('login.placeholder.code')">
+                            <a-input v-model:value="form.code" size="large" :placeholder="$t('login.placeholder.code')">
                                 <template #prefix>
-                                    <el-icon>
-                                        <i-ep-basketball />
-                                    </el-icon>
+                                    <SvgIcon name="verify" />
                                 </template>
-                            </el-input>
+                            </a-input>
                             <span class="login-form-verify-code pointer" @click="getCode_" v-html="code"></span>
                         </div>
-                    </el-form-item>
-                    <el-form-item>
+                    </a-form-item>
+                    <a-form-item>
                         <div class="flex flex-between" style="width: 100%;">
-                            <el-checkbox :label="t('login.remember')" />
+                            <a-checkbox>{{ $t('login.remember') }}</a-checkbox>
                             <span class="forget-password pointer">{{ $t('login.forget') }}</span>
                         </div>
-                    </el-form-item>
-                    <el-form-item>
+                    </a-form-item>
+                    <a-form-item>
                         <div class="flex flex-between" style="width: 100%;">
-                            <el-button size="default" class="flex-grow">{{ $t('login.phoneLogin') }}</el-button>
-                            <el-button size="default" class="flex-grow">{{ $t('login.qrcodeLogin') }}</el-button>
-                            <el-button size="default" class="flex-grow">{{ $t('login.register') }}</el-button>
+                            <a-button>{{ $t('login.phoneLogin') }}</a-button>
+                            <a-button>{{ $t('login.qrcodeLogin') }}</a-button>
+                            <a-button>{{ $t('login.register') }}</a-button>
                         </div>
-                    </el-form-item>
-                    <el-form-item style="margin-bottom: 10px;">
-                        <el-button type="primary" :loading="loading" style="width: 100%;" @click="submit">{{ $t('login.submit') }}</el-button>
-                    </el-form-item>
-                    <el-form-item>
+                    </a-form-item>
+                    <a-form-item style="margin-bottom: 10px;">
+                        <a-button type="primary" size="large" :loading="loading" style="width: 100%;" @click="submit">{{ $t('login.submit') }}</a-button>
+                    </a-form-item>
+                    <a-form-item>
                         <div class="divider flex flex-middle">
                             <div class="divider-line flex-grow"></div>
                             <span class="divider-text">{{ $t('login.other') }}</span>
@@ -141,19 +134,20 @@ const submit = () => {
                             <SvgIcon name="vite" />
                             <SvgIcon name="weibo" />
                         </div>
-                    </el-form-item>
-                </el-form>
+                    </a-form-item>
+                </a-form>
             </div>
         </div>
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .login {
     position: relative;
     width: 100%;
     height: 100%;
-    background: var(--login-bg);
+    background-image: var(--login-bg-img);
+    background-color: var(--login-bg);
     background-size: cover;
     &::before {
         position: absolute;
@@ -170,7 +164,7 @@ const submit = () => {
         position: absolute;
         top: 15px;
         right: 30px;
-        .el-switch { display: block; }
+        .a-switch { display: block; }
         .login-change-locale {
             margin-left: 15px;
         }
@@ -218,14 +212,19 @@ const submit = () => {
                 background: var(--login-form-left-after);
             }
         }
-        .el-form {
+        .ant-form {
             width: 55%;
             padding: 20px;
             background: var(--login-form-right-bg);
             h2 { color: var(--text-color); }
+            .verify-item  {
+                :deep(.ant-form-item-children-icon) {
+                    left: 198px;
+                }
+            }
             .login-form-verify {
                 width: 100%;
-                :deep(el-input) { flex: 1; }
+                :deep(a-input) { flex: 1; }
                 .login-form-verify-code {
                     display: block;
                     border: 1px solid var(--z-border-color);

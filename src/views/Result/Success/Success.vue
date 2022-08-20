@@ -7,6 +7,6 @@ import { } from 'vue'
   <div>Success</div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 
 </style>

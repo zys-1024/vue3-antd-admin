@@ -64,7 +64,7 @@ const userStore = UserStore()
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .header {
   	height: 100%;
 	.navbar {

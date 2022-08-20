@@ -26,7 +26,7 @@ const collapseChange = () => {
     </el-container>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
     .el-container {
         height: 100%;
         // background-color: var(--layout-bg);

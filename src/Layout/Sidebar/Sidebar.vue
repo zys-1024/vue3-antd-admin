@@ -21,7 +21,7 @@ const menus_ = computed(() => {
     </el-menu>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .el-menu {
     height: 100%;
     overflow-y: auto;

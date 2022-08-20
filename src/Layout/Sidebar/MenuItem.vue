@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { TRoutes } from '@/router/routes';
+import { TRoutes } from '@/router/routes'
 import { PropType } from 'vue'
 
 const { item } = defineProps({
@@ -24,6 +24,6 @@ const { item } = defineProps({
     </el-menu-item>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 
 </style>

@@ -8,12 +8,12 @@ export default {
             code: 'Verify code'
         },
         error: {
-            username: 'Please input the username' ,
-            password: 'Please input the password',
+            username: 'Please input your username' ,
+            password: 'Please input your password',
             code: 'Please input the verify code'
         },
-        remember: 'remember me',
-        forget: 'forgot password ?',
+        remember: 'Remember Me',
+        forget: 'Forgot Password ?',
         phoneLogin: 'Log in with phone',
         qrcodeLogin: 'Log in with qrcode',
         register: 'Register',

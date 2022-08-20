@@ -3,6 +3,7 @@ import { PropType } from 'vue'
 import { useI18n } from 'vue-i18n'
 import I18nStore from '@/store/i18n'
 import { Lang } from '@/locale'
+import { MenuProps } from 'ant-design-vue';
 
 const { showLocale, trigger } = defineProps({
     trigger: {
@@ -18,30 +19,30 @@ const { showLocale, trigger } = defineProps({
 const i18nStore = I18nStore()
 const i18n = useI18n()
 
-const langChange = (value: Lang) => {
-    i18n.locale.value = value
-    i18nStore.changeLang(value)
+const langChange: MenuProps['onClick'] = ({ key }) => {
+    i18n.locale.value = key as string
+    i18nStore.changeLang(key as Lang)
 }
 </script>
 
 <template>
     <div class="change-locale pointer flex flex-middle">
-        <el-dropdown  :trigger="trigger" @command="langChange">
+        <a-dropdown  :trigger="[trigger]">
             <div class="flex flex-middle flex-end ">
                 <SvgIcon name="lang" />
                 <span class="show-locale" v-if="showLocale">{{ i18nStore.lang === 'zh' ? '简体中文' : 'English' }}</span>
             </div>
-            <template #dropdown>
-                <el-dropdown-menu>
-                    <el-dropdown-item :command="Lang.ZH">简体中文</el-dropdown-item>
-                    <el-dropdown-item :command="Lang.EN">English</el-dropdown-item>
-                </el-dropdown-menu>
+            <template #overlay>
+                <a-menu @click="langChange">
+                    <a-menu-item :key="Lang.ZH">简体中文</a-menu-item>
+                    <a-menu-item :key="Lang.EN">English</a-menu-item>
+                </a-menu>
             </template>
-        </el-dropdown>
+        </a-dropdown>
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .change-locale {
     .svg-icon {
         outline: 0;
