@@ -7,33 +7,37 @@ const isCollapse = ref<boolean>(false)
 
 const collapseChange = () => {
     isCollapse.value = !isCollapse.value
+    console.log(isCollapse.value)
 }
 </script>
 
 <template>
-    <el-container>
-        <el-aside style="width: 230px">
+    <a-layout class="layout">
+        <a-layout-sider v-model:collapsed="isCollapse" collapsible>
+            <div class="logo" />
             <Sidebar :isCollapse="isCollapse" />
-        </el-aside>
-        <el-container>
-            <el-header>
+        </a-layout-sider>
+        <a-layout>
+            <a-layout-header>
                 <Header :isCollapse="isCollapse" @collapseChange="collapseChange" />
-            </el-header>
-            <el-main>
+            </a-layout-header>
+            <a-layout-content>
                 <RouterView />
-            </el-main>
-        </el-container>
-    </el-container>
+            </a-layout-content>
+        </a-layout>
+    </a-layout>
 </template>
 
 <style lang="less" scoped>
-    .el-container {
-        height: 100%;
-        // background-color: var(--layout-bg);
-        .el-header {
-            height: 50px;
-            border-bottom: 1px solid var(--border-color);
-            // background-color: #fff;
-        }
+.layout {
+    height: 100%;
+    .ant-layout-sider {
+        width: 220px !important;
     }
+    .ant-layout-header {
+        height: 48px;
+        padding: 0 20px 0 0;
+        background-color: var(--header-bg);
+    }
+}
 </style>

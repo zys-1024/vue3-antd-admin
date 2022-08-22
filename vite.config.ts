@@ -39,7 +39,8 @@ export default defineConfig({
         preprocessorOptions: {
             less: {
                 // 开启less支持
-                javascriptEnabled: true
+                javascriptEnabled: true,
+                additionalData: ['@import "@/assets/style/mixin.less";']
             }
         }
     }

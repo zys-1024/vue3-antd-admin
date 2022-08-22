@@ -70,7 +70,6 @@ const submit = async () => {
             <ChangeLocale class="login-change-locale" />
         </div>
         <div class="login-form">
-            <Theme />
             <div class="login-form-header flex flex-center flex-middle">
                 <SvgIcon name="vite" />
                 <h1 class="login-form-title" v-t="'login.title'" />

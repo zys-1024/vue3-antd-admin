@@ -1,7 +1,12 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
+import { useRoute } from 'vue-router';
 import { menus } from '@/router'
-import MenuItem from './MenuItem.vue'
+
+interface ISelected {
+    openKeys: string[]
+    selectedKeys: string[]
+}
 
 const { isCollapse } = defineProps({
     isCollapse: {
@@ -10,21 +15,44 @@ const { isCollapse } = defineProps({
     }
 })
 
+const route = useRoute()
+
 const menus_ = computed(() => {
     return menus.filter(item => item.meta?.menu)
+})
+
+// 将例如/menu/menu3/menu3_1/menu3_1_1 转成 ['/menu', '/menu/menu3', '/menu/menu3/menu3_1', '/menu/menu3/menu3_1/menu3_1_1']
+const parse = (): string[] => {
+    return route.path.split('/').filter(item => !!item).map((item, index, arr) => {
+        let key = ''
+        for(let i = 0; i <= index; i++) {
+            key += ('/' + arr[i])
+        }
+        return key
+    })
+}
+
+const selected = reactive<ISelected>({
+    openKeys: parse(),
+    selectedKeys: [route.path]
 })
 </script>
 
 <template>
-    <el-menu :default-active="$route.path" :collapse="isCollapse" router :default-openeds="[$route.path]">
-        <MenuItem v-for="item of menus_" :key="item.name" :item="item" />
-    </el-menu>
+    <a-menu 
+        mode="inline" 
+        theme="dark"
+        v-model:openKeys="selected.openKeys"
+        v-model:selectedKeys="selected.selectedKeys">
+        <MenuItem v-for="item of menus_" :item="item" :key="item.path" />
+    </a-menu>
 </template>
 
 <style lang="less" scoped>
-.el-menu {
+.ant-menu {
     height: 100%;
-    overflow-y: auto;
-    @include scrollbar;
+    overflow: hidden auto;
+    user-select: none;
+    .scrollbar();
 }
 </style>

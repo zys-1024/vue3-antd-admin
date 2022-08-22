@@ -104,7 +104,7 @@ module.exports = [{
                 icon: 'menu'
             },
             children: [{
-                path: '/menu/menu3/menu3_1_1',
+                path: '/menu/menu3/menu3_1/menu3_1_1',
                 name: 'Menu3_1_1',
                 component: '/views/Menu/Menu3/Menu3_1/Menu3_1_1/Menu3_1_1.vue',
                 meta: {
@@ -145,8 +145,8 @@ module.exports = [{
         }
     }]
 }, {
-    path: '/Exception',
-    name: 'Exception',
+    path: '/exception',
+    name: 'exception',
     component: '/views/Exception/Exception.vue',
     meta: {
         name: '异常页',
@@ -154,7 +154,7 @@ module.exports = [{
         icon: 'exception'
     },
     children: [{
-        path: '/Exception/403',
+        path: '/exception/403',
         name: '403',
         component: '/views/Exception/403/403.vue',
         meta: {

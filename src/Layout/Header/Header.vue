@@ -17,14 +17,13 @@ const userStore = UserStore()
 
 <template>
     <div class="header flex flex-middle flex-between">
-        <el-icon class="sidebar-toggle pointer" @click="emit('collapseChange')">
-			<i-ep-expand v-show="isCollapse" />
-			<i-ep-fold v-show="!isCollapse" />
-		</el-icon>
+        <div class="sider-collapse flex flex-center flex-middle pointer" @click="emit('collapseChange')">
+			<SvgIcon :name="isCollapse ? 'fold' : 'unfold'" />
+		</div>
         <div class="navbar">
 			<ul class="navbar-list flex">
-				<li class="navbar-list-item"><el-icon><i-ep-search /></el-icon></li>
-				<li class="navbar-list-item"><el-icon><i-ep-bell /></el-icon></li>
+				<li class="navbar-list-item"><SvgIcon name="search" /></li>
+				<li class="navbar-list-item"><SvgIcon name="bell" /></li>
 				<li class="navbar-list-item"><SvgIcon name="full" /></li>
 				<li class="navbar-list-item" style="padding: 0;">
 					<div style="height: 100%;">
@@ -32,32 +31,32 @@ const userStore = UserStore()
 					</div>
 				</li>
 				<li class="navbar-list-item" style="padding: 0;">
-					<el-dropdown style="height: 100%;">
+					<a-dropdown style="height: 100%;">
 						<div class="flex flex-middle" style="padding: 0 10px;">
-							<el-avatar :size="25" :src="userStore.userInfo.avatar" />
+							<a-avatar :size="25" :src="userStore.userInfo.avatar" />
 							<span class="username">{{ userStore.userInfo.username }}</span>
 						</div>
-						<template #dropdown>
-							<el-dropdown-menu>
-								<el-dropdown-item>
+						<template #overlay>
+							<a-menu>
+								<a-menu-item>
 									<SvgIcon name="home" />
 									{{ $t('header.home') }}
-								</el-dropdown-item>
-								<el-dropdown-item>
-									<el-icon><i-ep-user /></el-icon>
+								</a-menu-item>
+								<a-menu-item>
+									<SvgIcon name="user" />
 									{{ $t('header.personalCenter') }}
-								</el-dropdown-item>
-								<el-dropdown-item>
-									<el-icon><i-ep-setting /></el-icon>
+								</a-menu-item>
+								<a-menu-item>
+									<SvgIcon name="setting" />
 									{{ $t('header.setting') }}
-								</el-dropdown-item>
-								<el-dropdown-item divided @click="userStore.logout">
-									<el-icon><i-ep-switchButton /></el-icon>
+								</a-menu-item>
+								<a-menu-item divided @click="userStore.logout">
+									<SvgIcon name="shut" />
 									{{ $t('header.logout') }}
-								</el-dropdown-item>
-							</el-dropdown-menu>
+								</a-menu-item>
+							</a-menu>
 						</template>
-					</el-dropdown>	
+					</a-dropdown>	
 				</li>
 			</ul>
 		</div>
@@ -67,8 +66,16 @@ const userStore = UserStore()
 <style lang="less" scoped>
 .header {
   	height: 100%;
+	.sider-collapse {
+		padding: 0 10px;
+		height: 100%;
+		&:hover {
+			background-color: var(--hover-bg);
+		}
+	}
 	.navbar {
 		height: 100%;
+		user-select: none;
 		.navbar-list {
 			height: 100%;
 			.navbar-list-item {
@@ -86,12 +93,12 @@ const userStore = UserStore()
 					margin-left: 5px;
 				}
 
-				.el-dropdown { height: 100%; }
+				.ant-dropdown-trigger { height: 100%; }
 				.change-locale {
 					height: 100%;
-					:deep(.el-dropdown) {
+					:deep(.ant-dropdown-trigger) {
 						height: 100%;
-						>div { padding: 0 10px; }
+						padding: 0 10px;
 					}
 				}
 			}

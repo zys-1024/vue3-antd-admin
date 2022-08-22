@@ -10,13 +10,15 @@ interface IColorState {
   infoColor?: string
 }
 
-let colorState = reactive<IColorState>({
+const defaultColors = {
   primaryColor: '#1890ff',
   errorColor: '#ff4d4f',
   warningColor: '#faad14',
   successColor: '#52c41a',
   infoColor: '#1890ff',
-})
+}
+
+let colorState = reactive<IColorState>({ ...defaultColors })
 
 onMounted(() => {
     const antTheme = window.localStorage.getItem('ant-theme')
@@ -26,7 +28,6 @@ onMounted(() => {
 })
 
 watch(colorState, (newColor: IColorState) => {
-    console.log('change')
     ConfigProvider.config({
         theme: newColor
     })
