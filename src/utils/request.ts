@@ -1,3 +1,4 @@
+import { notification } from 'ant-design-vue'
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import config from '../config/request.config'
 import { IResponseType } from '../types/response'
@@ -36,7 +37,7 @@ instance.interceptors.response.use(response => {
             message = '服务器错误'
             break
     }
-    ElNotification.error({ title: status, message })
+    notification.error({ message: status, description: message })
     return Promise.reject(error)
 })
 

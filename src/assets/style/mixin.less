@@ -3,11 +3,24 @@
         width: 6px;
     }
     &::-webkit-scrollbar-thumb {
-        background-color: #0003;
+        background-color: var(--scrollbar-bg);
         border-radius: 10px;
         transition: all .2s ease-in-out;
     }
     &::-webkit-scrollbar-track {
         border-radius: 10px;
     }
+}
+
+.ellips {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.multi-line-ellips (@row: 1) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: @row;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

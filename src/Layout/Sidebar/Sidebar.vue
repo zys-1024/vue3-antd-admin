@@ -50,7 +50,7 @@ const selected = reactive<ISelected>({
 
 <style lang="less" scoped>
 .ant-menu {
-    height: 100%;
+    flex: 1;
     overflow: hidden auto;
     user-select: none;
     .scrollbar();

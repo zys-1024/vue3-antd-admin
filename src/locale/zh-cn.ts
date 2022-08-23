@@ -1,6 +1,6 @@
 export default {
     login: {
-        title: '后台管理系统',
+        title: 'Vue3 Admin',
         submit: '登录',
         placeholder:{
             username: '请输入用户名' ,

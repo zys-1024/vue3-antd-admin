@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { onMounted } from 'vue'
 import enUS from 'ant-design-vue/es/locale/en_US'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
-import { Lang } from './locale'
 import I18nStore from '@/store/i18n'
+import darkMode from './utils/theme';
 
 const i18nStore = I18nStore()
+
+onMounted(() => {
+	darkMode()
+})
 </script>
 
 <template>
@@ -14,6 +18,6 @@ const i18nStore = I18nStore()
 	</a-config-provider>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 
 </style>

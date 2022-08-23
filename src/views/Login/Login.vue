@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { getCode, ILoginForm } from '@/api/user'
 import UserStore from '@/store/user'
 import i18n from '@/locale'
 import { FormInstance } from 'ant-design-vue/es'
+import i18nStore from '@/store/i18n'
 
 const t = i18n.global.t
 const userStore = UserStore()
 const form = reactive<ILoginForm>({ username: 'admin', password: '123456', code: '' })
-const rules = {
+// computed保证再次显示验证信息时，语言更改成功
+const rules = computed(() => ({
     username: [{ required: true, message: t('login.error.username') }],
     password: [{ required: true, message: t('login.error.password') }],
     code: [{ required: true, message: t('login.error.code') }]
-}
+}))
 const code = ref<string>('')
 const formRef = ref<FormInstance>()
 const loading = ref<boolean>(false)
@@ -25,18 +27,16 @@ onUnmounted(() => {
     document.removeEventListener('keyup', enter)
 })
 
-watch(() => i18n.global.locale.value , () => {
-    setTimeout(() => {
-        // 语言切换时会自动触发表单验证显示验证信息，使用clearValidate清理验证信息
-        formRef.value?.clearValidate()
-    }, 0)
-})
-
 const enter = (e: KeyboardEvent) => {
     if(e.key === 'Enter') {
         submit()
     }
 }
+
+// 切换语言后，表单验证信息不会跟着切换语言，直接清除验证信息
+watch(() => i18n.global.locale.value, () => {
+    formRef.value?.clearValidate()
+})
 
 const inputFocus = () => {
     const input = document.querySelector('.ant-form-item-has-error input') as HTMLInputElement
@@ -111,10 +111,10 @@ const submit = async () => {
                         </div>
                     </a-form-item>
                     <a-form-item>
-                        <div class="flex flex-between" style="width: 100%;">
-                            <a-button>{{ $t('login.phoneLogin') }}</a-button>
-                            <a-button>{{ $t('login.qrcodeLogin') }}</a-button>
-                            <a-button>{{ $t('login.register') }}</a-button>
+                        <div class="flex" style="width: 100%;">
+                            <a-button class="flex-grow">{{ $t('login.phoneLogin') }}</a-button>
+                            <a-button class="flex-grow" style="margin: 0 10px;">{{ $t('login.qrcodeLogin') }}</a-button>
+                            <a-button class="flex-grow">{{ $t('login.register') }}</a-button>
                         </div>
                     </a-form-item>
                     <a-form-item style="margin-bottom: 10px;">

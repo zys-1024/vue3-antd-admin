@@ -2,6 +2,7 @@ import { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 import { getToken } from '@/utils/token'
 import addRoutes from '.'
+import Login from '@/views/Login/Login.vue'
 
 export type TRoutes = RouteRecordRaw & {
     children?: TRoutes[],
@@ -15,7 +16,7 @@ export type TRoutes = RouteRecordRaw & {
 export const routes: TRoutes[] = [{
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/Login/Login.vue'),
+    component: Login,
     meta: {
         title: '登录'
     }

@@ -1,6 +1,6 @@
 export default {
     login: {
-        title: 'Back manage System',
+        title: 'Vue3 Admin',
         submit: 'SignIn',
         placeholder:{
             username: 'Please input the username' ,

@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import UserStore from '@/store/user'
 
-const { isCollapse } = defineProps({
-	isCollapse: {
+const { collapse } = defineProps({
+	collapse: {
 		type: Boolean,
 		default: false
 	}
 })
 
 const emit = defineEmits<{
-    (event: 'collapseChange'): void
+    (event: 'update:collapse', collapse: boolean): void
 }>()
 
 const userStore = UserStore()
@@ -17,8 +17,8 @@ const userStore = UserStore()
 
 <template>
     <div class="header flex flex-middle flex-between">
-        <div class="sider-collapse flex flex-center flex-middle pointer" @click="emit('collapseChange')">
-			<SvgIcon :name="isCollapse ? 'fold' : 'unfold'" />
+        <div class="sider-collapse flex flex-center flex-middle pointer" @click="emit('update:collapse', !collapse)">
+			<SvgIcon :name="collapse ? 'fold' : 'unfold'" />
 		</div>
         <div class="navbar">
 			<ul class="navbar-list flex">

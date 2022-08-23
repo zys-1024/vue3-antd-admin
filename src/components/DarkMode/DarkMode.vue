@@ -1,21 +1,11 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { useDark, useToggle } from '@vueuse/core'
+import darkMode, { toggle } from '@/utils/theme';
+import { ref } from 'vue'
 
-const isDark = useDark({
-    storageKey: 'theme-mode',
-    valueLight: 'light',
-    valueDark: 'dark'
-})
-const toggle = useToggle(isDark)
 const dark = ref<boolean>(false)
-
-onMounted(() => {
-	dark.value = window.localStorage.getItem('theme-mode') === 'dark'
-})
-
 const change = () => {
 	dark.value = toggle()
+	darkMode(dark.value)
 }
 </script>
 
