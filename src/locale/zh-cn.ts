@@ -50,5 +50,16 @@ export default {
         '404': '404',
         '500': '500',
         '外链': '外链'
+    },
+    setting: {
+        pageStyle: '整体风格',
+        themeColor: '主题色',
+        navMode: '导航模式',
+        lightMenuStyle: '亮色菜单风格',
+        darkMenuStyle: '暗色菜单风格',
+        darkMode: '暗黑模式',
+        siderMenuLayout: '侧边菜单布局',
+        topMenuLayout: '顶部菜单布局',
+        mixMenuLayout: '混合菜单布局'
     }
 }

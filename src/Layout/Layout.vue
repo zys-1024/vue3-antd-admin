@@ -8,9 +8,9 @@ const collapse = ref<boolean>(false)
 
 <template>
     <a-layout class="layout">
-        <a-layout-sider v-model:collapsed="collapse" :width="230">
+        <a-layout-sider v-model:collapsed="collapse" :width="230" :collapsedWidth="60">
             <div class="logo pointer">
-                <div class="flex flex-middle flex-center">
+                <div class="flex flex-middle">
                     <SvgIcon name="vite" />
                     <span>Vue3 Admin</span>
                 </div>
@@ -25,6 +25,7 @@ const collapse = ref<boolean>(false)
                 <RouterView />
             </a-layout-content>
         </a-layout>
+        <Setting />
     </a-layout>
 </template>
 
@@ -37,7 +38,8 @@ const collapse = ref<boolean>(false)
         overflow: hidden;
         >div {
             height: 100%;
-            padding: 0 24px;
+            padding: 0 0 0 24px;
+            transition: .3s;
             .svg-icon {
                 width: 32px;
                 height: 32px;
@@ -66,17 +68,26 @@ const collapse = ref<boolean>(false)
     }
     .ant-layout-sider-collapsed {
         .logo {
-            span {
-                width: 0;
-                margin: 0;
-                opacity: 0;
-            }
+           >div {
+                padding: 0 15px;
+                span {
+                    flex: none;
+                    width: 0;
+                    margin: 0;
+                    opacity: 0;
+                }
+           }
         }
     }
     .ant-layout-header {
         height: 48px;
         padding: 0 20px 0 0;
         background-color: var(--header-bg);
+        margin-left: 1px;
+    }
+
+    .ant-layout-content {
+        padding: 15px;
     }
 }
 </style>

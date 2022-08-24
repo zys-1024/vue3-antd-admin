@@ -33,7 +33,7 @@ export default defineConfig({
     ],
     resolve: { alias },
     server: {
-        host: '0.0.0.0',
+        host: '0.0.0.0'
     },
     css: {
         preprocessorOptions: {

@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import UserStore from '@/store/user'
+import { reactive } from 'vue'
+
+interface IState { isFullScreen: boolean }
 
 const { collapse } = defineProps({
 	collapse: {
@@ -7,24 +10,40 @@ const { collapse } = defineProps({
 		default: false
 	}
 })
-
 const emit = defineEmits<{
     (event: 'update:collapse', collapse: boolean): void
 }>()
 
 const userStore = UserStore()
+const state = reactive<IState>({
+	isFullScreen: false
+})
+
+const fullScreen = () => {
+	if (document.fullscreenElement) {
+		document.exitFullscreen()
+		state.isFullScreen = false
+	} else {
+		document.documentElement.requestFullscreen()
+		state.isFullScreen = true
+	}
+}
 </script>
 
 <template>
     <div class="header flex flex-middle flex-between">
         <div class="sider-collapse flex flex-center flex-middle pointer" @click="emit('update:collapse', !collapse)">
-			<SvgIcon :name="collapse ? 'fold' : 'unfold'" />
+			<SvgIcon :name="collapse ? 'unfold' : 'fold'" />
 		</div>
         <div class="navbar">
 			<ul class="navbar-list flex">
 				<li class="navbar-list-item"><SvgIcon name="search" /></li>
-				<li class="navbar-list-item"><SvgIcon name="bell" /></li>
-				<li class="navbar-list-item"><SvgIcon name="full" /></li>
+				<li class="navbar-list-item">
+					<a-badge dot>
+						<SvgIcon name="bell" />
+					</a-badge>
+				</li>
+				<li class="navbar-list-item" @click="fullScreen"><SvgIcon :name="state.isFullScreen ? 'unfull' : 'full'" /></li>
 				<li class="navbar-list-item" style="padding: 0;">
 					<div style="height: 100%;">
 						<ChangeLocale :show-locale="false" trigger="hover" />

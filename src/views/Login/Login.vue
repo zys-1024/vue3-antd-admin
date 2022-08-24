@@ -189,7 +189,7 @@ const submit = async () => {
             }
         }
         .login-form-header+div {
-            border-radius: 4px;
+            border-radius: var(--z-radius);
             box-shadow: 0 0 0 1px var(--login-form-border-color);
             background: linear-gradient(41deg, black, #3d4f774d);
         }
@@ -230,7 +230,7 @@ const submit = async () => {
                     width: 150px;
                     height: 40px;
                     margin-left: 20px;
-                    border-radius: 4px;
+                    border-radius: var(--z-radius);
                     background-color: #fff;
                 }
             }

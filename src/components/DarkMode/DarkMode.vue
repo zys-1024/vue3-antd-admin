@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import darkMode, { toggle } from '@/utils/theme';
 import { ref } from 'vue'
+import darkMode, { toggle, isDark } from '@/utils/theme'
 
-const dark = ref<boolean>(false)
+const dark = ref<boolean>(isDark)
+
 const change = () => {
 	dark.value = toggle()
 	darkMode(dark.value)
