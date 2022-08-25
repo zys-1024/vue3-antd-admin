@@ -1,5 +1,5 @@
 import { getRoutes } from '@/api/routes'
-import { Router, RouteRecordRaw } from 'vue-router'
+import { RouteRecordRaw } from 'vue-router'
 import router, { TRoutes } from './routes'
 
 export let menus: TRoutes[] = []

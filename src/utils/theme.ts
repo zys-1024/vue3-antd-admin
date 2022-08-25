@@ -16,11 +16,14 @@ export const isDark = window.localStorage.getItem('theme-mode') === 'dark'
 
 // 开/关 暗黑模式
 const darkMode = (enabled: boolean = isDark) => {
+    const mode = enabled ? 'dark' : 'light'
     document.getElementById('theme')?.remove()
     const style = document.createElement('style')
     style.id = 'theme'
     style.innerHTML = enabled ? dark : light
     document.head.appendChild(style)
+    window.localStorage.setItem('theme-mode', mode)
+    document.querySelector('html')!.className = mode
 }
 
 export default darkMode

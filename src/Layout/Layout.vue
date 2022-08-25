@@ -1,30 +1,74 @@
 <script lang="ts" setup>
-import { watch, ref } from 'vue'
-import Sidebar from './Sidebar/Sidebar.vue'
-import Header from './Header/Header.vue'
+import { ref } from 'vue'
+import useTheme from '@/hooks/useTheme'
 
+const { getMenuTheme, getMenuMode } = useTheme()
 const collapse = ref<boolean>(false)
+
 </script>
 
 <template>
     <a-layout class="layout">
-        <a-layout-sider v-model:collapsed="collapse" :width="230" :collapsedWidth="60">
-            <div class="logo pointer">
-                <div class="flex flex-middle">
-                    <SvgIcon name="vite" />
-                    <span>Vue3 Admin</span>
+        <template v-if="getMenuMode() === 'inline'">
+            <a-layout-sider
+                v-model:collapsed="collapse" 
+                :width="230" 
+                :collapsedWidth="60"
+                :collapsible="getMenuMode() === 'mix'"
+                :theme="getMenuTheme()">
+                <div class="logo pointer">
+                    <div class="flex flex-middle">
+                        <SvgIcon name="vite" />
+                        <span :class="[getMenuTheme()]">Vue3 Admin</span>
+                    </div>
                 </div>
-            </div>
-            <Sidebar :isCollapse="collapse" />
-        </a-layout-sider>
-        <a-layout>
-            <a-layout-header>
-                <Header v-model:collapse="collapse" />
+                <Sidebar />
+            </a-layout-sider>
+            <a-layout v-if="getMenuMode() !== 'horizontal'">
+                <a-layout-header>
+                    <Header v-model:collapse="collapse" />
+                </a-layout-header>
+                <a-layout-content>
+                    <RouterView />
+                </a-layout-content>
+            </a-layout>
+        </template>
+        <template v-else-if="getMenuMode() === 'horizontal'">
+            <a-layout-header class="flex">
+                <div class="logo pointer">
+                    <div class="flex flex-middle">
+                        <SvgIcon name="vite" />
+                        <span>Vue3 Admin</span>
+                    </div>
+                </div>
+                <Sidebar />
+                <Header />
             </a-layout-header>
-            <a-layout-content>
-                <RouterView />
-            </a-layout-content>
-        </a-layout>
+            <template>
+                <a-layout-content>
+                    <RouterView />
+                </a-layout-content>
+            </template>
+        </template>
+        <template v-else-if="getMenuMode() === 'mix'">
+            <a-layout-header class="flex">
+                <div class="logo pointer">
+                    <div class="flex flex-middle">
+                        <SvgIcon name="vite" />
+                        <span>Vue3 Admin</span>
+                    </div>
+                </div>
+                <Header />
+            </a-layout-header>
+            <a-layout>
+                <a-layout-sider>
+                    <Sidebar />
+                </a-layout-sider>
+                <a-layout-content>
+                    <RouterView />
+                </a-layout-content>
+            </a-layout>
+        </template>
         <Setting />
     </a-layout>
 </template>
@@ -36,6 +80,8 @@ const collapse = ref<boolean>(false)
         position: relative;
         height: 48px;
         overflow: hidden;
+        background-color: var(--logo-bg);
+        transition: background .3s;
         >div {
             height: 100%;
             padding: 0 0 0 24px;
@@ -58,12 +104,19 @@ const collapse = ref<boolean>(false)
                 transition: all .3s;
                 .ellips;
             }
+            .light { color: #2e2e2e; }
         }
+    }
+    .logo.inline {
+        color: #1f1f1f;
     }
     .ant-layout-sider {
         :deep(.ant-layout-sider-children) {
             display: flex;
             flex-direction: column;
+        }
+        :deep(.ant-layout-sider-trigger) {
+            background-color: var(--logo-bg);
         }
     }
     .ant-layout-sider-collapsed {
@@ -83,7 +136,7 @@ const collapse = ref<boolean>(false)
         height: 48px;
         padding: 0 20px 0 0;
         background-color: var(--header-bg);
-        margin-left: 1px;
+        transition: background .3s;
     }
 
     .ant-layout-content {

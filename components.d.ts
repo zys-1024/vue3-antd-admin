@@ -56,6 +56,7 @@ declare module '@vue/runtime-core' {
     Result: typeof import('./src/views/Result/Result.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SetLayoutStyle: typeof import('./src/Layout/Setting/components/SetLayoutStyle.vue')['default']
     Setting: typeof import('./src/Layout/Setting/Setting.vue')['default']
     Sidebar: typeof import('./src/Layout/Sidebar/Sidebar.vue')['default']
     Success: typeof import('./src/views/Result/Success/Success.vue')['default']
