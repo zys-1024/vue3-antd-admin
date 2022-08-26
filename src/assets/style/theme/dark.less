@@ -2,7 +2,7 @@
     --text-color: #E5EAF3;
     --bg-color-mute: #2c2c2c;
     --border-color: #4C4D4F;
-    --hover-bg: #2B2B2C;
+    --header-hover-bg: #2B2B2C;
     // DarkMode
     --z-dark-switch-action-bg: #000;
     // Login
@@ -22,7 +22,7 @@
     // Header
     --header-bg: #1f1f1f;
     // Sider
-    --sider-logo-text-color: var(--text-color);
+    --logo-text-color: var(--text-color);
     --scrollbar-bg: #313131;
     --logo-bg: #141414;
     // Setting
@@ -36,4 +36,38 @@
     --setting-style-pseudo3: #1f1f1f;
     --setting-style-shadow: rgb(13, 13, 13) 0px 1px 2.5px 0px;
     --setting-style-handle: var(--text-color);
+
+    #app[menu-theme="dark-menu"] {
+        --logo-text-color: #fff;
+    
+        --header-bg: #fff;
+    }
+    
+    #app[menu-theme="dark-menu"]#app[menu-mode="inline"] {
+        --header-bg: #fff;
+    }
+    
+    #app[menu-theme="dark-menu"]#app[menu-mode="horizontal"],
+    #app[menu-theme="dark-menu"]#app[menu-mode="mix"] {
+        --logo-bg: #001529;
+        --header-bg: #001529;
+    }
+    
+    #app[menu-theme=""]#app[menu-mode="inline"] {
+        --logo-bg: #141414;
+    }
+    
+    #app[menu-theme=""]#app[menu-mode="horizontal"] {
+        --header-bg: #141414;
+        --logo-bg: #141414;
+    }
+    
+    #app[menu-theme=""]#app[menu-mode="mix"] {
+        --toggle-bg: #1f1f1f;
+    }
+    
+    #app[menu-theme=""] {
+        --header-bg: #1f1f1f;
+        --logo-bg: #1f1f1f;
+    }
 }

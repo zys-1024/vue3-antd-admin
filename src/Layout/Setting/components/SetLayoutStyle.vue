@@ -13,7 +13,7 @@ interface ISelected {
 interface IStyles { tip: string, name: keyof IStyleName }
 interface INavTypes { tip: string, name: keyof INavName }
 
-const { setMenuTheme, setMenuMode } = useTheme()
+const { setMenuTheme, setMenuMode, getMenuTheme } = useTheme()
 const selected = reactive<ISelected>({
 	pageStyle: 'light',
 	primaryColor: 0,
@@ -31,38 +31,64 @@ const navs: INavTypes[] = [
 	{ tip: 'setting.mixMenuLayout', name: 'mix' }
 ]
 
+const setAppAttr = (attr: string, value: string) => {
+    const app = document.getElementById('app') as HTMLDivElement
+    app.setAttribute(attr, value)
+}
+
 const setPageStyle = (style: keyof IStyleName) => {
     selected.pageStyle = style
     switch (style) {
         case 'light':
             darkMode(false)
             setMenuTheme('light')
+            setAppAttr('menu-theme', 'light-menu')
             break
         case 'dark':
             darkMode(false)
-            setMenuTheme('dark')
+            if (selected.navMode !== 'mix') {
+                setMenuTheme('dark')
+                setAppAttr('menu-theme', 'dark-menu')
+            }
             break
         case 'darkMode':
             darkMode(true)
-            // @ts-ignore
-            setMenuTheme('default')
+            setMenuTheme('light')
+            setAppAttr('menu-theme', '')
             break
     }
 }
 const setPrimaryColor = (index: number, color: string) => {
     selected.primaryColor = index
 }
+
 const setNavigationMode = (mode: keyof INavName) => {
     selected.navMode = mode
     switch(mode) {
         case 'sider':
             setMenuMode('inline')
+            setAppAttr('menu-mode', 'inline')
+            if (selected.pageStyle === 'dark') {
+               setMenuTheme('dark')
+            }
             break
         case 'top':
             setMenuMode('horizontal')
+            setAppAttr('menu-mode', 'horizontal')
+            if (selected.pageStyle === 'dark') {
+               setMenuTheme('dark')
+            }
             break
         case 'mix':
             setMenuMode('mix')
+            setAppAttr('menu-mode', 'mix')
+            if (selected.pageStyle === 'dark') {
+                setMenuTheme('light')
+            }
+            if (selected.pageStyle !== 'darkMode') {
+                selected.pageStyle = 'light'
+                setAppAttr('menu-theme', 'light-menu')
+            }
             break
     }
 }
@@ -72,7 +98,7 @@ const setNavigationMode = (mode: keyof INavName) => {
     <div class="layout-setting-item layout-setting-style">
         <p>{{ $t('setting.pageStyle') }}</p>
         <div class="flex">
-            <a-tooltip placement="top" v-for="item of styles" :key="item.name">
+            <a-tooltip placement="top" v-for="item of styles.filter(item => !(item.name === 'dark' && selected.navMode === 'mix'))" :key="item.name">
                 <template #title>
                     <span>{{ $t(item.tip) }}</span>
                 </template>

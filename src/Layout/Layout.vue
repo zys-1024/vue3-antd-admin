@@ -14,12 +14,11 @@ const collapse = ref<boolean>(false)
                 v-model:collapsed="collapse" 
                 :width="230" 
                 :collapsedWidth="60"
-                :collapsible="getMenuMode() === 'mix'"
                 :theme="getMenuTheme()">
                 <div class="logo pointer">
                     <div class="flex flex-middle">
                         <SvgIcon name="vite" />
-                        <span :class="[getMenuTheme()]">Vue3 Admin</span>
+                        <span>Vue3 Admin</span>
                     </div>
                 </div>
                 <Sidebar />
@@ -35,7 +34,7 @@ const collapse = ref<boolean>(false)
         </template>
         <template v-else-if="getMenuMode() === 'horizontal'">
             <a-layout-header class="flex">
-                <div class="logo pointer">
+                <div class="logo pointer" style="margin-right: 50px;">
                     <div class="flex flex-middle">
                         <SvgIcon name="vite" />
                         <span>Vue3 Admin</span>
@@ -51,7 +50,7 @@ const collapse = ref<boolean>(false)
             </template>
         </template>
         <template v-else-if="getMenuMode() === 'mix'">
-            <a-layout-header class="flex">
+            <a-layout-header class="flex flex-between">
                 <div class="logo pointer">
                     <div class="flex flex-middle">
                         <SvgIcon name="vite" />
@@ -61,7 +60,7 @@ const collapse = ref<boolean>(false)
                 <Header />
             </a-layout-header>
             <a-layout>
-                <a-layout-sider>
+                <a-layout-sider :width="230" collapsible :theme="getMenuTheme()">
                     <Sidebar />
                 </a-layout-sider>
                 <a-layout-content>
@@ -87,14 +86,14 @@ const collapse = ref<boolean>(false)
             padding: 0 0 0 24px;
             transition: .3s;
             .svg-icon {
-                width: 32px;
-                height: 32px;
+                width: var(--logo-size);
+                height: var(--logo-size);
                 margin: 0;
             }
             span {
                 flex: 1;
-                font-size: 20px;
-                color: var(--sider-logo-text-color);
+                font-size: var(--logo-font-size);
+                color: var(--logo-text-color);
                 font-weight: 500;
                 white-space: nowrap;
                 margin-left: 10px;
@@ -104,11 +103,7 @@ const collapse = ref<boolean>(false)
                 transition: all .3s;
                 .ellips;
             }
-            .light { color: #2e2e2e; }
         }
-    }
-    .logo.inline {
-        color: #1f1f1f;
     }
     .ant-layout-sider {
         :deep(.ant-layout-sider-children) {
@@ -116,7 +111,7 @@ const collapse = ref<boolean>(false)
             flex-direction: column;
         }
         :deep(.ant-layout-sider-trigger) {
-            background-color: var(--logo-bg);
+            background-color: var(--toggle-bg);
         }
     }
     .ant-layout-sider-collapsed {

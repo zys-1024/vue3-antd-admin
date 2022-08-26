@@ -15,7 +15,9 @@ const config = reactive<IThemeConfig>({
 
 export default function() {
 
-    const getMenuTheme = (): keyof IMenuTheme => config.menuTheme
+    const getMenuTheme = (): keyof IMenuTheme => {
+        return config.menuTheme
+    }
 
     const setMenuTheme = (theme: keyof IMenuTheme) => {
         config.menuTheme = theme

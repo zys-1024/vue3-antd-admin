@@ -92,7 +92,7 @@ const fullScreen = () => {
 		height: 100%;
 		.svg-icon { font-size: 18px; margin: 0; }
 		&:hover {
-			background-color: var(--hover-bg);
+			background-color: var(--header-hover-bg);
 		}
 	}
 	.navbar {
@@ -106,10 +106,14 @@ const fullScreen = () => {
 				align-items: center;
 				padding: 0 10px;
 				cursor: pointer;
+				color: var(--header-right-color); 
 				&:hover {
-					background-color: var(--hover-bg);
+					background-color: var(--header-hover-bg);
 				}
-				:deep(.svg-icon) { margin: 0; }
+				:deep(.svg-icon) { 
+					margin: 0; 
+					color: var(--header-right-color); 
+				}
 				.username {
 					font-size: 14px;
 					margin-left: 5px;
