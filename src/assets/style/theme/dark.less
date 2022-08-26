@@ -37,36 +37,44 @@
     --setting-style-shadow: rgb(13, 13, 13) 0px 1px 2.5px 0px;
     --setting-style-handle: var(--text-color);
 
-    #app[menu-theme="dark-menu"] {
+    #app[menu-theme="dark"] {
         --logo-text-color: #fff;
     
         --header-bg: #fff;
     }
     
-    #app[menu-theme="dark-menu"]#app[menu-mode="inline"] {
+    #app[menu-theme="dark"]#app[menu-mode="inline"] {
         --header-bg: #fff;
     }
     
-    #app[menu-theme="dark-menu"]#app[menu-mode="horizontal"],
-    #app[menu-theme="dark-menu"]#app[menu-mode="mix"] {
+    #app[menu-theme="dark"]#app[menu-mode="horizontal"],
+    #app[menu-theme="dark"]#app[menu-mode="mix"] {
         --logo-bg: #001529;
         --header-bg: #001529;
     }
     
-    #app[menu-theme=""]#app[menu-mode="inline"] {
-        --logo-bg: #141414;
-    }
-    
-    #app[menu-theme=""]#app[menu-mode="horizontal"] {
+    #app[menu-theme="dark"]#app[menu-mode="inline"],
+    #app[menu-theme="dark"]#app[menu-mode="horizontal"] {
         --header-bg: #141414;
         --logo-bg: #141414;
     }
     
-    #app[menu-theme=""]#app[menu-mode="mix"] {
+    #app[menu-theme="dark"]#app[menu-mode="mix"] {
+        --header-bg: #141414;
+        --logo-bg: #141414;
+        --toggle-bg: #1f1f1f;
+    }
+
+    #app[menu-theme="light"]#app[menu-mode="horizontal"] {
+        --header-bg: #141414;
+    }
+
+    #app[menu-theme="light"]#app[menu-mode="mix"] {
+        --logo-bg: #1f1f1f;
         --toggle-bg: #1f1f1f;
     }
     
-    #app[menu-theme=""] {
+    #app[menu-theme="dark"] {
         --header-bg: #1f1f1f;
         --logo-bg: #1f1f1f;
     }

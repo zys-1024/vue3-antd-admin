@@ -34,7 +34,7 @@ const collapse = ref<boolean>(false)
         </template>
         <template v-else-if="getMenuMode() === 'horizontal'">
             <a-layout-header class="flex">
-                <div class="logo pointer" style="margin-right: 50px;">
+                <div class="logo pointer" style="padding-right: 50px;">
                     <div class="flex flex-middle">
                         <SvgIcon name="vite" />
                         <span>Vue3 Admin</span>

@@ -1,40 +1,59 @@
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 
 interface IMenuTheme { light: string, dark: string }
 export interface IMenuMode { inline: string, vertical: string, horizontal: string }
 interface IMenuMode2 extends IMenuMode { mix: string }
 interface IThemeConfig {
-    menuTheme: keyof IMenuTheme
-    menuMode: keyof IMenuMode2
+    'menu-theme': keyof IMenuTheme
+    'menu-mode': keyof IMenuMode2
 }
 
+const config_ = window.localStorage.getItem('useTheme')
 const config = reactive<IThemeConfig>({
-    menuTheme: 'light',
-    menuMode: 'inline'
+    'menu-theme': 'light',
+    'menu-mode': 'inline'
 })
+
+if (config_) {
+    const parse = JSON.parse(config_)
+    Object.assign(config, parse)
+    Object.keys(parse).forEach(key => {
+        setAppAttr(key, parse[key])
+    })
+}
+
+watch(config, val => {
+    window.localStorage.setItem('useTheme', JSON.stringify(val))
+})
+
+function setAppAttr (attr: string, value: string) {
+    const app = document.getElementById('app') as HTMLDivElement
+    app.setAttribute(attr, value)
+}
 
 export default function() {
 
     const getMenuTheme = (): keyof IMenuTheme => {
-        return config.menuTheme
+        return config['menu-theme']
     }
 
     const setMenuTheme = (theme: keyof IMenuTheme) => {
-        config.menuTheme = theme
+        config['menu-theme'] = theme
     }
 
     const getMenuMode = (): keyof IMenuMode2 => {
-        return config.menuMode
+        return config['menu-mode']
     }
 
     const setMenuMode = (mode: keyof IMenuMode2) => {
-        config.menuMode = mode
+        config['menu-mode'] = mode
     }
 
     return {
         getMenuTheme,
         setMenuTheme,
         getMenuMode,
-        setMenuMode
+        setMenuMode,
+        setAppAttr
     }
 }

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { onMounted, reactive, watch } from 'vue'
 import useTheme from '@/hooks/useTheme'
 import darkMode from '@/utils/theme'
 
 interface IStyleName { light: string, dark: string, darkMode: string }
-interface INavName { sider: string, top: string, mix: string }
+interface INavName { inline: string, horizontal: string, mix: string }
 interface ISelected {
 	pageStyle: keyof IStyleName
 	primaryColor: number
@@ -13,11 +13,11 @@ interface ISelected {
 interface IStyles { tip: string, name: keyof IStyleName }
 interface INavTypes { tip: string, name: keyof INavName }
 
-const { setMenuTheme, setMenuMode, getMenuTheme } = useTheme()
+const { setMenuTheme, setMenuMode, setAppAttr } = useTheme()
 const selected = reactive<ISelected>({
 	pageStyle: 'light',
 	primaryColor: 0,
-	navMode: 'sider'
+	navMode: 'inline'
 })
 const colors: string[] = ['#1890ff', '#f00', '#ea005a', '#f50', '#3acf5c', '#07d8ce', '#7f59ff', '#ad0ee3']
 const styles: IStyles[] = [
@@ -26,15 +26,20 @@ const styles: IStyles[] = [
 	{ tip: 'setting.darkMode', name: 'darkMode' }
 ]
 const navs: INavTypes[] = [
-	{ tip: 'setting.siderMenuLayout', name: 'sider' },
-	{ tip: 'setting.topMenuLayout', name: 'top' },
+	{ tip: 'setting.siderMenuLayout', name: 'inline' },
+	{ tip: 'setting.topMenuLayout', name: 'horizontal' },
 	{ tip: 'setting.mixMenuLayout', name: 'mix' }
 ]
 
-const setAppAttr = (attr: string, value: string) => {
-    const app = document.getElementById('app') as HTMLDivElement
-    app.setAttribute(attr, value)
-}
+watch(selected, val => {
+    window.localStorage.setItem('layout-style', JSON.stringify(val))
+})
+onMounted(() => {
+    const selected_ = window.localStorage.getItem('layout-style')
+    if (selected_) {
+        Object.assign(selected, JSON.parse(selected_))
+    }
+})
 
 const setPageStyle = (style: keyof IStyleName) => {
     selected.pageStyle = style
@@ -42,19 +47,19 @@ const setPageStyle = (style: keyof IStyleName) => {
         case 'light':
             darkMode(false)
             setMenuTheme('light')
-            setAppAttr('menu-theme', 'light-menu')
+            setAppAttr('menu-theme', 'light')
             break
         case 'dark':
             darkMode(false)
             if (selected.navMode !== 'mix') {
                 setMenuTheme('dark')
-                setAppAttr('menu-theme', 'dark-menu')
+                setAppAttr('menu-theme', 'dark')
             }
             break
         case 'darkMode':
             darkMode(true)
             setMenuTheme('light')
-            setAppAttr('menu-theme', '')
+            setAppAttr('menu-theme', 'dark')
             break
     }
 }
@@ -65,14 +70,14 @@ const setPrimaryColor = (index: number, color: string) => {
 const setNavigationMode = (mode: keyof INavName) => {
     selected.navMode = mode
     switch(mode) {
-        case 'sider':
+        case 'inline':
             setMenuMode('inline')
             setAppAttr('menu-mode', 'inline')
             if (selected.pageStyle === 'dark') {
                setMenuTheme('dark')
             }
             break
-        case 'top':
+        case 'horizontal':
             setMenuMode('horizontal')
             setAppAttr('menu-mode', 'horizontal')
             if (selected.pageStyle === 'dark') {
@@ -87,7 +92,7 @@ const setNavigationMode = (mode: keyof INavName) => {
             }
             if (selected.pageStyle !== 'darkMode') {
                 selected.pageStyle = 'light'
-                setAppAttr('menu-theme', 'light-menu')
+                setAppAttr('menu-theme', 'light')
             }
             break
     }
