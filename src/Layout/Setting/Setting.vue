@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
-const visible = ref<boolean>(true)
+const visible = ref<boolean>(false)
 const settingRef = ref<HTMLDivElement>()
 const btnRef = ref<HTMLDivElement>()
 
@@ -14,11 +14,11 @@ const visibleHandle = () => visible.value = !visible.value
 </script>
 
 <template>
-    <div class="layout-setting" ref="settingRef">
+    <div class="layout-setting ant-scrolling-effect" ref="settingRef">
 		<div class="layout-setting-handle flex flex-center flex-middle" ref="btnRef" @click="visibleHandle">
 			<SvgIcon :name="visible ? 'close' : 'setting'" />
 		</div>
-		<a-drawer class="layout-setting-drawer" v-model:visible="visible" :getContainer="settingRef" :closable="false" :width="300">
+		<a-drawer class="layout-setting-drawer" v-model:visible="visible" :forceRender="true" :getContainer="settingRef" :closable="false" :width="300">
 			<SetLayoutStyle />
 		</a-drawer>
     </div>

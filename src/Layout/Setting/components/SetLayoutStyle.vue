@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, reactive, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import useTheme from '@/hooks/useTheme'
 import darkMode from '@/utils/theme'
 
@@ -7,19 +7,21 @@ interface IStyleName { light: string, dark: string, darkMode: string }
 interface INavName { inline: string, horizontal: string, mix: string }
 interface ISelected {
 	pageStyle: keyof IStyleName
-	primaryColor: number
+	primaryColorIndex: number
 	navMode: keyof INavName
 }
 interface IStyles { tip: string, name: keyof IStyleName }
 interface INavTypes { tip: string, name: keyof INavName }
 
-const { setMenuTheme, setMenuMode, setAppAttr } = useTheme()
+const { setMenuTheme, setMenuMode, setAppAttr, setPrimaryColor, getPrimaryColor } = useTheme()
 const selected = reactive<ISelected>({
 	pageStyle: 'light',
-	primaryColor: 0,
+	primaryColorIndex: 0,
 	navMode: 'inline'
 })
-const colors: string[] = ['#1890ff', '#f00', '#ea005a', '#f50', '#3acf5c', '#07d8ce', '#7f59ff', '#ad0ee3']
+const primaryColor = ref<string>()
+const colorRef = ref<HTMLInputElement>()
+const colors: string[] = ['#1890ff', '#f00', '#ea005a', '#f50', '#00bd74', '#4bd600', '#7f59ff', '']
 const styles: IStyles[] = [
 	{ tip: 'setting.lightMenuStyle', name: 'light' },
 	{ tip: 'setting.darkMenuStyle', name: 'dark' },
@@ -38,6 +40,7 @@ onMounted(() => {
     const selected_ = window.localStorage.getItem('layout-style')
     if (selected_) {
         Object.assign(selected, JSON.parse(selected_))
+        primaryColor.value = getPrimaryColor()
     }
 })
 
@@ -63,8 +66,21 @@ const setPageStyle = (style: keyof IStyleName) => {
             break
     }
 }
-const setPrimaryColor = (index: number, color: string) => {
-    selected.primaryColor = index
+
+const setPrimaryColor_ = (index: number, color: string) => {
+    if (index === colors.length - 1) {
+        colorRef.value?.click()
+    } else {
+        selected.primaryColorIndex = index
+        setPrimaryColor(color)
+        primaryColor.value = getPrimaryColor()
+    }
+}
+
+const colorChange = (e: Event) => {
+    selected.primaryColorIndex = colors.length - 1
+    setPrimaryColor((e.target as HTMLInputElement).value)
+    primaryColor.value = getPrimaryColor()
 }
 
 const setNavigationMode = (mode: keyof INavName) => {
@@ -118,11 +134,13 @@ const setNavigationMode = (mode: keyof INavName) => {
         <ul class="flex">
             <li v-for="(item, index) of colors" 
             :key="item" 
-            :style="{backgroundColor: item}" 
+            :style="{background: item}" 
+            :class="{'select-color': index === colors.length - 1}"
             class="flex flex-middle flex-center"
-            @click="setPrimaryColor(index, item)">
-                <svgIcon name="check" v-show="selected.primaryColor === index" />
+            @click="setPrimaryColor_(index, item)">
+                <svgIcon name="check" v-show="selected.primaryColorIndex === index" />
             </li>
+            <input type="color" v-model="primaryColor" ref="colorRef" @change="colorChange" />
         </ul>
     </div>
     <div class="layout-setting-item layout-setting-navigation-mode">
@@ -194,6 +212,7 @@ const setNavigationMode = (mode: keyof INavName) => {
 }
 .layout-setting-theme-color {
 	ul {
+        position: relative;
 		li {
 			width: 20px;
 			height: 20px;
@@ -206,6 +225,19 @@ const setNavigationMode = (mode: keyof INavName) => {
 				color: var(--setting-style-handle);
 			}
 		}
+        input[type="color"] {
+            position: absolute;
+            width: 20px;
+			height: 20px;
+            top: 0;
+            right: 22px;
+            visibility: hidden;
+        }
+        .select-color {
+            background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+                        linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+                        linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+        }
 	}
 }
 .layout-setting-navigation-mode {

@@ -43,11 +43,9 @@ const collapse = ref<boolean>(false)
                 <Sidebar />
                 <Header />
             </a-layout-header>
-            <template>
-                <a-layout-content>
-                    <RouterView />
-                </a-layout-content>
-            </template>
+            <a-layout-content>
+                <RouterView />
+            </a-layout-content>
         </template>
         <template v-else-if="getMenuMode() === 'mix'">
             <a-layout-header class="flex flex-between">

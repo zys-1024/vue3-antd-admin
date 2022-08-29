@@ -3,12 +3,15 @@ import { onMounted } from 'vue'
 import enUS from 'ant-design-vue/es/locale/en_US'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import I18nStore from '@/store/i18n'
-import darkMode from './utils/theme';
+import darkMode from './utils/theme'
+import useTheme from './hooks/useTheme'
 
 const i18nStore = I18nStore()
+const { useStyle } = useTheme()
 
 onMounted(() => {
 	darkMode()
+	useStyle()
 })
 </script>
 

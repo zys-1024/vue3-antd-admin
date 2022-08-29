@@ -4,7 +4,6 @@ import { getCode, ILoginForm } from '@/api/user'
 import UserStore from '@/store/user'
 import i18n from '@/locale'
 import { FormInstance } from 'ant-design-vue/es'
-import i18nStore from '@/store/i18n'
 
 const t = i18n.global.t
 const userStore = UserStore()
@@ -66,7 +65,7 @@ const submit = async () => {
 <template>
     <div class="login">
         <div class="login-other flex flex-middle">
-            <DarkMode style="margin-top: -2px;" />
+            <DarkModeSwitch style="margin-top: -2px;" />
             <ChangeLocale class="login-change-locale" />
         </div>
         <div class="login-form">
