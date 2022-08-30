@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, reactive } from 'vue'
+import { computed, onMounted, reactive, watch } from 'vue'
 import { useRoute } from 'vue-router';
 import { menus } from '@/router'
 import useTheme, { IMenuMode } from '@/hooks/useTheme'
@@ -11,19 +11,32 @@ interface ISelected {
 
 const route = useRoute()
 const { getMenuTheme, getMenuMode } = useTheme()
+const selected = reactive<ISelected>({
+    openKeys: [],
+    selectedKeys: []
+})
+
+onMounted(() => {
+    format()
+})
+watch(() => route.path, () => {
+    format()
+})
+
 const menus_ = computed(() => {
     return menus.filter(item => item.meta?.menu)
 })
+
 const mode = computed(() => {
     return getMenuMode() === 'mix' ? 'inline' : (getMenuMode() as keyof IMenuMode)
 })
 
-// 将例如/menu/menu3/menu3_1/menu3_1_1 转成 ['/menu', '/menu/menu3', '/menu/menu3/menu3_1', '/menu/menu3/menu3_1/menu3_1_1']
-const parse = computed((): Array<string[]> => {
+const format = () => {
     // 菜单类型为horizontal返回空数组，不自动展开
     if (getMenuMode() === 'horizontal') {
-        return Array(2).fill([])
+        return [[], [route.path]]
     }
+    // 将例如/menu/menu3/menu3_1/menu3_1_1 转成 ['/menu', '/menu/menu3', '/menu/menu3/menu3_1', '/menu/menu3/menu3_1/menu3_1_1']
     const openKeys =  route.path.split('/').filter(item => !!item).map((item, index, arr) => {
         let key = ''
         for(let i = 0; i <= index; i++) {
@@ -31,13 +44,11 @@ const parse = computed((): Array<string[]> => {
         }
         return key
     })
-    return [openKeys, [route.path]]
-})
+    selected.openKeys = [...selected.openKeys, ...openKeys]
+    selected.selectedKeys = [route.path]
+}
 
-const selected = reactive<ISelected>({
-    openKeys: parse.value[0],
-    selectedKeys: parse.value[1]
-})
+
 </script>
 
 <template>

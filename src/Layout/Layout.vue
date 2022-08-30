@@ -27,6 +27,7 @@ const collapse = ref<boolean>(false)
                 <a-layout-header>
                     <Header v-model:collapse="collapse" />
                 </a-layout-header>
+                <Tabs />
                 <a-layout-content>
                     <RouterView />
                 </a-layout-content>
@@ -58,7 +59,11 @@ const collapse = ref<boolean>(false)
                 <Header />
             </a-layout-header>
             <a-layout>
-                <a-layout-sider :width="230" collapsible :theme="getMenuTheme()">
+                <a-layout-sider 
+                    :width="230"
+                    :collapsedWidth="60"
+                    collapsible
+                    :theme="getMenuTheme()">
                     <Sidebar />
                 </a-layout-sider>
                 <a-layout-content>
@@ -110,6 +115,7 @@ const collapse = ref<boolean>(false)
         }
         :deep(.ant-layout-sider-trigger) {
             background-color: var(--toggle-bg);
+            border-top: 1px solid var(--border-color);
         }
     }
     .ant-layout-sider-collapsed {

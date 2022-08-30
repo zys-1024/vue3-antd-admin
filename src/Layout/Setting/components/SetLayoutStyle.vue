@@ -21,7 +21,7 @@ const selected = reactive<ISelected>({
 })
 const primaryColor = ref<string>()
 const colorRef = ref<HTMLInputElement>()
-const colors: string[] = ['#1890ff', '#f00', '#ea005a', '#f50', '#00bd74', '#4bd600', '#7f59ff', '']
+const colors: string[] = ['#1890ff', '#ea005a', '#f50', '#faad14', '#00bd74', '#4bd600', '#7f59ff', '']
 const styles: IStyles[] = [
 	{ tip: 'setting.lightMenuStyle', name: 'light' },
 	{ tip: 'setting.darkMenuStyle', name: 'dark' },
