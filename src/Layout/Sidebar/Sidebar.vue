@@ -67,6 +67,7 @@ const format = () => {
     flex: 1;
     overflow: hidden auto;
     user-select: none;
+    border: none;
     .scrollbar();
 }
 .ant-menu-horizontal {

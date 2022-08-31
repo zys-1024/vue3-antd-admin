@@ -44,6 +44,7 @@ const collapse = ref<boolean>(false)
                 <Sidebar />
                 <Header />
             </a-layout-header>
+            <Tabs />
             <a-layout-content>
                 <RouterView />
             </a-layout-content>
@@ -66,9 +67,12 @@ const collapse = ref<boolean>(false)
                     :theme="getMenuTheme()">
                     <Sidebar />
                 </a-layout-sider>
-                <a-layout-content>
-                    <RouterView />
-                </a-layout-content>
+                <a-layout>
+                    <Tabs />
+                    <a-layout-content>
+                        <RouterView />
+                    </a-layout-content>
+                </a-layout>
             </a-layout>
         </template>
         <Setting />
@@ -109,6 +113,7 @@ const collapse = ref<boolean>(false)
         }
     }
     .ant-layout-sider {
+        border-right: 1px solid var(--border-color);
         :deep(.ant-layout-sider-children) {
             display: flex;
             flex-direction: column;

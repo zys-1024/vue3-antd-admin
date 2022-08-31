@@ -1,18 +1,24 @@
 <script lang="ts" setup>
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 
-interface ITabsItem { path: string, name: string }
+interface ITabsItem { path: string, name: string, [key: string]: any }
 interface ITabs { [key: string]: ITabsItem }
 
 const router = useRouter()
 const route = useRoute()
 const tabs = ref<ITabs>({})
+const hideTabs = ref<ITabsItem[]>([])
 const active = ref<string>()
+const containerRef = ref<HTMLDivElement>()
+const tabRef = ref<HTMLUListElement>()
 
 onMounted(() => {
 	addTab()
 	active.value = route.path
+	const observer = new ResizeObserver(ellipsis)
+	observer.observe(containerRef.value!)
+	ellipsis()
 })
 
 watch(route, newRoute => {
@@ -24,6 +30,7 @@ const addTab = (r: RouteLocationNormalizedLoaded = route ) => {
 	const { path, meta: { name } } = r
 	if (tabs.value.hasOwnProperty(path)) return
 	tabs.value[path] = { path, name: name as string }
+	ellipsis()
 }
 
 const del = (path: string) => {
@@ -32,7 +39,9 @@ const del = (path: string) => {
 	keys.forEach((item, i, arr) => {
 		if (path === item) {
 			delete tabs.value[path]
+			ellipsis()
 			index = i
+			return
 		}
 	})
 	if (path !== active.value) return
@@ -40,20 +49,76 @@ const del = (path: string) => {
 	index = index === 0 ? 0 : index >= keys.length ? index - 1 : index
 	router.push(keys[index])
 }
+
+const delHide = (path: string) => {
+	let index = 0
+	hideTabs.value.forEach((item, i) => {
+		if (item.path === path) {
+			index = i
+			return
+		}
+	})
+	if (path !== active.value) return
+	hideTabs.value.splice(index, 1)
+	index = index === 0 ? 0 : index >= hideTabs.value.length ? index - 1 : index
+}
+
+const ellipsis = async () => {
+	await nextTick()
+	const parent = containerRef.value
+	if (!parent) return
+	const ul = tabRef.value
+	const parentOffsetWidth = hideTabs.value.length ? parent!.offsetWidth - 27 : parent!.offsetWidth
+	const lastChildKey = (ul?.lastElementChild as HTMLLIElement)?.dataset.key
+	// ul宽度大于等于ul父元素宽度 并且 ul里面至少有一个子元素 并且 没有添加过
+	if (ul!.offsetWidth >= parentOffsetWidth && lastChildKey) {
+		// 如果hideTabs不存在这个元素
+		if (!hideTabs.value.some(item => item.path === tabs.value[lastChildKey].path)) {
+			// 通过ul最后一个子元素的data-key获取tabs里的元素，并添加子元素的宽度, 存入hideTabs
+			hideTabs.value.unshift({ ...tabs.value[lastChildKey], width: (ul?.lastElementChild as HTMLLIElement).offsetWidth })	
+		}
+		// 删除最后一个子元素
+		delete tabs.value[lastChildKey]
+	} else if (hideTabs.value.length) {
+		// 最后隐藏的元素
+		const el = hideTabs.value[0]
+		// ul父元素宽度足够显示最后隐藏的元素则把el添加进tabs
+		if (parentOffsetWidth >= ul!.offsetWidth + el!.width) {
+			hideTabs.value.shift()
+			tabs.value[el!.path] = el as any as ITabsItem
+		}
+	}
+}
 </script>
 
 <template>
-    <div class="layout-tabs flex">
-		<ul class="layout-tabs-list flex">
+    <div class="layout-tabs flex flex-between flex-middle" ref="containerRef">
+		<ul class="layout-tabs-list flex" ref="tabRef">
 			<li class="layout-tabs-item flex flex-between flex-middle" 
-				v-for="(item, key, index) in tabs" 
+				v-for="item in tabs" 
 				:key="item.path" 
+				:data-key="item.path"
 				:class="{active: active === item.path}"
 				@click="$router.push(item.path)">
 				{{ $t(`menu.${item.name}`) }}
 				<SvgIcon name="close" @click.stop="del(item.path)" v-if="Object.keys(tabs).length !== 1" />
 			</li>
 		</ul>
+		<a-dropdown trigger="click" overlayClassName="hide-tabs">
+			<SvgIcon name="ellipsis" v-if="hideTabs.length" class="ellipsis pointer" />
+			<template #overlay>
+				<a-menu>
+					<a-menu-item 
+						v-for="item of hideTabs" 
+						:key="item.path"
+						:class="{active: active === item.path}"
+						@click="$router.push(item.path)">
+						{{ $t(`menu.${item.name}`) }}
+						<SvgIcon name="close" @click.stop="delHide(item.path)" />
+					</a-menu-item>
+				</a-menu>
+			</template>
+		</a-dropdown>
     </div>
 </template>
 
@@ -62,17 +127,21 @@ const del = (path: string) => {
 	width: 100%;
 	padding: 4px 0 0 0;
 	border-top: 1px solid var(--border-color);
-	background-color: var(--header-bg);
+	background-color: var(--tabs-bg);
+	.ellipsis {
+		font-size: 20px;
+		outline: none;
+	}
 	
 	@radius: 8px;
 	.layout-tabs-list {
 		position: relative;
 		margin: 0;
+		overflow: hidden;
 		&::before, &::after {
 			display: block;
 			content: "";
 			width: 10px;
-			height: 100%;
 			border-radius: 0 0 @radius 0;
 			background: var(--tabs-bg);
 			z-index: 3;
@@ -82,11 +151,12 @@ const del = (path: string) => {
 		}
 		.layout-tabs-item {
 			color: var(--text-color);
-			font-size: 14px;
+			font-size: 13px;
 			padding: 4px 10px;
 			cursor: pointer;
 			background-color: var(--tabs-bg);
 			border-radius: 0 0 @radius @radius;
+			white-space: nowrap;
 			z-index: 2;
 			&:hover {
 				color: var(--tabs-hover-color);
@@ -110,15 +180,39 @@ const del = (path: string) => {
 				position: absolute;
 				display: block;
 				content: "";
-				width: 15px;
+				width: 20px;
 				height: 50%;
 				bottom: 0;
 				background: var(--tabs-active-bg);
 				z-index: 0;
 			}
-			&::before { left: -6px; }
-			&::after { right: -6px; }
+			&::before { left: -10px; }
+			&::after { right: -10px; }
 		}
+		.layout-tabs-item.hide {
+			display: none;
+		}
+	}
+}
+</style>
+<style lang="less">
+.ant-dropdown.hide-tabs {
+	.ant-dropdown-menu-item .ant-dropdown-menu-title-content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.svg-icon {
+			margin: 0 0 0 10px;
+			border-radius: 50%;
+			&:hover {
+				color: var(--ant-primary-1);
+				background-color: var(--ant-primary-color);
+			}
+		}
+	}
+	.ant-dropdown-menu-item.active {
+		color: var(--ant-primary-color);
+		background-color: var(--ant-primary-1);
 	}
 }
 </style>
