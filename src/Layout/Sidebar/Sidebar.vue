@@ -2,7 +2,8 @@
 import { computed, onMounted, reactive, watch } from 'vue'
 import { useRoute } from 'vue-router';
 import { menus } from '@/router'
-import useTheme, { IMenuMode } from '@/hooks/useTheme'
+import { storeToRefs } from 'pinia'
+import layoutStore from '@/store/layout'
 
 interface ISelected {
     openKeys: string[]
@@ -10,7 +11,7 @@ interface ISelected {
 }
 
 const route = useRoute()
-const { getMenuTheme, getMenuMode } = useTheme()
+const { menuType, menuTheme }  = storeToRefs(layoutStore())
 const selected = reactive<ISelected>({
     openKeys: [],
     selectedKeys: []
@@ -28,12 +29,12 @@ const menus_ = computed(() => {
 })
 
 const mode = computed(() => {
-    return getMenuMode() === 'mix' ? 'inline' : (getMenuMode() as keyof IMenuMode)
+    return menuType.value === 'mix' ? 'inline' : menuType.value
 })
 
 const format = () => {
     // 菜单类型为horizontal返回空数组，不自动展开
-    if (getMenuMode() === 'horizontal') {
+    if (menuType.value === 'horizontal') {
         return [[], [route.path]]
     }
     // 将例如/menu/menu3/menu3_1/menu3_1_1 转成 ['/menu', '/menu/menu3', '/menu/menu3/menu3_1', '/menu/menu3/menu3_1/menu3_1_1']
@@ -54,7 +55,7 @@ const format = () => {
 <template>
     <a-menu 
         :mode="mode"
-        :theme="getMenuTheme()"
+        :theme="menuTheme"
         style="height: 48px; line-height: 48px;"
         v-model:openKeys="selected.openKeys"
         v-model:selectedKeys="selected.selectedKeys">

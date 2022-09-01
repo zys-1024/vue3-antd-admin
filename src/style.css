@@ -6,9 +6,6 @@ body {
   margin: 0;
 }
 div { box-sizing: border-box; }
-@supports (display: block) {
-  * { box-sizing: border-box; }
-}
 #app {
   position: relative;
   width: 100vw;

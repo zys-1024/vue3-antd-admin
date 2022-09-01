@@ -2,6 +2,7 @@
 import { onMounted, reactive, ref, watch } from 'vue'
 import useTheme from '@/hooks/useTheme'
 import darkMode from '@/utils/theme'
+import layoutStore from '@/store/layout'
 
 interface IStyleName { light: string, dark: string, darkMode: string }
 interface INavName { inline: string, horizontal: string, mix: string }
@@ -13,7 +14,8 @@ interface ISelected {
 interface IStyles { tip: string, name: keyof IStyleName }
 interface INavTypes { tip: string, name: keyof INavName }
 
-const { setMenuTheme, setMenuMode, setAppAttr, setPrimaryColor, getPrimaryColor } = useTheme()
+const layout = layoutStore()
+const { setAppAttr } = useTheme()
 const selected = reactive<ISelected>({
 	pageStyle: 'light',
 	primaryColorIndex: 0,
@@ -40,7 +42,7 @@ onMounted(() => {
     const selected_ = window.localStorage.getItem('layout-style')
     if (selected_) {
         Object.assign(selected, JSON.parse(selected_))
-        primaryColor.value = getPrimaryColor()
+        primaryColor.value = primaryColor.value
     }
 })
 
@@ -49,20 +51,23 @@ const setPageStyle = (style: keyof IStyleName) => {
     switch (style) {
         case 'light':
             darkMode(false)
-            setMenuTheme('light')
+            layout.setMenuTheme('light')
+            layout.setThemeMode('light')
             setAppAttr('menu-theme', 'light')
             break
         case 'dark':
             darkMode(false)
+            layout.setThemeMode('light')
             if (selected.navMode !== 'mix') {
-                setMenuTheme('dark')
+                layout.setMenuTheme('dark')
                 setAppAttr('menu-theme', 'dark')
             }
             break
         case 'darkMode':
             darkMode(true)
-            setMenuTheme('light')
-            setAppAttr('menu-theme', 'dark')
+            layout.setMenuTheme('light')
+            layout.setThemeMode('dark')
+            setAppAttr('menu-theme', 'light')
             break
     }
 }
@@ -72,39 +77,39 @@ const setPrimaryColor_ = (index: number, color: string) => {
         colorRef.value?.click()
     } else {
         selected.primaryColorIndex = index
-        setPrimaryColor(color)
-        primaryColor.value = getPrimaryColor()
+        layout.setThemePrimaryColor(color)
+        primaryColor.value = layout.primaryColor
     }
 }
 
 const colorChange = (e: Event) => {
     selected.primaryColorIndex = colors.length - 1
-    setPrimaryColor((e.target as HTMLInputElement).value)
-    primaryColor.value = getPrimaryColor()
+    layout.setThemePrimaryColor((e.target as HTMLInputElement).value)
+    primaryColor.value = layout.primaryColor
 }
 
 const setNavigationMode = (mode: keyof INavName) => {
     selected.navMode = mode
     switch(mode) {
         case 'inline':
-            setMenuMode('inline')
-            setAppAttr('menu-mode', 'inline')
+            layout.setMenuType('inline')
+            setAppAttr('menu-type', 'inline')
             if (selected.pageStyle === 'dark') {
-               setMenuTheme('dark')
+               layout.setMenuTheme('dark')
             }
             break
         case 'horizontal':
-            setMenuMode('horizontal')
-            setAppAttr('menu-mode', 'horizontal')
+            layout.setMenuType('horizontal')
+            setAppAttr('menu-type', 'horizontal')
             if (selected.pageStyle === 'dark') {
-               setMenuTheme('dark')
+               layout.setMenuTheme('dark')
             }
             break
         case 'mix':
-            setMenuMode('mix')
-            setAppAttr('menu-mode', 'mix')
+            layout.setMenuType('mix')
+            setAppAttr('menu-type', 'mix')
             if (selected.pageStyle === 'dark') {
-                setMenuTheme('light')
+                layout.setMenuTheme('light')
             }
             if (selected.pageStyle !== 'darkMode') {
                 selected.pageStyle = 'light'

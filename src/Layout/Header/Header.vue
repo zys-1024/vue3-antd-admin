@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import UserStore from '@/store/user'
 import { reactive } from 'vue'
-import useTheme from '@/hooks/useTheme'
+import layoutStore from '@/store/layout'
 
 interface IState { isFullScreen: boolean }
 
@@ -16,7 +16,7 @@ const emit = defineEmits<{
 }>()
 
 const userStore = UserStore()
-const { getMenuMode } = useTheme()
+const { menuType } = layoutStore()
 const state = reactive<IState>({
 	isFullScreen: false
 })
@@ -33,8 +33,8 @@ const fullScreen = () => {
 </script>
 
 <template>
-    <div class="header flex flex-middle flex-between" :class="{ 'flex-end': getMenuMode() !== 'inline' }">
-        <div v-if="getMenuMode() === 'inline'" class="sider-collapse flex flex-center flex-middle pointer" @click="emit('update:collapse', !collapse)">
+    <div class="header flex flex-middle flex-between" :class="{ 'flex-end': menuType !== 'inline' }">
+        <div v-if="menuType === 'inline'" class="sider-collapse flex flex-center flex-middle pointer" @click="emit('update:collapse', !collapse)">
 			<SvgIcon :name="collapse ? 'unfold' : 'fold'" />
 		</div>
         <div class="navbar">

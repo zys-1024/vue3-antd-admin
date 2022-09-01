@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 
 interface ITabsItem { path: string, name: string, [key: string]: any }
@@ -19,10 +19,6 @@ onMounted(() => {
 	active.value = route.path
 	observer = new ResizeObserver(ellipsis)
 	observer.observe(containerRef.value!)
-})
-
-onUnmounted(() => {
-	observer.unobserve(containerRef.value!)
 })
 
 watch(route, newRoute => {
@@ -119,7 +115,7 @@ const ellipsis = async () => {
 		</ul>
 		<!-- 不知道什么原因，trigger设置为click，当hideTabs全部删除的时候 再点击tabs 会报错 -->
 		<!-- 不设置trigger或者hideTabs长度为0隐藏 可以解决报错 -->
-		<a-dropdown overlayClassName="hide-tabs">
+		<a-dropdown overlayClassName="hide-tabs" v-if="hideTabs.length">
 			<div class="ellipsis pointer flex flex-middle">
 				<SvgIcon name="ellipsis" v-if="hideTabs.length" />
 			</div>
@@ -143,7 +139,6 @@ const ellipsis = async () => {
 .layout-tabs {
 	width: 100%;
 	padding: 4px 0 0 0;
-	border-top: 1px solid var(--border-color);
 	background-color: var(--tabs-bg);
 	.ellipsis {
 		height: 100%;

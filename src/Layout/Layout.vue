@@ -1,20 +1,18 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import useTheme from '@/hooks/useTheme'
+import layoutStore from '@/store/layout'
 
-const { getMenuTheme, getMenuMode } = useTheme()
-const collapse = ref<boolean>(false)
+const layout = layoutStore()
 
 </script>
 
 <template>
     <a-layout class="layout">
-        <template v-if="getMenuMode() === 'inline'">
+        <template v-if="layout.menuType === 'inline'">
             <a-layout-sider
-                v-model:collapsed="collapse" 
+                v-model:collapsed="layout.collapse" 
                 :width="230" 
                 :collapsedWidth="60"
-                :theme="getMenuTheme()">
+                :theme="layout.menuTheme">
                 <div class="logo pointer">
                     <div class="flex flex-middle">
                         <SvgIcon name="vite" />
@@ -23,9 +21,9 @@ const collapse = ref<boolean>(false)
                 </div>
                 <Sidebar />
             </a-layout-sider>
-            <a-layout v-if="getMenuMode() !== 'horizontal'">
+            <a-layout v-if="layout.menuType !== ('horizontal' as any)">
                 <a-layout-header>
-                    <Header v-model:collapse="collapse" />
+                    <Header v-model:collapse="layout.collapse" />
                 </a-layout-header>
                 <Tabs />
                 <a-layout-content>
@@ -33,7 +31,7 @@ const collapse = ref<boolean>(false)
                 </a-layout-content>
             </a-layout>
         </template>
-        <template v-else-if="getMenuMode() === 'horizontal'">
+        <template v-else-if="layout.menuType === 'horizontal'">
             <a-layout-header class="flex">
                 <div class="logo pointer" style="padding-right: 50px;">
                     <div class="flex flex-middle">
@@ -49,7 +47,7 @@ const collapse = ref<boolean>(false)
                 <RouterView />
             </a-layout-content>
         </template>
-        <template v-else-if="getMenuMode() === 'mix'">
+        <template v-else-if="layout.menuType === 'mix'">
             <a-layout-header class="flex flex-between">
                 <div class="logo pointer">
                     <div class="flex flex-middle">
@@ -64,7 +62,7 @@ const collapse = ref<boolean>(false)
                     :width="230"
                     :collapsedWidth="60"
                     collapsible
-                    :theme="getMenuTheme()">
+                    :theme="layout.menuTheme">
                     <Sidebar />
                 </a-layout-sider>
                 <a-layout>
@@ -139,7 +137,9 @@ const collapse = ref<boolean>(false)
     .ant-layout-header {
         height: 48px;
         padding: 0 20px 0 0;
+        border-bottom: 1px solid var(--border-color);
         background-color: var(--header-bg);
+        box-sizing: content-box;
         transition: background .3s;
     }
 
