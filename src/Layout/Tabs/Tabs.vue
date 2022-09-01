@@ -12,13 +12,17 @@ const hideTabs = ref<ITabsItem[]>([])
 const active = ref<string>()
 const containerRef = ref<HTMLDivElement>()
 const tabRef = ref<HTMLUListElement>()
+let observer: ResizeObserver
 
 onMounted(() => {
 	addTab()
 	active.value = route.path
-	const observer = new ResizeObserver(ellipsis)
+	observer = new ResizeObserver(ellipsis)
 	observer.observe(containerRef.value!)
-	ellipsis()
+})
+
+onUnmounted(() => {
+	observer.unobserve(containerRef.value!)
 })
 
 watch(route, newRoute => {
