@@ -1,3 +1,3 @@
-declare interface IThemeType { light: 'light', dark: 'dark' }
+declare type IThemeType = { light: 'light', dark: 'dark' }
 
-declare interface IMenuType { inline: 'inline', horizontal: 'horizontal', mix: 'mix' }
+declare type IMenuType = { inline: 'inline', horizontal: 'horizontal', mix: 'mix' }

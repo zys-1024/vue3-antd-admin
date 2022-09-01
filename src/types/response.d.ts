@@ -1,4 +1,4 @@
-declare interface IResponseType<T = any> {
+declare type IResponseType<T = any> = {
     data: T
     code: number
     msg: string

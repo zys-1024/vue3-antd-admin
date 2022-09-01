@@ -1,4 +1,4 @@
-declare interface IUserInfo {
+declare type IUserInfo = {
     id: number
     username: string
     gender: -1 | 0 | 1
