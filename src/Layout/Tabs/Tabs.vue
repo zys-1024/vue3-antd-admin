@@ -39,7 +39,9 @@ const del = (path: string) => {
 	keys.forEach((item, i, arr) => {
 		if (path === item) {
 			delete tabs.value[path]
-			ellipsis()
+			if (hideTabs.value.length) {
+				ellipsis()
+			}
 			index = i
 			return
 		}
@@ -58,9 +60,16 @@ const delHide = (path: string) => {
 			return
 		}
 	})
-	if (path !== active.value) return
 	hideTabs.value.splice(index, 1)
 	index = index === 0 ? 0 : index >= hideTabs.value.length ? index - 1 : index
+	if (path !== active.value) return
+	if (hideTabs.value.length) {
+		router.push(hideTabs.value[index].path)
+	} else {
+		// hideTabs全部删除后跳转到tabs最后一个元素的path（key就是path）
+		const arr = Object.keys(tabs.value)
+		router.push(arr[arr.length - 1])
+	}
 }
 
 const ellipsis = async () => {
@@ -104,7 +113,9 @@ const ellipsis = async () => {
 				<SvgIcon name="close" @click.stop="del(item.path)" v-if="Object.keys(tabs).length !== 1" />
 			</li>
 		</ul>
-		<a-dropdown trigger="click" overlayClassName="hide-tabs">
+		<!-- 不知道什么原因，trigger设置为click，当hideTabs全部删除的时候 再点击tabs 会报错 -->
+		<!-- 不设置trigger或者hideTabs长度为0隐藏 可以解决报错 -->
+		<a-dropdown trigger="click" overlayClassName="hide-tabs" v-if="hideTabs.length">
 			<SvgIcon name="ellipsis" v-if="hideTabs.length" class="ellipsis pointer" />
 			<template #overlay>
 				<a-menu>
