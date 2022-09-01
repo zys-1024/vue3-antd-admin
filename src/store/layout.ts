@@ -2,8 +2,6 @@ import { defineStore } from 'pinia'
 import useTheme from '@/hooks/useTheme'
 import { DebuggerEvent } from 'vue'
 
-interface IThemeType { light: 'light', dark: 'dark' }
-interface IMenuType { inline: 'inline', horizontal: 'horizontal', mix: 'mix' }
 interface ILayoutState {
     collapse: boolean
     menuType: keyof IMenuType

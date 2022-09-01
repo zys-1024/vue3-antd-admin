@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { IUserInfo } from '@/types/user'
 
 export interface ILoginForm { username: string, password: string, code: string }
 

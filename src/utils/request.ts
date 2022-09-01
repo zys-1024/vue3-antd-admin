@@ -1,7 +1,6 @@
 import { notification } from 'ant-design-vue'
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import config from '../config/request.config'
-import { IResponseType } from '../types/response'
 import { getToken, setToken } from './token'
 
 const { baseURL, timeout } = config

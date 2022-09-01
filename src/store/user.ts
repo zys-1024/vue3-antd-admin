@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { login, ILoginForm } from '@/api/user'
-import { IUserInfo } from '@/types/user'
 import { getToken, removeToken } from '@/utils/token'
 import router from '@/router/routes'
 import { message } from 'ant-design-vue'

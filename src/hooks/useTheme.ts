@@ -1,12 +1,9 @@
 import { reactive } from 'vue'
 import { ConfigProvider } from 'ant-design-vue'
 
-interface IMenuTheme { light: string, dark: string }
-export interface IMenuMode { inline: string, vertical: string, horizontal: string }
-interface IMenuMode2 extends IMenuMode { mix: string }
 interface IThemeConfig {
-    menuTheme: keyof IMenuTheme
-    menuType: keyof IMenuMode2
+    menuTheme: keyof IThemeType
+    menuType: keyof IMenuType
     primaryColor: string
     [key: string]: string
 }
