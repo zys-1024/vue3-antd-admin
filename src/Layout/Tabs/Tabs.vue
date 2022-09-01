@@ -115,8 +115,10 @@ const ellipsis = async () => {
 		</ul>
 		<!-- 不知道什么原因，trigger设置为click，当hideTabs全部删除的时候 再点击tabs 会报错 -->
 		<!-- 不设置trigger或者hideTabs长度为0隐藏 可以解决报错 -->
-		<a-dropdown trigger="click" overlayClassName="hide-tabs" v-if="hideTabs.length">
-			<SvgIcon name="ellipsis" v-if="hideTabs.length" class="ellipsis pointer" />
+		<a-dropdown overlayClassName="hide-tabs">
+			<div class="ellipsis pointer flex flex-middle">
+				<SvgIcon name="ellipsis" v-if="hideTabs.length" />
+			</div>
 			<template #overlay>
 				<a-menu>
 					<a-menu-item 
@@ -140,8 +142,9 @@ const ellipsis = async () => {
 	border-top: 1px solid var(--border-color);
 	background-color: var(--tabs-bg);
 	.ellipsis {
+		height: 100%;
 		font-size: 20px;
-		outline: none;
+		.svg-icon { outline: none; }
 	}
 	
 	@radius: 8px;
@@ -169,9 +172,6 @@ const ellipsis = async () => {
 			border-radius: 0 0 @radius @radius;
 			white-space: nowrap;
 			z-index: 2;
-			&:hover {
-				color: var(--tabs-hover-color);
-			}
 			.svg-icon {
 				margin: 1px 0 0 8px;
 				border-radius: 50%;
@@ -181,6 +181,7 @@ const ellipsis = async () => {
 				}
 			}
 		}
+		.layout-tabs-item:hover,
 		.layout-tabs-item.active {
 			position: relative;
 			border-radius: @radius;
@@ -216,10 +217,14 @@ const ellipsis = async () => {
 			margin: 0 0 0 10px;
 			border-radius: 50%;
 			&:hover {
-				color: var(--ant-primary-1);
-				background-color: var(--ant-primary-color);
+				color: var(--tabs-active-bg);
+				background-color: var(--tabs-active-color);
 			}
 		}
+	}
+	.ant-dropdown-menu-item:hover {
+		color: var(--tabs-active-color);
+		background-color: var(--tabs-active-bg);
 	}
 	.ant-dropdown-menu-item.active {
 		color: var(--ant-primary-color);

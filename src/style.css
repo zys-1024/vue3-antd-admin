@@ -1,7 +1,7 @@
 :root {
   color: var(--text-color);
 }
-
+html { overflow: hidden; }
 body {
   margin: 0;
 }
