@@ -47,8 +47,8 @@ const layoutStore = defineStore('layout', {
     }
 })
 
-layoutStore().$subscribe((state) => {
-    window.localStorage.setItem('layoutConfig', JSON.stringify((state.events as DebuggerEvent).target))
+layoutStore().$subscribe(() => {
+    window.localStorage.setItem('layoutConfig', JSON.stringify((layoutStore().$state)))
 })
 
 export default layoutStore

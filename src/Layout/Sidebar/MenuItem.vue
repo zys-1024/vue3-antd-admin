@@ -23,7 +23,7 @@ export default defineComponent({
   <a-sub-menu v-if="item?.children?.length" :key="item.path">
         <template #icon> <SvgIcon :name="item.meta?.icon!" /> </template>
         <template #title>{{ $t(`menu.${item?.meta?.name}`) }}</template>
-        <MenuItem v-for="child of (item.children.filter(f => !!f.component) as TRoutes[])" :key="child.path" :item="child" />
+        <MenuItem v-for="child of (item.children.filter((f: TRoutes) => !!f.component))" :key="child.path" :item="child" />
     </a-sub-menu>
     <a-menu-item v-else :key="item?.path" @click="$router.push(item?.path!)">
         <template #icon><SvgIcon :name="item?.meta?.icon!" /></template>

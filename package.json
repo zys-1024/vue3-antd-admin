@@ -1,11 +1,11 @@
 {
-  "name": "vue-admin",
+  "name": "vue3-antd-admin",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host --port=3000",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {

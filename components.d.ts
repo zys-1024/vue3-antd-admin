@@ -10,7 +10,6 @@ declare module '@vue/runtime-core' {
     403: typeof import('./src/views/Exception/403/403.vue')['default']
     404: typeof import('./src/views/Exception/404/404.vue')['default']
     500: typeof import('./src/views/Exception/500/500.vue')['default']
-    AAlert: typeof import('ant-design-vue/es')['Alert']
     AAvatar: typeof import('ant-design-vue/es')['Avatar']
     ABadge: typeof import('ant-design-vue/es')['Badge']
     AButton: typeof import('ant-design-vue/es')['Button']
@@ -30,7 +29,6 @@ declare module '@vue/runtime-core' {
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     Analyze: typeof import('./src/views/Dashboard/Analyze/Analyze.vue')['default']
     ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
-    ASwitch: typeof import('ant-design-vue/es')['Switch']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     ChangeLocale: typeof import('./src/components/ChangeLocale/ChangeLocale.vue')['default']
     DarkModeSwitch: typeof import('./src/components/DarkModeSwitch/DarkModeSwitch.vue')['default']
@@ -64,7 +62,6 @@ declare module '@vue/runtime-core' {
     SvgIcon: typeof import('./src/components/SvgIcon/SvgIcon.vue')['default']
     SystemSetting: typeof import('./src/views/SystemSetting/SystemSetting.vue')['default']
     Tabs: typeof import('./src/Layout/Tabs/Tabs.vue')['default']
-    Theme: typeof import('./src/components/Theme/Theme.vue')['default']
     Workbench: typeof import('./src/views/Dashboard/Workbench/Workbench.vue')['default']
   }
 }
