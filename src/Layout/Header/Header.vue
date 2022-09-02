@@ -2,21 +2,22 @@
 import UserStore from '@/store/user'
 import { reactive } from 'vue'
 import layoutStore from '@/store/layout'
+import { storeToRefs } from 'pinia'
 
 interface IState { isFullScreen: boolean }
 
-const { collapse } = defineProps({
-	collapse: {
+const { auto } = defineProps({
+	auto: {
 		type: Boolean,
 		default: false
 	}
 })
 const emit = defineEmits<{
-    (event: 'update:collapse', collapse: boolean): void
+    (event: 'update:auto', auto: boolean): void
 }>()
 
 const userStore = UserStore()
-const { menuType } = layoutStore()
+const { menuType, collapse } = storeToRefs(layoutStore())
 const state = reactive<IState>({
 	isFullScreen: false
 })
@@ -30,11 +31,16 @@ const fullScreen = () => {
 		state.isFullScreen = true
 	}
 }
+
+const menuToggle = () => {
+	collapse.value = !collapse.value
+	emit('update:auto', collapse.value)
+}
 </script>
 
 <template>
     <div class="header flex flex-middle flex-between" :class="{ 'flex-end': menuType !== 'inline' }">
-        <div v-if="menuType === 'inline'" class="sider-collapse flex flex-center flex-middle pointer" @click="emit('update:collapse', !collapse)">
+        <div v-if="menuType === 'inline'" class="sider-collapse flex flex-center flex-middle pointer" @click="menuToggle">
 			<SvgIcon :name="collapse ? 'unfold' : 'fold'" />
 		</div>
         <div class="navbar">

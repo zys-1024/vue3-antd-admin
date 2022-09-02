@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import useTheme from '@/hooks/useTheme'
-import { DebuggerEvent } from 'vue'
 
 interface ILayoutState {
     collapse: boolean
+    isDrawer: boolean
     menuType: keyof IMenuType
     menuTheme: keyof IThemeType
     themeMode: keyof IThemeType
@@ -14,6 +14,7 @@ const theme = useTheme()
 
 const initConfig: ILayoutState = {
     collapse: false,
+    isDrawer: false,
     menuType: 'inline',
     menuTheme: 'light',
     themeMode: 'light',
@@ -31,6 +32,12 @@ const init = (): ILayoutState => {
 const layoutStore = defineStore('layout', {
     state: (): ILayoutState => ({ ...init() }),
     actions: {
+        setCollapse(collapse: boolean) {
+            this.collapse = collapse
+        },
+        setDrawer(isDrawer: boolean) {
+            this.isDrawer = isDrawer
+        },
         setMenuType(type: keyof IMenuType) {
             this.menuType = type
         },

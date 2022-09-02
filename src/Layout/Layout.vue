@@ -1,18 +1,61 @@
 <script lang="ts" setup>
+import { onMounted, onUnmounted, ref } from 'vue'
 import layoutStore from '@/store/layout'
 
 const layout = layoutStore()
+const timer = ref<NodeJS.Timer | null>(null)
+const auto = ref<boolean>(false)
+
+onMounted(() => {
+    resize()
+    window.addEventListener('resize', resize)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('resize', resize)
+})
+
+const resize = () => {
+    if (timer.value) return
+    timer.value = setInterval(() => {
+        const width = window.innerWidth
+        if (width < 768) {
+            layout.setCollapse(false)
+            layout.setDrawer(true)
+            auto.value = true
+        } else if (width < 992) {
+            if(auto.value) {
+                layout.setCollapse(true)
+                layout.setDrawer(false)
+            }
+            auto.value = false
+        } else {
+            if (auto.value) return
+            layout.setCollapse(false)
+            layout.setDrawer(false)
+            auto.value = true
+        }
+        timer.value && clearInterval(timer.value)
+        timer.value = null
+    }, 100)
+}
+
+const visibleHandle = () => {
+    layout.setCollapse(!layout.collapse)
+}
 
 </script>
 
 <template>
     <a-layout class="layout">
+        <!-- 菜单栏inline类型 -->
         <template v-if="layout.menuType === 'inline'">
             <a-layout-sider
                 v-model:collapsed="layout.collapse" 
                 :width="230" 
                 :collapsedWidth="60"
-                :theme="layout.menuTheme">
+                :theme="layout.menuTheme"
+                v-if="!layout.isDrawer">
                 <div class="logo pointer">
                     <div class="flex flex-middle">
                         <SvgIcon name="vite" />
@@ -23,7 +66,7 @@ const layout = layoutStore()
             </a-layout-sider>
             <a-layout v-if="layout.menuType !== ('horizontal' as any)">
                 <a-layout-header>
-                    <Header v-model:collapse="layout.collapse" />
+                    <Header v-model:auto="auto" />
                 </a-layout-header>
                 <Tabs />
                 <a-layout-content>
@@ -31,6 +74,8 @@ const layout = layoutStore()
                 </a-layout-content>
             </a-layout>
         </template>
+
+        <!-- 菜单栏horizontal类型 -->
         <template v-else-if="layout.menuType === 'horizontal'">
             <a-layout-header class="flex">
                 <div class="logo pointer" style="padding-right: 50px;">
@@ -47,6 +92,8 @@ const layout = layoutStore()
                 <RouterView />
             </a-layout-content>
         </template>
+
+        <!-- 菜单栏mix类型 -->
         <template v-else-if="layout.menuType === 'mix'">
             <a-layout-header class="flex flex-between">
                 <div class="logo pointer">
@@ -75,6 +122,27 @@ const layout = layoutStore()
         </template>
         <Setting />
     </a-layout>
+
+    <!-- 小屏-drawer弹出显示 -->
+    <a-drawer 
+        v-if="layout.isDrawer" 
+        :width="230" 
+        v-model:visible="layout.collapse" 
+        placement="left"
+        :closable="false"
+        @click="visibleHandle">
+        <a-layout-sider
+            :width="230" 
+            :theme="layout.menuTheme">
+            <div class="logo pointer">
+                <div class="flex flex-middle">
+                    <SvgIcon name="vite" />
+                    <span>Vue3 Admin</span>
+                </div>
+            </div>
+            <Sidebar />
+        </a-layout-sider>
+    </a-drawer>
 </template>
 
 <style lang="less" scoped>
