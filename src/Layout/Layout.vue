@@ -130,6 +130,7 @@ const visibleHandle = () => {
         v-model:visible="layout.collapse" 
         placement="left"
         :closable="false"
+        class="sm-menu"
         @click="visibleHandle">
         <a-layout-sider
             :width="230" 
@@ -213,6 +214,51 @@ const visibleHandle = () => {
 
     .ant-layout-content {
         padding: 15px;
+    }
+}
+</style>
+<style lang="less">
+.sm-menu {
+    .ant-drawer-body {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        .ant-layout-sider {
+            flex: 1 !important;
+            .ant-layout-sider-children {
+                display: flex;
+                flex-direction: column;
+                .logo {
+                    height: 48px;
+                    >div {
+                        height: 100%;
+                        padding: 0 0 0 24px;
+                        transition: .3s;
+                        .svg-icon {
+                            width: var(--logo-size);
+                            height: var(--logo-size);
+                            margin: 0;
+                        }
+                        span {
+                            flex: 1;
+                            font-size: var(--logo-font-size);
+                            color: var(--logo-text-color);
+                            font-weight: 500;
+                            white-space: nowrap;
+                            margin-left: 10px;
+                            overflow: hidden;
+                            opacity: 1;
+                            user-select: none;
+                            transition: all .3s;
+                            .ellips;
+                        }
+                    }
+                }
+                .ant-menu {
+                    flex: 1;
+                }
+            }
+        }
     }
 }
 </style>

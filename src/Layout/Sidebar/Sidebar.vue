@@ -11,7 +11,7 @@ interface ISelected {
 }
 
 const route = useRoute()
-const { menuType, menuTheme }  = storeToRefs(layoutStore())
+const { menuType, menuTheme, collapse, isDrawer }  = storeToRefs(layoutStore())
 const selected = reactive<ISelected>({
     openKeys: [],
     selectedKeys: []
@@ -20,7 +20,12 @@ const selected = reactive<ISelected>({
 onMounted(() => {
     format()
 })
+
 watch(() => route.path, () => {
+    format()
+})
+
+watch(() => collapse.value, newVal => {
     format()
 })
 
@@ -34,9 +39,12 @@ const mode = computed(() => {
 
 const format = () => {
     // 菜单类型为horizontal返回空数组，不自动展开
-    if (menuType.value === 'horizontal') {
-        return [[], [route.path]]
+    if (menuType.value === 'horizontal' || collapse.value) {
+        selected.openKeys = []
+        selected.selectedKeys = [route.path]
+        return
     }
+
     // 将例如/menu/menu3/menu3_1/menu3_1_1 转成 ['/menu', '/menu/menu3', '/menu/menu3/menu3_1', '/menu/menu3/menu3_1/menu3_1_1']
     const openKeys =  route.path.split('/').filter(item => !!item).map((item, index, arr) => {
         let key = ''
@@ -48,6 +56,8 @@ const format = () => {
     selected.openKeys = [...selected.openKeys, ...openKeys]
     selected.selectedKeys = [route.path]
 }
+
+defineExpose({ selected })
 
 
 </script>
