@@ -1,12 +1,16 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import darkMode, { toggle, isDark } from '@/utils/theme'
+import darkMode, { toggle } from '@/utils/theme'
+import layoutStore from '@/store/layout'
 
-const dark = ref<boolean>(isDark)
+const layout = layoutStore()
+const dark = ref<boolean>(layout.themeMode === 'dark')
 
 const change = () => {
 	dark.value = toggle()
 	darkMode(dark.value)
+	layout.setThemeMode(dark.value ? 'dark' : 'light')
+	layout.setPageStyle(dark.value ? 'darkMode' : 'light')
 }
 </script>
 

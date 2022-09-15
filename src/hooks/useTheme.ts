@@ -2,8 +2,8 @@ import { reactive } from 'vue'
 import { ConfigProvider } from 'ant-design-vue'
 
 interface IThemeConfig {
-    menuTheme: keyof IThemeType
-    menuType: keyof IMenuType
+    menuTheme: keyof ThemeType
+    menuType: keyof MenuType
     primaryColor: string
     [key: string]: string
 }
