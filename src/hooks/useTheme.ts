@@ -18,15 +18,15 @@ const config = reactive<IThemeConfig>({
 function useStyle() {
     if (config_) {
         const parse = JSON.parse(config_) as IThemeConfig
-        setAppAttr('menu-theme', parse['menuTheme'])
-        setAppAttr('menu-type', parse['menuType'])
+        setBodyAttr('menu-theme', parse['menuTheme'])
+        setBodyAttr('menu-type', parse['menuType'])
         setPrimaryColor(parse.primaryColor)
     }
 }
 
-function setAppAttr (attr: string, value: string) {
-    const app = document.getElementById('app') as HTMLDivElement
-    app.setAttribute(attr, value)
+function setBodyAttr (attr: string, value: string) {
+    const html = document.body as HTMLBodyElement
+    html.setAttribute(attr, value)
 }
 
 function setPrimaryColor (color: string) {
@@ -39,7 +39,7 @@ function setPrimaryColor (color: string) {
 export default function() {
     return {
         setPrimaryColor,
-        setAppAttr,
+        setBodyAttr,
         useStyle
     }
 }

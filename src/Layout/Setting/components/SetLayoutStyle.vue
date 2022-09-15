@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import useTheme from '@/hooks/useTheme'
 import darkMode from '@/utils/theme'
 import layoutStore from '@/store/layout'
@@ -9,7 +9,7 @@ interface IStyles { tip: string, name: keyof PageStyle }
 interface INavTypes { tip: string, name: keyof INavName }
 
 const layout = layoutStore()
-const { setAppAttr } = useTheme()
+const { setBodyAttr } = useTheme()
 const primaryColor = ref<string>()
 const colorRef = ref<HTMLInputElement>()
 const colors: string[] = ['#1890ff', '#ea005a', '#f50', '#faad14', '#00bd74', '#4bd600', '#7f59ff', '']
@@ -35,21 +35,21 @@ const setPageStyle = (style: keyof PageStyle) => {
             darkMode(false)
             layout.setMenuTheme('light')
             layout.setThemeMode('light')
-            setAppAttr('menu-theme', 'light')
+            setBodyAttr('menu-theme', 'light')
             break
         case 'dark':
             darkMode(false)
             layout.setThemeMode('light')
             if (layout.menuType !== 'mix') {
                 layout.setMenuTheme('dark')
-                setAppAttr('menu-theme', 'dark')
+                setBodyAttr('menu-theme', 'dark')
             }
             break
         case 'darkMode':
             darkMode(true)
             layout.setMenuTheme('light')
             layout.setThemeMode('dark')
-            setAppAttr('menu-theme', 'light')
+            setBodyAttr('menu-theme', 'light')
             break
     }
 }
@@ -73,27 +73,27 @@ const setNavigationMode = (mode: keyof INavName) => {
     switch(mode) {
         case 'inline':
             layout.setMenuType('inline')
-            setAppAttr('menu-type', 'inline')
+            setBodyAttr('menu-type', 'inline')
             if (layout.pageStyle === 'dark') {
                layout.setMenuTheme('dark')
             }
             break
         case 'horizontal':
             layout.setMenuType('horizontal')
-            setAppAttr('menu-type', 'horizontal')
+            setBodyAttr('menu-type', 'horizontal')
             if (layout.pageStyle === 'dark') {
                layout.setMenuTheme('dark')
             }
             break
         case 'mix':
             layout.setMenuType('mix')
-            setAppAttr('menu-type', 'mix')
+            setBodyAttr('menu-type', 'mix')
             if (layout.pageStyle === 'dark') {
                 layout.setMenuTheme('light')
             }
             if (layout.pageStyle !== 'darkMode') {
                 layout.pageStyle = 'light'
-                setAppAttr('menu-theme', 'light')
+                setBodyAttr('menu-theme', 'light')
             }
             break
     }

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, reactive } from 'vue'
 import layoutStore from '@/store/layout'
 
 const layout = layoutStore()
+const menu = reactive<{type: 'sm' | 'md' | 'lg', auto: boolean}>({ type: 'lg', auto: true })
 const timer = ref<NodeJS.Timer | null>(null)
-const auto = ref<boolean>(false)
 
 onMounted(() => {
     resize()
@@ -22,18 +22,21 @@ const resize = () => {
         if (width < 768) {
             layout.setCollapse(false)
             layout.setDrawer(true)
-            auto.value = true
+            menu.auto = true
+            menu.type = 'sm'
         } else if (width < 992) {
-            if(auto.value) {
+            if(menu.auto) {
                 layout.setCollapse(true)
                 layout.setDrawer(false)
             }
-            auto.value = false
+            menu.auto = false
+            menu.type = 'md'
         } else {
-            if (auto.value) return
+            if (menu.auto && menu.type !== 'sm') return
             layout.setCollapse(false)
             layout.setDrawer(false)
-            auto.value = true
+            menu.auto = true
+            menu.type = 'lg'
         }
         timer.value && clearInterval(timer.value)
         timer.value = null
@@ -66,7 +69,7 @@ const visibleHandle = () => {
             </a-layout-sider>
             <a-layout v-if="layout.menuType !== ('horizontal' as any)">
                 <a-layout-header>
-                    <Header v-model:auto="auto" />
+                    <Header v-model:auto="menu.auto" />
                 </a-layout-header>
                 <Tabs />
                 <a-layout-content>
@@ -130,6 +133,7 @@ const visibleHandle = () => {
         v-model:visible="layout.collapse" 
         placement="left"
         :closable="false"
+        :destroyOnClose="true"
         class="sm-menu"
         @click="visibleHandle">
         <a-layout-sider

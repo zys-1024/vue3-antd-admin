@@ -39,12 +39,11 @@ const mode = computed(() => {
 
 const format = () => {
     // 菜单类型为horizontal返回空数组，不自动展开
-    if (menuType.value === 'horizontal' || collapse.value) {
+    if (menuType.value === 'horizontal' || collapse.value && !isDrawer.value) {
         selected.openKeys = []
         selected.selectedKeys = [route.path]
         return
     }
-
     // 将例如/menu/menu3/menu3_1/menu3_1_1 转成 ['/menu', '/menu/menu3', '/menu/menu3/menu3_1', '/menu/menu3/menu3_1/menu3_1_1']
     const openKeys =  route.path.split('/').filter(item => !!item).map((item, index, arr) => {
         let key = ''

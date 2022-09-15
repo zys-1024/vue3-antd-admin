@@ -17,7 +17,7 @@ const emit = defineEmits<{
 }>()
 
 const userStore = UserStore()
-const { menuType, collapse } = storeToRefs(layoutStore())
+const { menuType, collapse, isDrawer } = storeToRefs(layoutStore())
 const state = reactive<IState>({
 	isFullScreen: false
 })
@@ -41,7 +41,7 @@ const menuToggle = () => {
 <template>
     <div class="header flex flex-middle flex-between" :class="{ 'flex-end': menuType !== 'inline' }">
         <div v-if="menuType === 'inline'" class="sider-collapse flex flex-center flex-middle pointer" @click="menuToggle">
-			<SvgIcon :name="collapse ? 'unfold' : 'fold'" />
+			<SvgIcon :name="isDrawer ? (collapse ? 'fold' : 'unfold') : (collapse ? 'unfold' : 'fold')" />
 		</div>
         <div class="navbar">
 			<ul class="navbar-list flex">
