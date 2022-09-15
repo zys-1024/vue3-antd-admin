@@ -3,10 +3,11 @@ import useTheme from '@/hooks/useTheme'
 
 interface ILayoutState {
     collapse: boolean
-    isDrawer: boolean
-    menuType: keyof IMenuType
-    menuTheme: keyof IThemeType
-    themeMode: keyof IThemeType
+    isDrawer: Boolean
+    menuType: keyof MenuType
+    menuTheme: keyof ThemeType
+    themeMode: keyof ThemeType
+    pageStyle: keyof PageStyle
     primaryColor: string
 }
 
@@ -18,7 +19,8 @@ const initConfig: ILayoutState = {
     menuType: 'inline',
     menuTheme: 'light',
     themeMode: 'light',
-    primaryColor: '#1890FF'
+    pageStyle: 'light',
+    primaryColor: '#1890ff'
 }
 
 const init = (): ILayoutState => {
@@ -38,24 +40,23 @@ const layoutStore = defineStore('layout', {
         setDrawer(isDrawer: boolean) {
             this.isDrawer = isDrawer
         },
-        setMenuType(type: keyof IMenuType) {
+        setMenuType(type: keyof MenuType) {
             this.menuType = type
         },
-        setMenuTheme(theme: keyof IThemeType) {
+        setMenuTheme(theme: keyof ThemeType) {
             this.menuTheme = theme
         },
-        setThemeMode(mode: keyof IThemeType) {
+        setThemeMode(mode: keyof ThemeType) {
             this.themeMode = mode
+        },
+        setPageStyle(style: keyof PageStyle) {
+            this.pageStyle = style
         },
         setThemePrimaryColor(color: string) {
             this.primaryColor = color
             theme.setPrimaryColor(color)
         }
     }
-})
-
-layoutStore().$subscribe(() => {
-    window.localStorage.setItem('layoutConfig', JSON.stringify((layoutStore().$state)))
 })
 
 export default layoutStore

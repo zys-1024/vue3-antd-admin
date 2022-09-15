@@ -5,13 +5,19 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import I18nStore from '@/store/i18n'
 import darkMode from './utils/theme'
 import useTheme from './hooks/useTheme'
+import layoutStore from './store/layout'
 
 const i18nStore = I18nStore()
 const { useStyle } = useTheme()
+const layout = layoutStore()
 
 onMounted(() => {
 	darkMode()
 	useStyle()
+})
+
+layout.$subscribe(() => {
+	window.localStorage.setItem('layoutConfig', JSON.stringify((layout.$state)))
 })
 </script>
 

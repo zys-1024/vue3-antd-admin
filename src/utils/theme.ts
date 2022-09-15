@@ -10,10 +10,12 @@ const config = useDark({
 // 切换模式
 export const toggle: () => boolean = useToggle(config)
 
-export const isDark = window.localStorage.getItem('theme-mode') === 'dark'
+export const isDark = (): boolean => {
+    return window.localStorage.getItem('theme-mode') === 'dark'
+}
 
 // 开/关 暗黑模式
-const darkMode = (enabled: boolean = isDark) => {
+const darkMode = (enabled: boolean = isDark()) => {
     let style = document.querySelector('style#theme')
     const mode = enabled ? 'dark' : 'light'
     if (!style) {

@@ -1,26 +1,15 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import useTheme from '@/hooks/useTheme'
 import darkMode from '@/utils/theme'
 import layoutStore from '@/store/layout'
 
-interface IStyleName { light: string, dark: string, darkMode: string }
 interface INavName { inline: string, horizontal: string, mix: string }
-interface ISelected {
-	pageStyle: keyof IStyleName
-	primaryColorIndex: number
-	navMode: keyof INavName
-}
-interface IStyles { tip: string, name: keyof IStyleName }
+interface IStyles { tip: string, name: keyof PageStyle }
 interface INavTypes { tip: string, name: keyof INavName }
 
 const layout = layoutStore()
 const { setAppAttr } = useTheme()
-const selected = reactive<ISelected>({
-	pageStyle: 'light',
-	primaryColorIndex: 0,
-	navMode: 'inline'
-})
 const primaryColor = ref<string>()
 const colorRef = ref<HTMLInputElement>()
 const colors: string[] = ['#1890ff', '#ea005a', '#f50', '#faad14', '#00bd74', '#4bd600', '#7f59ff', '']
@@ -35,19 +24,12 @@ const navs: INavTypes[] = [
 	{ tip: 'setting.mixMenuLayout', name: 'mix' }
 ]
 
-watch(selected, val => {
-    window.localStorage.setItem('layout-style', JSON.stringify(val))
-})
-onMounted(() => {
-    const selected_ = window.localStorage.getItem('layout-style')
-    if (selected_) {
-        Object.assign(selected, JSON.parse(selected_))
-        primaryColor.value = primaryColor.value
-    }
-})
+const currentColor = (item: string) => {
+    return layout.primaryColor === item || (!colors.includes(layout.primaryColor) && item === '')
+}
 
-const setPageStyle = (style: keyof IStyleName) => {
-    selected.pageStyle = style
+const setPageStyle = (style: keyof PageStyle) => {
+    layout.pageStyle = style
     switch (style) {
         case 'light':
             darkMode(false)
@@ -58,7 +40,7 @@ const setPageStyle = (style: keyof IStyleName) => {
         case 'dark':
             darkMode(false)
             layout.setThemeMode('light')
-            if (selected.navMode !== 'mix') {
+            if (layout.menuType !== 'mix') {
                 layout.setMenuTheme('dark')
                 setAppAttr('menu-theme', 'dark')
             }
@@ -72,47 +54,45 @@ const setPageStyle = (style: keyof IStyleName) => {
     }
 }
 
-const setPrimaryColor_ = (index: number, color: string) => {
-    if (index === colors.length - 1) {
+const setPrimaryColor_ = (color: string) => {
+    if (color === '') {
         colorRef.value?.click()
     } else {
-        selected.primaryColorIndex = index
         layout.setThemePrimaryColor(color)
         primaryColor.value = layout.primaryColor
     }
 }
 
 const colorChange = (e: Event) => {
-    selected.primaryColorIndex = colors.length - 1
     layout.setThemePrimaryColor((e.target as HTMLInputElement).value)
     primaryColor.value = layout.primaryColor
 }
 
 const setNavigationMode = (mode: keyof INavName) => {
-    selected.navMode = mode
+    layout.menuType = mode
     switch(mode) {
         case 'inline':
             layout.setMenuType('inline')
             setAppAttr('menu-type', 'inline')
-            if (selected.pageStyle === 'dark') {
+            if (layout.pageStyle === 'dark') {
                layout.setMenuTheme('dark')
             }
             break
         case 'horizontal':
             layout.setMenuType('horizontal')
             setAppAttr('menu-type', 'horizontal')
-            if (selected.pageStyle === 'dark') {
+            if (layout.pageStyle === 'dark') {
                layout.setMenuTheme('dark')
             }
             break
         case 'mix':
             layout.setMenuType('mix')
             setAppAttr('menu-type', 'mix')
-            if (selected.pageStyle === 'dark') {
+            if (layout.pageStyle === 'dark') {
                 layout.setMenuTheme('light')
             }
-            if (selected.pageStyle !== 'darkMode') {
-                selected.pageStyle = 'light'
+            if (layout.pageStyle !== 'darkMode') {
+                layout.pageStyle = 'light'
                 setAppAttr('menu-theme', 'light')
             }
             break
@@ -124,12 +104,12 @@ const setNavigationMode = (mode: keyof INavName) => {
     <div class="layout-setting-item layout-setting-style">
         <p>{{ $t('setting.pageStyle') }}</p>
         <div class="flex">
-            <a-tooltip placement="top" v-for="item of styles.filter(item => !(item.name === 'dark' && selected.navMode === 'mix'))" :key="item.name">
+            <a-tooltip placement="top" v-for="item of styles.filter(item => !(item.name === 'dark' && layout.menuType === 'mix'))" :key="item.name">
                 <template #title>
                     <span>{{ $t(item.tip) }}</span>
                 </template>
                 <div @click="setPageStyle(item.name)">
-                    <SvgIcon name="check" v-show="selected.pageStyle === item.name" />
+                    <SvgIcon name="check" v-show="layout.pageStyle === item.name" />
                 </div>
             </a-tooltip>
         </div>
@@ -142,8 +122,8 @@ const setNavigationMode = (mode: keyof INavName) => {
             :style="{background: item}" 
             :class="{'select-color': index === colors.length - 1}"
             class="flex flex-middle flex-center"
-            @click="setPrimaryColor_(index, item)">
-                <svgIcon name="check" v-show="selected.primaryColorIndex === index" />
+            @click="setPrimaryColor_(item)">
+                <svgIcon name="check" v-show="currentColor(item)" />
             </li>
             <input type="color" v-model="primaryColor" ref="colorRef" @change="colorChange" />
         </ul>
@@ -156,7 +136,7 @@ const setNavigationMode = (mode: keyof INavName) => {
                     <span>{{ $t(item.tip) }}</span>
                 </template>
                 <div @click="setNavigationMode(item.name)">
-                    <SvgIcon name="check" v-show="selected.navMode === item.name" />
+                    <SvgIcon name="check" v-show="layout.menuType === item.name" />
                 </div>
             </a-tooltip>
         </div>
