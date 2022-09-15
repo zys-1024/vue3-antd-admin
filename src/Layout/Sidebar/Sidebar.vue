@@ -42,7 +42,7 @@ const mode = computed(() => {
 
 const format = () => {
     // 菜单类型为horizontal返回空数组，不自动展开, 窗口大小变化后菜单收缩不自动弹出tooltip
-    if ((menuType.value === 'horizontal' && !isDrawer.value) || collapse.value && !isDrawer.value) {
+    if ((menuType.value === 'horizontal' && !isDrawer.value) || (collapse.value && !isDrawer.value)) {
         selected.openKeys = []
         selected.selectedKeys = [route.path]
         return

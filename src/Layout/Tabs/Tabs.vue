@@ -1,18 +1,21 @@
 <script lang="ts" setup>
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, PropType, ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
-
-interface ITabsItem { path: string, name: string, [key: string]: any }
-interface ITabs { [key: string]: ITabsItem }
 
 const router = useRouter()
 const route = useRoute()
-const tabs = ref<ITabs>({})
-const hideTabs = ref<ITabsItem[]>([])
+const hideTabs = ref<TabsItem[]>([])
 const active = ref<string>()
 const containerRef = ref<HTMLDivElement>()
 const tabRef = ref<HTMLUListElement>()
 let observer: ResizeObserver
+
+const { tabs } = defineProps({
+	tabs: {
+		type: Object as  PropType<Tabs>,
+		required: true
+	}
+})
 
 onMounted(() => {
 	addTab()
@@ -28,17 +31,17 @@ watch(route, newRoute => {
 
 const addTab = (r: RouteLocationNormalizedLoaded = route ) => {
 	const { path, meta: { name } } = r
-	if (tabs.value.hasOwnProperty(path)) return
-	tabs.value[path] = { path, name: name as string }
+	if (tabs.hasOwnProperty(path)) return
+	tabs[path] = { path, name: name as string }
 	ellipsis()
 }
 
 const del = (path: string) => {
-	const keys = Object.keys(tabs.value)
+	const keys = Object.keys(tabs)
 	let index = 0
 	keys.forEach((item, i, arr) => {
 		if (path === item) {
-			delete tabs.value[path]
+			delete tabs[path]
 			if (hideTabs.value.length) {
 				ellipsis()
 			}
@@ -67,7 +70,7 @@ const delHide = (path: string) => {
 		router.push(hideTabs.value[index].path)
 	} else {
 		// hideTabs全部删除后跳转到tabs最后一个元素的path（key就是path）
-		const arr = Object.keys(tabs.value)
+		const arr = Object.keys(tabs)
 		router.push(arr[arr.length - 1])
 	}
 }
@@ -77,24 +80,24 @@ const ellipsis = async () => {
 	const parent = containerRef.value
 	if (!parent) return
 	const ul = tabRef.value
-	const parentOffsetWidth = hideTabs.value.length ? parent!.offsetWidth - 27 : parent!.offsetWidth
+	const parentOffsetWidth = hideTabs.value.length ? parent!.offsetWidth - 30 : parent!.offsetWidth
 	const lastChildKey = (ul?.lastElementChild as HTMLLIElement)?.dataset.key
 	// ul宽度大于等于ul父元素宽度 并且 ul里面至少有一个子元素 并且 没有添加过
 	if (ul!.offsetWidth >= parentOffsetWidth && lastChildKey) {
 		// 如果hideTabs不存在这个元素
-		if (!hideTabs.value.some(item => item.path === tabs.value[lastChildKey].path)) {
+		if (!hideTabs.value.some(item => item.path === tabs[lastChildKey].path)) {
 			// 通过ul最后一个子元素的data-key获取tabs里的元素，并添加子元素的宽度, 存入hideTabs
-			hideTabs.value.unshift({ ...tabs.value[lastChildKey], width: (ul?.lastElementChild as HTMLLIElement).offsetWidth })	
+			hideTabs.value.unshift({ ...tabs[lastChildKey], width: (ul?.lastElementChild as HTMLLIElement).offsetWidth })	
 		}
 		// 删除最后一个子元素
-		delete tabs.value[lastChildKey]
+		delete tabs[lastChildKey]
 	} else if (hideTabs.value.length) {
 		// 最后隐藏的元素
 		const el = hideTabs.value[0]
 		// ul父元素宽度足够显示最后隐藏的元素则把el添加进tabs
 		if (parentOffsetWidth >= ul!.offsetWidth + el!.width) {
 			hideTabs.value.shift()
-			tabs.value[el!.path] = el as any as ITabsItem
+			tabs[el!.path] = el as any as TabsItem
 		}
 	}
 }
@@ -212,8 +215,9 @@ const ellipsis = async () => {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		padding-right: 7px;
 		.svg-icon {
-			margin: 0 0 0 10px;
+			margin: 0;
 			border-radius: 50%;
 			&:hover {
 				color: var(--tabs-active-bg);

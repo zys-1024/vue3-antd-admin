@@ -5,6 +5,7 @@ import layoutStore from '@/store/layout'
 const layout = layoutStore()
 const menu = reactive<{type: 'sm' | 'md' | 'lg', auto: boolean}>({ type: 'lg', auto: true })
 const timer = ref<NodeJS.Timer | null>(null)
+const tabs = ref<Tabs>({})
 
 onMounted(() => {
     resize()
@@ -75,7 +76,7 @@ const smMenuToggle = () => {
                 <a-layout-header>
                     <Header v-model:auto="menu.auto" />
                 </a-layout-header>
-                <Tabs />
+                <Tabs v-model:tabs="tabs" />
                 <a-layout-content>
                     <RouterView />
                 </a-layout-content>
@@ -97,7 +98,7 @@ const smMenuToggle = () => {
                 <Sidebar v-if="!layout.isDrawer"/>
                 <Header />
             </a-layout-header>
-            <Tabs />
+            <Tabs v-model:tabs="tabs" />
             <a-layout-content>
                 <RouterView />
             </a-layout-content>
@@ -128,7 +129,7 @@ const smMenuToggle = () => {
                     <Sidebar />
                 </a-layout-sider>
                 <a-layout>
-                    <Tabs />
+                    <Tabs v-model:tabs="tabs" />
                     <a-layout-content>
                         <RouterView />
                     </a-layout-content>
