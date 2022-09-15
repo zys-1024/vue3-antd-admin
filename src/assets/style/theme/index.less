@@ -5,15 +5,16 @@
     --primary-color: var(--ant-primary-color);
 
     --logo-size: 32px;
-    --logo-font-size: 20px;
+    --logo-font-size: 18px;
 
-    #app[menu-mode="mix"] {
-        --logo-size: 25px;
-        --logo-font-size: 18px;
-    }
-
-    #app[menu-mode="horizontal"] {
+    [menu-type="mix"],
+    [menu-type="horizontal"] {
         --logo-size: 25px;
         --logo-font-size: 16px;
+    }
+
+    .sm-menu {
+        --logo-size: 32px;
+        --logo-font-size: 18px;
     }
 }

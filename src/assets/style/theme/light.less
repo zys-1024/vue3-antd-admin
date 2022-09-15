@@ -40,34 +40,38 @@
     --tabs-hover-color: var(--ant-primary-color);
 
 
-    body[menu-theme="light"] {
+    [menu-theme="light"] {
         --logo-text-color: #3f3f3f;
         --header-bg: #fff;
     }
     
-    body[menu-type="mix"] {
+    [menu-type="mix"] {
         --logo-text-color: #fff;
         --header-bg: #001529;
     }
 
-    body[menu-theme="dark"] {
+    [menu-theme="dark"] {
         --logo-text-color: #fff;
         --scrollbar-bg: #53606e;
+        --logo-bg: #001529;
     }
     
-    body[menu-theme="light"]body[menu-type="mix"] {
+    [menu-theme="light"][menu-type="mix"] {
         --logo-text-color: #fff;
+        .sm-menu {
+            --logo-text-color: #3f3f3f;
+        }
     }
 
-    body[menu-theme="dark"]body[menu-type="horizontal"] {
-        --header-bg: #001529;
+    [menu-theme="dark"][menu-type="horizontal"] {
         --logo-bg: #001529;
         --logo-text-color: #fff;
     }
 
-    body[menu-theme="light"]body[menu-type="mix"],
-    body[menu-theme="dark"]body[menu-type="horizontal"] {
-        --header-right-color: rgba(255, 255, 255, .65);
+    [menu-theme="light"][menu-type="mix"],
+    [menu-theme="dark"][menu-type="horizontal"] {
+        --header-right-color: #fff;
         --header-hover-bg: #252a3d;
+        --header-bg: #001529;
     }
 }

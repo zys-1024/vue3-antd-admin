@@ -43,25 +43,28 @@
     --tabs-hover-color: #177ddc;
 
 
-    body[menu-theme="dark"] {
+    [menu-theme="dark"] {
         --logo-text-color: #fff;
         --header-bg: #fff;
     }
     
-    body[menu-theme="dark"]body[menu-mode="inline"] {
+    [menu-theme="dark"][menu-mode="inline"] {
         --header-bg: #fff;
     }
     
-    body[menu-theme="dark"]body[menu-mode="horizontal"],
-    body[menu-theme="dark"]body[menu-mode="mix"] {
+    [menu-theme="dark"][menu-mode="horizontal"],
+    [menu-theme="dark"][menu-mode="mix"] {
         --logo-bg: #001529;
         --header-bg: #001529;
     }
 
-    body[menu-theme="light"] {
+    [menu-theme="light"] {
         --logo-bg: #141414;
         --header-bg: #141414;
         --tabs-bg: #141414;
         --toggle-bg: #141414;
+        .sm-menu {
+            --logo-bg: #141414;
+        }
     }
 }

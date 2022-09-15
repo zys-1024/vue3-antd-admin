@@ -121,7 +121,7 @@ const ellipsis = async () => {
 			</div>
 			<template #overlay>
 				<a-menu>
-					<a-menu-item 
+					<a-menu-item
 						v-for="item of hideTabs" 
 						:key="item.path"
 						:class="{active: active === item.path}"
@@ -226,8 +226,8 @@ const ellipsis = async () => {
 		background-color: var(--tabs-active-bg);
 	}
 	.ant-dropdown-menu-item.active {
-		color: var(--ant-primary-color);
-		background-color: var(--ant-primary-1);
+		color: var(--tabs-active-color);
+		background-color: var(--tabs-active-bg);
 	}
 }
 </style>

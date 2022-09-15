@@ -47,6 +47,10 @@ const visibleHandle = () => {
     layout.setCollapse(!layout.collapse)
 }
 
+const smMenuToggle = () => {
+    layout.setCollapse(!layout.collapse)
+}
+
 </script>
 
 <template>
@@ -80,14 +84,17 @@ const visibleHandle = () => {
 
         <!-- 菜单栏horizontal类型 -->
         <template v-else-if="layout.menuType === 'horizontal'">
-            <a-layout-header class="flex">
-                <div class="logo pointer" style="padding-right: 50px;">
+            <a-layout-header class="flex flex-between">
+                <div class="logo pointer" style="padding-right: 50px;" v-if="!layout.isDrawer">
                     <div class="flex flex-middle">
                         <SvgIcon name="vite" />
                         <span>Vue3 Admin</span>
                     </div>
                 </div>
-                <Sidebar />
+                <div v-else class="sm-collapse flex flex-middle" @click="smMenuToggle">
+                    <SvgIcon :name="layout.collapse ? 'fold' : 'unfold'"/>
+                </div>
+                <Sidebar v-if="!layout.isDrawer"/>
                 <Header />
             </a-layout-header>
             <Tabs />
@@ -99,20 +106,25 @@ const visibleHandle = () => {
         <!-- 菜单栏mix类型 -->
         <template v-else-if="layout.menuType === 'mix'">
             <a-layout-header class="flex flex-between">
-                <div class="logo pointer">
+                <div class="logo pointer" v-if="!layout.isDrawer">
                     <div class="flex flex-middle">
                         <SvgIcon name="vite" />
                         <span>Vue3 Admin</span>
                     </div>
+                </div>
+                <div v-else class="sm-collapse flex flex-middle" @click="smMenuToggle">
+                    <SvgIcon :name="layout.collapse ? 'fold' : 'unfold'"/>
                 </div>
                 <Header />
             </a-layout-header>
             <a-layout>
                 <a-layout-sider 
                     :width="230"
+                    v-model:collapsed="layout.collapse"
                     :collapsedWidth="60"
                     collapsible
-                    :theme="layout.menuTheme">
+                    :theme="layout.menuTheme"
+                    v-if="!layout.isDrawer">
                     <Sidebar />
                 </a-layout-sider>
                 <a-layout>
@@ -183,6 +195,20 @@ const visibleHandle = () => {
             }
         }
     }
+    .sm-collapse {
+        padding: 0 10px;
+        height: 100%;
+        cursor: pointer;
+        &:hover {
+            background-color: var(--header-hover-bg);
+        }
+        .svg-icon {
+            color: var(--header-right-color);
+            width: 18px !important;
+            height: 18px !important;
+            margin: 0;
+        }
+    }
     .ant-layout-sider {
         border-right: 1px solid var(--border-color);
         :deep(.ant-layout-sider-children) {
@@ -234,6 +260,7 @@ const visibleHandle = () => {
                 flex-direction: column;
                 .logo {
                     height: 48px;
+                    background-color: var(--logo-bg);
                     >div {
                         height: 100%;
                         padding: 0 0 0 24px;

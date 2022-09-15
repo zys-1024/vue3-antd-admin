@@ -25,7 +25,7 @@ watch(() => route.path, () => {
     format()
 })
 
-watch(() => collapse.value, newVal => {
+watch(() => collapse.value, () => {
     format()
 })
 
@@ -34,12 +34,15 @@ const menus_ = computed(() => {
 })
 
 const mode = computed(() => {
+    if (isDrawer.value && menuType.value === 'horizontal') {
+        return 'inline'
+    }
     return menuType.value === 'mix' ? 'inline' : menuType.value
 })
 
 const format = () => {
-    // 菜单类型为horizontal返回空数组，不自动展开
-    if (menuType.value === 'horizontal' || collapse.value && !isDrawer.value) {
+    // 菜单类型为horizontal返回空数组，不自动展开, 窗口大小变化后菜单收缩不自动弹出tooltip
+    if ((menuType.value === 'horizontal' && !isDrawer.value) || collapse.value && !isDrawer.value) {
         selected.openKeys = []
         selected.selectedKeys = [route.path]
         return
