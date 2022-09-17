@@ -38,19 +38,24 @@ const addTab = (r: RouteLocationNormalizedLoaded = route ) => {
 
 const del = (path: string) => {
 	const keys = Object.keys(tabs)
+	if (keys.length === 1 && keys[0] === '/dashboard/analyze') return
 	let index = 0
-	keys.forEach((item, i, arr) => {
-		if (path === item) {
+	for (let i = 0; i < keys.length; i++) {
+		if (path === keys[i]) {
 			delete tabs[path]
 			if (hideTabs.value.length) {
 				ellipsis()
 			}
 			index = i
-			return
+			break
 		}
-	})
+	}
 	if (path !== active.value) return
-	keys.splice(index, 1)
+	keys.splice(index, 1)[0]
+	if (!Object.keys(tabs).length) {
+		router.push('/')
+		return
+	}
 	index = index === 0 ? 0 : index >= keys.length ? index - 1 : index
 	router.push(keys[index])
 }
@@ -64,14 +69,15 @@ const delHide = (path: string) => {
 		}
 	})
 	hideTabs.value.splice(index, 1)
+	delete tabs[path] // 删除hideTabs需要同时删除对应tab的dom元素
 	index = index === 0 ? 0 : index >= hideTabs.value.length ? index - 1 : index
 	if (path !== active.value) return
 	if (hideTabs.value.length) {
 		router.push(hideTabs.value[index].path)
 	} else {
-		// hideTabs全部删除后跳转到tabs最后一个元素的path（key就是path）
-		const arr = Object.keys(tabs)
-		router.push(arr[arr.length - 1])
+		// hideTabs全部删除后，获取最后一个显示的tab的key进行跳转
+		const lastShow = document.querySelectorAll('.layout-tabs-item[show="true"]')
+		router.push((lastShow.item(lastShow.length - 1) as HTMLLIElement).dataset.key!)
 	}
 }
 
@@ -80,24 +86,26 @@ const ellipsis = async () => {
 	const parent = containerRef.value
 	if (!parent) return
 	const ul = tabRef.value
-	const parentOffsetWidth = hideTabs.value.length ? parent!.offsetWidth - 30 : parent!.offsetWidth
-	const lastChildKey = (ul?.lastElementChild as HTMLLIElement)?.dataset.key
-	// ul宽度大于等于ul父元素宽度 并且 ul里面至少有一个子元素 并且 没有添加过
-	if (ul!.offsetWidth >= parentOffsetWidth && lastChildKey) {
-		// 如果hideTabs不存在这个元素
-		if (!hideTabs.value.some(item => item.path === tabs[lastChildKey].path)) {
-			// 通过ul最后一个子元素的data-key获取tabs里的元素，并添加子元素的宽度, 存入hideTabs
-			hideTabs.value.unshift({ ...tabs[lastChildKey], width: (ul?.lastElementChild as HTMLLIElement).offsetWidth })	
-		}
-		// 删除最后一个子元素
-		delete tabs[lastChildKey]
-	} else if (hideTabs.value.length) {
-		// 最后隐藏的元素
-		const el = hideTabs.value[0]
-		// ul父元素宽度足够显示最后隐藏的元素则把el添加进tabs
-		if (parentOffsetWidth >= ul!.offsetWidth + el!.width) {
-			hideTabs.value.shift()
-			tabs[el!.path] = el as any as TabsItem
+	const parentOffsetWidth = parent!.offsetWidth - 30
+	// 获取所有tabs元素，从后往前遍历
+	const children = ul?.children
+	for (let i = children!.length - 1; i >= 0; i--) {
+		const child = children?.item(i) as HTMLLIElement
+		const { offsetLeft, offsetWidth, dataset } = child
+		const lw = offsetLeft + offsetWidth
+		const key = dataset.key as string
+		// lw 大于 tabs容器父元素的宽度
+		if (lw > parentOffsetWidth) {
+			// 如果hideTabs没有包含path为key的元素就往里添加
+			if (!hideTabs.value.some(item => item.path === key)) {
+				hideTabs.value.unshift({ ...tabs[key], lw })
+				// 添加show属性供属性选择器添加样式，直接添加class会出现只有最后添加的元素成功添加，之前添加过的class都不见了，布吉岛怎么肥事
+				child.setAttribute('show', 'false')
+			}
+		} else if (hideTabs.value.length) {
+			child.setAttribute('show', 'true')
+			// 把显示出来的tab筛选出hideTabs
+			hideTabs.value = hideTabs.value.filter(item => item.path !== key)
 		}
 	}
 }
@@ -112,8 +120,10 @@ const ellipsis = async () => {
 				:data-key="item.path"
 				:class="{active: active === item.path}"
 				@click="$router.push(item.path)">
-				{{ $t(`menu.${item.name}`) }}
-				<SvgIcon name="close" @click.stop="del(item.path)" v-if="Object.keys(tabs).length !== 1" />
+				<div>
+					{{ $t(`menu.${item.name}`) }}
+					<SvgIcon name="close" @click.stop="del(item.path)" />
+				</div>
 			</li>
 		</ul>
 		<!-- 不知道什么原因，trigger设置为click，当hideTabs全部删除的时候 再点击tabs 会报错 -->
@@ -129,7 +139,7 @@ const ellipsis = async () => {
 						:key="item.path"
 						:class="{active: active === item.path}"
 						@click="$router.push(item.path)">
-						{{ $t(`menu.${item.name}`) }}
+						<span>{{ $t(`menu.${item.name}`) }}</span>
 						<SvgIcon name="close" @click.stop="delHide(item.path)" />
 					</a-menu-item>
 				</a-menu>
@@ -143,10 +153,12 @@ const ellipsis = async () => {
 	width: 100%;
 	padding: 4px 0 0 0;
 	background-color: var(--tabs-bg);
+	position: relative;
 	.ellipsis {
 		height: 100%;
 		font-size: 20px;
-		.svg-icon { outline: none; }
+		margin-right: 7px;
+		.svg-icon { outline: none; margin: 0; }
 	}
 	
 	@radius: 8px;
@@ -158,6 +170,7 @@ const ellipsis = async () => {
 			display: block;
 			content: "";
 			width: 10px;
+			min-width: 10px;
 			border-radius: 0 0 @radius 0;
 			background: var(--tabs-bg);
 			z-index: 3;
@@ -174,12 +187,15 @@ const ellipsis = async () => {
 			border-radius: 0 0 @radius @radius;
 			white-space: nowrap;
 			z-index: 2;
-			.svg-icon {
-				margin: 1px 0 0 8px;
-				border-radius: 50%;
-				&:hover {
-					color: var(--tabs-active-bg);
-					background-color: var(--tabs-active-color);
+			>div {
+				z-index: 1;
+				.svg-icon {
+					margin: 1px 0 0 8px;
+					border-radius: 50%;
+					&:hover {
+						color: var(--tabs-active-bg);
+						background-color: var(--tabs-active-color);
+					}
 				}
 			}
 		}
@@ -194,14 +210,27 @@ const ellipsis = async () => {
 				position: absolute;
 				display: block;
 				content: "";
-				width: 20px;
 				height: 50%;
 				bottom: 0;
-				background: var(--tabs-active-bg);
 				z-index: 0;
 			}
-			&::before { left: -10px; }
-			&::after { right: -10px; }
+			&::before { 
+				width: calc(100% + 20px);
+				left: -10px;
+				background-color: var(--tabs-active-bg);
+			}
+			&::after {
+				width: 10px;
+				border-radius: 0 0 0 @radius;
+				right: -10px;
+				background-color: var(--tabs-bg);
+			}
+		}
+		.layout-tabs-item[show="false"] {
+			visibility: hidden;
+		}
+		.layout-tabs-item[show="true"] {
+			visibility: visible;
 		}
 		.layout-tabs-item.hide {
 			display: none;
@@ -211,11 +240,12 @@ const ellipsis = async () => {
 </style>
 <style lang="less">
 .ant-dropdown.hide-tabs {
+	.ant-dropdown-menu-item { min-width: 80px; }
 	.ant-dropdown-menu-item .ant-dropdown-menu-title-content {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding-right: 7px;
+		span { margin-right: 20px; }
 		.svg-icon {
 			margin: 0;
 			border-radius: 50%;
