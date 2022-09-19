@@ -60,8 +60,6 @@ const format = () => {
 }
 
 defineExpose({ selected })
-
-
 </script>
 
 <template>

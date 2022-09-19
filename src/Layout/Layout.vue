@@ -51,7 +51,6 @@ const visibleHandle = () => {
 const smMenuToggle = () => {
     layout.setCollapse(!layout.collapse)
 }
-
 </script>
 
 <template>
@@ -77,8 +76,9 @@ const smMenuToggle = () => {
                     <Header v-model:auto="menu.auto" />
                 </a-layout-header>
                 <Tabs v-model:tabs="tabs" />
-                <a-layout-content>
+                <a-layout-content class="flex-v flex-between">
                     <RouterView />
+                    <Footer />
                 </a-layout-content>
             </a-layout>
         </template>
@@ -99,8 +99,9 @@ const smMenuToggle = () => {
                 <Header />
             </a-layout-header>
             <Tabs v-model:tabs="tabs" />
-            <a-layout-content>
+            <a-layout-content class="flex-v flex-between">
                 <RouterView />
+                <Footer />
             </a-layout-content>
         </template>
 
@@ -130,8 +131,9 @@ const smMenuToggle = () => {
                 </a-layout-sider>
                 <a-layout>
                     <Tabs v-model:tabs="tabs" />
-                    <a-layout-content>
+                    <a-layout-content class="flex-v flex-between">
                         <RouterView />
+                        <Footer />
                     </a-layout-content>
                 </a-layout>
             </a-layout>

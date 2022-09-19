@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import useTheme from '@/hooks/useTheme'
+import { getStorage } from '@/utils/storage'
 
 interface ILayoutState {
     collapse: boolean
@@ -8,7 +9,9 @@ interface ILayoutState {
     menuTheme: keyof ThemeType
     themeMode: keyof ThemeType
     pageStyle: keyof PageStyle
-    primaryColor: string
+    primaryColor: string,
+    tabs: boolean,
+    footer: boolean
 }
 
 const theme = useTheme()
@@ -20,11 +23,13 @@ const initConfig: ILayoutState = {
     menuTheme: 'light',
     themeMode: 'light',
     pageStyle: 'light',
-    primaryColor: '#1890ff'
+    primaryColor: '#1890ff',
+    tabs: true,
+    footer: false
 }
 
 const init = (): ILayoutState => {
-    const storage = window.localStorage.getItem('layoutConfig')
+    const storage = getStorage('layoutConfig')
     if (storage) {
         return JSON.parse(storage) as ILayoutState
     }
@@ -32,7 +37,7 @@ const init = (): ILayoutState => {
 }
 
 const layoutStore = defineStore('layout', {
-    state: (): ILayoutState => ({ ...init() }),
+    state: (): ILayoutState => init(),
     actions: {
         setCollapse(collapse: boolean) {
             this.collapse = collapse

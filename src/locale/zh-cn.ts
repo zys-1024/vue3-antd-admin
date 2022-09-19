@@ -60,6 +60,8 @@ export default {
         darkMode: '暗黑模式',
         siderMenuLayout: '侧边菜单布局',
         topMenuLayout: '顶部菜单布局',
-        mixMenuLayout: '混合菜单布局'
+        mixMenuLayout: '混合菜单布局',
+        tabs: '标签栏',
+        footer: '页脚'
     }
 }

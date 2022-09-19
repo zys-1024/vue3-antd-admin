@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import { ConfigProvider } from 'ant-design-vue'
+import { getStorage } from '@/utils/storage'
 
 interface IThemeConfig {
     menuTheme: keyof ThemeType
@@ -8,7 +9,7 @@ interface IThemeConfig {
     [key: string]: string
 }
 
-const config_ = window.localStorage.getItem('layoutConfig')
+const config_ = getStorage('layoutConfig')
 const config = reactive<IThemeConfig>({
     menuTheme: 'light',
     menuType: 'inline',

@@ -1,11 +1,13 @@
+import { getStorage, removeStorage, setStorage } from "./storage"
+
 export const setToken = (token: string): void => {
-    window.localStorage.setItem('token', token)
+    setStorage('token', token)
 } 
 
 export const getToken = (): string | null => {
-    return window.localStorage.getItem('token')
+    return getStorage('token')
 }
 
 export const removeToken = (): void => {
-    window.localStorage.removeItem('token')
+    removeStorage('token')
 }

@@ -20,6 +20,7 @@ const visibleHandle = () => visible.value = !visible.value
 		</div>
 		<a-drawer class="layout-setting-drawer" v-model:visible="visible" :forceRender="true" :getContainer="settingRef" :closable="false" :width="300">
 			<SetLayoutStyle />
+			<SetOther />
 		</a-drawer>
     </div>
 </template>

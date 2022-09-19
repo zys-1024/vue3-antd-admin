@@ -6,6 +6,7 @@ import I18nStore from '@/store/i18n'
 import darkMode from './utils/theme'
 import useTheme from './hooks/useTheme'
 import layoutStore from './store/layout'
+import { setStorage } from './utils/storage'
 
 const i18nStore = I18nStore()
 const { useStyle } = useTheme()
@@ -17,7 +18,7 @@ onMounted(() => {
 })
 
 layout.$subscribe(() => {
-	window.localStorage.setItem('layoutConfig', JSON.stringify((layout.$state)))
+	setStorage('layoutConfig', JSON.stringify((layout.$state)))
 })
 </script>
 

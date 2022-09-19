@@ -6,12 +6,13 @@ import { storeToRefs } from 'pinia'
 
 interface IState { isFullScreen: boolean }
 
-const { auto } = defineProps({
+defineProps({
 	auto: {
 		type: Boolean,
 		default: false
 	}
 })
+
 const emit = defineEmits<{
     (event: 'update:auto', auto: boolean): void
 }>()

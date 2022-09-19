@@ -60,6 +60,8 @@ export default {
         darkMode: 'Dark Mode',
         siderMenuLayout: 'Sider Menu Layout',
         topMenuLayout: 'Top Menu Layout',
-        mixMenuLayout: 'Mix Menu Layout'
+        mixMenuLayout: 'Mix Menu Layout',
+        tabs: 'Tabs',
+        footer: 'Footer'
     }
 }

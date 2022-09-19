@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { nextTick, onMounted, PropType, ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
+import layoutStore from '@/store/layout'
 
 const router = useRouter()
 const route = useRoute()
+const layout = layoutStore()
 const hideTabs = ref<TabsItem[]>([])
 const active = ref<string>()
 const containerRef = ref<HTMLDivElement>()
@@ -112,7 +114,7 @@ const ellipsis = async () => {
 </script>
 
 <template>
-    <div class="layout-tabs flex flex-between flex-middle" ref="containerRef">
+    <div class="layout-tabs flex flex-between flex-middle" ref="containerRef" v-if="layout.tabs">
 		<ul class="layout-tabs-list flex" ref="tabRef">
 			<li class="layout-tabs-item flex flex-between flex-middle" 
 				v-for="item in tabs" 

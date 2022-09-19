@@ -1,5 +1,6 @@
 import { useDark, useToggle } from '@vueuse/core'
 import dark from 'ant-design-vue/dist/antd.dark.less'
+import { getStorage, setStorage } from './storage'
 
 const config = useDark({
     storageKey: 'theme-mode',
@@ -11,7 +12,7 @@ const config = useDark({
 export const toggle: () => boolean = useToggle(config)
 
 export const isDark = (): boolean => {
-    return window.localStorage.getItem('theme-mode') === 'dark'
+    return getStorage('theme-mode') === 'dark'
 }
 
 // 开/关 暗黑模式
@@ -24,7 +25,7 @@ const darkMode = (enabled: boolean = isDark()) => {
     }
     style.innerHTML = enabled ? dark : ''
     document.head.appendChild(style)
-    window.localStorage.setItem('theme-mode', mode)
+    setStorage('theme-mode', mode)
     document.querySelector('html')!.className = mode
 }
 
