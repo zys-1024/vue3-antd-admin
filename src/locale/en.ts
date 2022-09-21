@@ -51,6 +51,7 @@ export default {
         '500': '500',
         '外链': 'External Link'
     },
+    otherSettings: 'Other Settings',
     setting: {
         pageStyle: 'Page Style',
         themeColor: 'Theme Color',
@@ -61,7 +62,8 @@ export default {
         siderMenuLayout: 'Sider Menu Layout',
         topMenuLayout: 'Top Menu Layout',
         mixMenuLayout: 'Mix Menu Layout',
-        tabs: 'Tabs',
-        footer: 'Footer'
+        tabs: 'Tab Bar',
+        footer: 'Footer',
+        invert: 'Weak Mode'
     }
 }

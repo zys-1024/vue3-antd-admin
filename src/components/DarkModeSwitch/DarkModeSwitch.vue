@@ -28,7 +28,7 @@ const change = () => {
         border-radius: 30px;
         border: 1px solid var(--el-border-color);
         background: var(--bg-color-mute);
-		transition: background .3s;
+		transition: background 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
         .svg-icon {
 			position: absolute;
 			width: 18px;
@@ -40,7 +40,7 @@ const change = () => {
 			padding: 2px;
 			box-sizing: border-box;
 			margin: 0;
-			transition: all .3s;
+			transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
 		}
 		.svg-icon.dark {
 			left: calc(100% - 18px);

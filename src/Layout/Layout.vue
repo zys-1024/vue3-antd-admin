@@ -173,11 +173,11 @@ const smMenuToggle = () => {
         height: 48px;
         overflow: hidden;
         background-color: var(--logo-bg);
-        transition: background .3s;
+        transition: background 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
         >div {
             height: 100%;
             padding: 0 0 0 24px;
-            transition: .3s;
+            transition: .3s cubic-bezier(0.215, 0.61, 0.355, 1);
             .svg-icon {
                 width: var(--logo-size);
                 height: var(--logo-size);
@@ -193,7 +193,7 @@ const smMenuToggle = () => {
                 overflow: hidden;
                 opacity: 1;
                 user-select: none;
-                transition: all .3s;
+                transition: all .3s cubic-bezier(0.215, 0.61, 0.355, 1);
                 .ellips;
             }
         }
@@ -242,11 +242,11 @@ const smMenuToggle = () => {
         border-bottom: 1px solid var(--border-color);
         background-color: var(--header-bg);
         box-sizing: content-box;
-        transition: background .3s;
+        transition: background .3s cubic-bezier(0.215, 0.61, 0.355, 1);
     }
 
     .ant-layout-content {
-        padding: 15px;
+        padding: 20px;
     }
 }
 </style>
@@ -267,7 +267,7 @@ const smMenuToggle = () => {
                     >div {
                         height: 100%;
                         padding: 0 0 0 24px;
-                        transition: .3s;
+                        transition: .3s cubic-bezier(0.215, 0.61, 0.355, 1);
                         .svg-icon {
                             width: var(--logo-size);
                             height: var(--logo-size);
@@ -283,7 +283,7 @@ const smMenuToggle = () => {
                             overflow: hidden;
                             opacity: 1;
                             user-select: none;
-                            transition: all .3s;
+                            transition: all .3s cubic-bezier(0.215, 0.61, 0.355, 1);
                             .ellips;
                         }
                     }

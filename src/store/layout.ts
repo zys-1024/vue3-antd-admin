@@ -11,7 +11,8 @@ interface ILayoutState {
     pageStyle: keyof PageStyle
     primaryColor: string,
     tabs: boolean,
-    footer: boolean
+    footer: boolean,
+    invert: boolean
 }
 
 const theme = useTheme()
@@ -25,7 +26,8 @@ const initConfig: ILayoutState = {
     pageStyle: 'light',
     primaryColor: '#1890ff',
     tabs: true,
-    footer: false
+    footer: false,
+    invert: false
 }
 
 const init = (): ILayoutState => {

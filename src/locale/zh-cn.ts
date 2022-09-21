@@ -51,6 +51,7 @@ export default {
         '500': '500',
         '外链': '外链'
     },
+    otherSettings: '其他设置',
     setting: {
         pageStyle: '整体风格',
         themeColor: '主题色',
@@ -62,6 +63,7 @@ export default {
         topMenuLayout: '顶部菜单布局',
         mixMenuLayout: '混合菜单布局',
         tabs: '标签栏',
-        footer: '页脚'
+        footer: '页脚',
+        invert: '色弱模式'
     }
 }
