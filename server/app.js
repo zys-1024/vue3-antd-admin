@@ -1,11 +1,13 @@
 const express =  require('express')
 const router = require('./src/router')
 const cors = require('cors')
+const history = require('connect-history-api-fallback')
 const { fail } = require('./src/utils/response')
 const { whiteList } = require('./src/config/token')
 
 const app = express()
 
+app.use(history())
 app.use(cors({
     origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:4173'],
     credentials: true,
@@ -24,10 +26,15 @@ app.all('/api/*', (req, res,next) => {
     }
 })
 app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/dist'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 router(app)
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/dist/index.html')
+})
 
 app.listen(9999, () => {
     console.log('server running at http://localhost:9999')

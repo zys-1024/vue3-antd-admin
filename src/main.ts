@@ -7,5 +7,6 @@ import 'ant-design-vue/dist/antd.variable.less'
 import App from './App.vue'
 import i18n from '@/locale'
 import 'virtual:svg-icons-register'
+import 'default-passive-events'
 
 createApp(App).use(i18n).use(createPinia()).use(router).mount('#app')
