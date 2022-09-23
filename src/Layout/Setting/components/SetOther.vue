@@ -6,7 +6,6 @@ const layout = layoutStore()
 const items = reactive<string[]>(['tabs', 'footer', 'invert'])
 
 watch(() => layout.invert, newVal => {
-    console.log(newVal)
     document.body.style.filter = `invert(${newVal ? '10' : '0'})`
 })
 </script>

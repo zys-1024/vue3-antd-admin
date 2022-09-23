@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { nextTick, onMounted, PropType, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, PropType, ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import layoutStore from '@/store/layout'
+import useMethod from '@/hooks/useMethod'
 
+const methods = useMethod()
 const router = useRouter()
 const route = useRoute()
 const layout = layoutStore()
@@ -10,7 +12,6 @@ const hideTabs = ref<TabsItem[]>([])
 const active = ref<string>()
 const containerRef = ref<HTMLDivElement>()
 const tabRef = ref<HTMLUListElement>()
-let observer: ResizeObserver
 
 const { tabs } = defineProps({
 	tabs: {
@@ -22,8 +23,7 @@ const { tabs } = defineProps({
 onMounted(() => {
 	addTab()
 	active.value = route.path
-	observer = new ResizeObserver(ellipsis)
-	observer.observe(containerRef.value!)
+	methods.setMethod('tabsEllipsis', ellipsis)
 })
 
 watch(route, newRoute => {

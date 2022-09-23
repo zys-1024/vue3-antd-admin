@@ -1,7 +1,10 @@
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, reactive } from 'vue'
+import Vue, { onMounted, onUnmounted, ref, reactive } from 'vue'
 import layoutStore from '@/store/layout'
+import ResizeObserver from 'resize-observer-polyfill'
+import useMethod from '@/hooks/useMethod'
 
+const methods = useMethod()
 const layout = layoutStore()
 const menu = reactive<{type: 'sm' | 'md' | 'lg', auto: boolean}>({ type: 'lg', auto: true })
 const timer = ref<NodeJS.Timer | null>(null)
@@ -10,6 +13,13 @@ const tabs = ref<Tabs>({})
 onMounted(() => {
     resize()
     window.addEventListener('resize', resize)
+    const observer = new ResizeObserver((entries, observer) => {
+        const tabsEllipsis = methods.getMethod('tabsEllipsis')
+        const anlyzeResize = methods.getMethod('anlyzeResize')
+        tabsEllipsis && tabsEllipsis()
+        anlyzeResize && anlyzeResize()
+    })
+    observer.observe(document.querySelector('.ant-layout-content') as HTMLDivElement)
 })
 
 onUnmounted(() => {
