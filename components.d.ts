@@ -35,7 +35,6 @@ declare module '@vue/runtime-core' {
     AStatistic: typeof import('ant-design-vue/es')['Statistic']
     ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
     ASwitch: typeof import('ant-design-vue/es')['Switch']
-    ATag: typeof import('ant-design-vue/es')['Tag']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     ChangeLocale: typeof import('./src/components/ChangeLocale/ChangeLocale.vue')['default']
     DarkModeSwitch: typeof import('./src/components/DarkModeSwitch/DarkModeSwitch.vue')['default']

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, onMounted, ref, nextTick, onUnmounted } from 'vue'
+import { reactive, onMounted, ref, nextTick, onUnmounted, shallowRef } from 'vue'
 import * as echarts from 'echarts'
 import useMethod from '@/hooks/useMethod'
 
@@ -8,35 +8,42 @@ const orderData = reactive<number[]>([120, 70, 110, 130, 100, 120, 160, 200, 110
 const visitsData = reactive<number[]>([120, 70, 110, 130, 100, 120, 160, 200, 110, 120, 90, 70, 100])
 const orderRef = ref<HTMLDivElement>()
 const visitsRef = ref<HTMLDivElement>()
-let orderCharts: echarts.ECharts
-let visitsCharts: echarts.ECharts
+const otherRef = ref<HTMLDivElement>()
+const orderCharts = shallowRef<echarts.ECharts>()
+const visitsCharts = shallowRef<echarts.ECharts>()
+const otherCharts = shallowRef<echarts.ECharts>()
 
 onMounted(() => {
-	(async () => {
-		await nextTick()
-		initOrderCharts()
-		initVisitsCharts()
-	})()
-	methods.setMethod('anlyzeResize', resize)
+	initCharts()
 })
 
 onUnmounted(() => {
-	orderCharts.dispose()
-	visitsCharts.dispose()
+	orderCharts.value!.dispose()
+	visitsCharts.value!.dispose()
+	otherCharts.value!.dispose()
 })
 
-const resize = async () => {
-	await nextTick()
-	orderCharts.resize()
-	visitsCharts.resize()
+const initCharts = () => {
+	setTimeout(() => {
+		initOrderCharts()
+		initVisitsCharts()
+		initOtherCharts()
+		methods.setMethod('anlyzeResize', resize)
+	})
+}
+
+const resize = () => {
+	orderCharts.value!.resize()
+	visitsCharts.value!.resize()
+	otherCharts.value!.resize()
 }
 
 const initOrderCharts = () => {
-	orderCharts = echarts.init(orderRef.value!)
+	orderCharts.value = echarts.init(orderRef.value!)
 	const option: echarts.EChartsOption = {
 		xAxis: { type: 'category', show: false },
-		yAxis: { type: 'value', show: false, boundaryGap: [1, 1] },
-		grid: { left: 0, right: 0 },
+		yAxis: { type: 'value', show: false },
+		grid: { left: 0, right: 0, top: 0, bottom: 0},
 		series: [{
 			data: orderData,
 			type: 'bar',
@@ -54,15 +61,15 @@ const initOrderCharts = () => {
 			}
 		}]
 	}
-	orderCharts.setOption(option)
+	orderCharts.value.setOption(option)
 }
 
 const initVisitsCharts = () => {
-	visitsCharts = echarts.init(visitsRef.value!)
+	visitsCharts.value = echarts.init(visitsRef.value!)
 	const option: echarts.EChartsOption = {
 		xAxis: { type: 'category', show: false },
 		yAxis: { type: 'value', show: false },
-		grid: { left: 0, right: 0, bottom: 40 },
+		grid: { left: 0, right: 0, top: 3, bottom: 0},
 		series: [{
 			data: visitsData,
 			type: 'line',
@@ -81,19 +88,46 @@ const initVisitsCharts = () => {
 			areaStyle: {
 				opacity: 0.8,
 				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-				{
-					offset: 0,
-					color: '#00bd74'
-				},
-				{
-					offset: 1,
-					color: 'rgb(55, 162, 255)'
-				}
+					{
+						offset: 0,
+						color: '#00bd74'
+					},
+					{
+						offset: 1,
+						color: 'rgb(55, 162, 255)'
+					}
 				])
 			},
 		}]
 	}
-	visitsCharts.setOption(option)
+	visitsCharts.value.setOption(option)
+}
+
+const initOtherCharts = () => {
+	otherCharts.value = echarts.init(otherRef.value!)
+	const option: echarts.EChartsOption = {
+		xAxis: { type: 'value', show: false },
+		yAxis: { type: 'category', show: false },
+		grid: { left: 0, right: 0, top: 0, bottom: 0},
+		series: [{
+			barWidth: 8,
+			data: [120, 200, 150, 80],
+			type: 'bar',
+			itemStyle: {
+				borderRadius: [0, 10, 10, 0],
+				color: new echarts.graphic.LinearGradient(
+					0, 0, 1, 0, [{
+						offset: 0,
+						color: 'rgb(55, 162, 255)'
+					}, {
+						offset: 1,
+						color: '#fff'
+					}]
+				)
+			}
+		}]
+	}
+	otherCharts.value.setOption(option)
 }
 </script>
 
@@ -166,7 +200,7 @@ const initVisitsCharts = () => {
 					<div class="row row-3">
 						<div class="flex flex-between">
 							<a-statistic title="访问人数" :value="36921" />
-							<SvgIcon name="visitsRef" />
+							<SvgIcon name="visits" />
 						</div>
 						<div class="charts" ref="visitsRef"></div>
 						<a-divider />
@@ -182,11 +216,27 @@ const initVisitsCharts = () => {
 				<a-card>
 					<div class="row row-4">
 						<div class="flex flex-between">
-							<a-statistic title="销售总额" :value="112893" />
+							<a-statistic title="随便填的" :value="43542" />
 							<SvgIcon name="info" />
 						</div>
-						<div class="charts"></div>
+						<div class="charts" ref="otherRef">
+							<!-- <a-progress
+								:stroke-color="{ from: '#287bff', to: '#ff2c9e' }"
+								:percent="60"
+								status="active"
+							/>
+							<a-progress
+								:stroke-color="{ from: '#ff2098', to: '#16ffe7' }"
+								:percent="98"
+								status="active"
+							/> -->
+						</div>
 						<a-divider />
+						<a-statistic :value="2561" :value-style="{ fontSize: '14px' }">
+							<template #prefix>
+								<span>随便填的</span>
+							</template>
+						</a-statistic>
 					</div>
 				</a-card>
 			</a-col>
