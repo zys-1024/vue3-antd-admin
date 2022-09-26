@@ -1,12 +1,10 @@
 import { notification } from 'ant-design-vue'
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
-import config from '../config/request.config'
 import { getToken, setToken } from './token'
 
-const { baseURL, timeout } = config
 const instance: AxiosInstance = axios.create({
-    baseURL: baseURL + '/api',
-    timeout,
+    baseURL: import.meta.env.VITE_BASEURL + '/api',
+    timeout: 30000,
     withCredentials: true
 })
 
