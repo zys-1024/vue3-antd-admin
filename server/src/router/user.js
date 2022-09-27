@@ -33,7 +33,7 @@ router.get('/code', (req, res) => {
 
 router.post('/login', (req, res) => {
     const { username, password, code } = req.body
-    if (code === '' || code.toLocaleLowerCase() !== verifyCode) {
+    if (code.toLocaleLowerCase() !== verifyCode) {
         return res.send(fail('验证码错误'))
     }
     if (name === username && pwd === password) {

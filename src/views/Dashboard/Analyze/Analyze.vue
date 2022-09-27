@@ -6,12 +6,15 @@ import useMethod from '@/hooks/useMethod'
 const methods = useMethod()
 const orderData = reactive<number[]>([120, 70, 110, 130, 100, 120, 160, 200, 110, 120, 90, 70, 100])
 const visitsData = reactive<number[]>([120, 70, 110, 130, 100, 120, 160, 200, 110, 120, 90, 70, 100])
+const salesData = reactive<number[]>([])
 const orderRef = ref<HTMLDivElement>()
 const visitsRef = ref<HTMLDivElement>()
 const otherRef = ref<HTMLDivElement>()
+const salesRef = ref<HTMLDivElement>()
 const orderCharts = shallowRef<echarts.ECharts>()
 const visitsCharts = shallowRef<echarts.ECharts>()
 const otherCharts = shallowRef<echarts.ECharts>()
+const salesCharts = shallowRef<echarts.ECharts>()
 
 onMounted(() => {
 	initCharts()
@@ -21,6 +24,7 @@ onUnmounted(() => {
 	orderCharts.value!.dispose()
 	visitsCharts.value!.dispose()
 	otherCharts.value!.dispose()
+	salesCharts.value!.dispose()
 })
 
 const initCharts = () => {
@@ -28,6 +32,7 @@ const initCharts = () => {
 		initOrderCharts()
 		initVisitsCharts()
 		initOtherCharts()
+		initSalesCharts()
 		methods.setMethod('anlyzeResize', resize)
 	})
 }
@@ -36,6 +41,7 @@ const resize = () => {
 	orderCharts.value!.resize()
 	visitsCharts.value!.resize()
 	otherCharts.value!.resize()
+	salesCharts.value!.resize()
 }
 
 const initOrderCharts = () => {
@@ -129,14 +135,165 @@ const initOtherCharts = () => {
 	}
 	otherCharts.value.setOption(option)
 }
+
+const initSalesCharts = () => {
+	salesCharts.value = echarts.init(salesRef.value!)
+	const option: echarts.EChartsOption = {
+		color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
+		title: { text: '订单数' },
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'cross',
+				label: {
+					backgroundColor: '#6a7985'
+				}
+			}
+		},
+		legend: {
+			data: ['数码', '电器', '家具', '服饰', '食品']
+		},
+		xAxis: [{
+			type: 'category',
+			boundaryGap: false,
+			data: new Array(12).fill('月').map((item, index) => (index + 1) + item)
+		}],
+		yAxis: { type: 'value' },
+		grid: { left: 0, right: '1.1%', bottom: 0, containLabel: true },
+		series: [{
+			name: '数码',
+			type: 'line',
+			stack: 'Total',
+			smooth: true,
+			lineStyle: {
+				width: 0
+			},
+			showSymbol: false,
+			areaStyle: {
+				opacity: 0.8,
+				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+				{
+					offset: 0,
+					color: 'rgb(128, 255, 165)'
+				},
+				{
+					offset: 1,
+					color: 'rgb(1, 191, 236)'
+				}
+				])
+			},
+			emphasis: {
+				focus: 'series'
+			},
+			data: [140, 232, 101, 264, 90, 340, 250, 232, 101, 264, 90, 340]
+		}, {
+			name: '电器',
+			type: 'line',
+			stack: 'Total',
+			smooth: true,
+			lineStyle: {
+				width: 0
+			},
+			showSymbol: false,
+			areaStyle: {
+				opacity: 0.8,
+				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+					offset: 0,
+					color: 'rgb(0, 221, 255)'
+				}, {
+					offset: 1,
+					color: 'rgb(77, 119, 255)'
+				}])
+			},
+			emphasis: {
+				focus: 'series'
+			},
+			data: [120, 282, 111, 234, 220, 340, 310, 282, 111, 234, 220, 340]
+		}, {
+			name: '家具',
+			type: 'line',
+			stack: 'Total',
+			smooth: true,
+			lineStyle: {
+				width: 0
+			},
+			showSymbol: false,
+			areaStyle: {
+				opacity: 0.8,
+				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+					offset: 0,
+					color: 'rgb(55, 162, 255)'
+				}, {
+					offset: 1,
+					color: 'rgb(116, 21, 219)'
+				}])
+			},
+			emphasis: {
+				focus: 'series'
+			},
+			data: [320, 132, 201, 334, 190, 130, 220, 132, 201, 334, 190, 130]
+		}, {
+			name: '服饰',
+			type: 'line',
+			stack: 'Total',
+			smooth: true,
+			lineStyle: {
+				width: 0
+			},
+			showSymbol: false,
+			areaStyle: {
+				opacity: 0.8,
+				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+					offset: 0,
+					color: 'rgb(255, 0, 135)'
+				}, {
+					offset: 1,
+					color: 'rgb(135, 0, 157)'
+				}])
+			},
+			emphasis: {
+				focus: 'series'
+			},
+			data: [220, 402, 231, 134, 190, 230, 120, 402, 231, 134, 190, 230]
+		}, {
+			name: '食品',
+			type: 'line',
+			stack: 'Total',
+			smooth: true,
+			lineStyle: {
+				width: 0
+			},
+			showSymbol: false,
+			label: {
+				show: true,
+				position: 'top'
+			},
+			areaStyle: {
+				opacity: 0.8,
+				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+					offset: 0,
+					color: 'rgb(255, 191, 0)'
+				}, {
+					offset: 1,
+					color: 'rgb(224, 62, 76)'
+				}])
+			},
+			emphasis: {
+				focus: 'series'
+			},
+			data: [220, 302, 181, 234, 210, 290, 150, 302, 181, 234, 210, 290]
+		}]
+	}
+	salesCharts.value.setOption(option)
+}
 </script>
 
 <template>
 	<div class="analyze">
-		<a-row :gutter="[20, 20]">
+		<a-row :gutter="[20, 20]" class="row-1">
 			<a-col :xl="6" :sm="12" :xs="24">
 				<a-card>
-					<div class="row row-1">
+					<div class="col col-1">
 						<div class="flex flex-between">
 							<a-statistic 
 								title="销售总额" 
@@ -180,7 +337,7 @@ const initOtherCharts = () => {
 			</a-col>
 			<a-col :xl="6" :sm="12" :xs="24">
 				<a-card>
-					<div class="row row-2">
+					<div class="col col-2">
 						<div class="flex flex-between">
 							<a-statistic title="订单数" :value="2369" :value-style="{fontSize: '25px'}" />
 							<SvgIcon name="order" />
@@ -197,7 +354,7 @@ const initOtherCharts = () => {
 			</a-col>
 			<a-col :xl="6" :sm="12" :xs="24">
 				<a-card>
-					<div class="row row-3">
+					<div class="col col-3">
 						<div class="flex flex-between">
 							<a-statistic title="访问人数" :value="36921" />
 							<SvgIcon name="visits" />
@@ -214,23 +371,12 @@ const initOtherCharts = () => {
 			</a-col>
 			<a-col :xl="6" :sm="12" :xs="24">
 				<a-card>
-					<div class="row row-4">
+					<div class="col col-4">
 						<div class="flex flex-between">
 							<a-statistic title="随便填的" :value="43542" />
 							<SvgIcon name="info" />
 						</div>
-						<div class="charts" ref="otherRef">
-							<!-- <a-progress
-								:stroke-color="{ from: '#287bff', to: '#ff2c9e' }"
-								:percent="60"
-								status="active"
-							/>
-							<a-progress
-								:stroke-color="{ from: '#ff2098', to: '#16ffe7' }"
-								:percent="98"
-								status="active"
-							/> -->
-						</div>
+						<div class="charts" ref="otherRef"></div>
 						<a-divider />
 						<a-statistic :value="2561" :value-style="{ fontSize: '14px' }">
 							<template #prefix>
@@ -238,6 +384,28 @@ const initOtherCharts = () => {
 							</template>
 						</a-statistic>
 					</div>
+				</a-card>
+			</a-col>
+		</a-row>
+		<br>
+		<a-row :gutter="[20, 20]" class="row-2">
+			<a-col :xl="16" :xs="24">
+				<a-card>
+					<div class="charts" ref="salesRef"></div>
+				</a-card>
+			</a-col>
+			<a-col :xl="8" :xs="24">
+				<a-card title="Card Title">
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
 				</a-card>
 			</a-col>
 		</a-row>
@@ -249,43 +417,51 @@ const initOtherCharts = () => {
 	.svg-icon { margin: 0 }
 	.ant-card {
 		height: 100%;
+	}
+	.row-1 {
 		.charts {
 			width: 100%;
 			height: 46px;
 		}
-	}
-	.row {
-		:deep(.ant-divider) { margin: 8px 0; }
-		.ant-statistic {
-			.ant-statistic-content {
-				line-height: initial;
-			}
-		}
-	}
-	.row-1 {
-		flex-wrap: wrap;
-		>div:nth-child(2) {
-			flex-wrap: wrap;
-			height: 46px;
-			align-items: flex-end;
-			>div:first-child { margin-right: 15px; }
-			:deep(.ant-statistic-content) {
-				display: flex;
-				.ant-statistic-content-prefix {
-					display: flex;
-					align-items: center;
-					span:first-child {
-						color: var(--text-color);
-						margin-right: 10px;
-					}
+		.col {
+			:deep(.ant-divider) { margin: 8px 0; }
+			.ant-statistic {
+				.ant-statistic-content {
+					line-height: initial;
 				}
 			}
 		}
-		>div:last-child {
-			:deep(.ant-statistic-content-prefix) {
-				margin: 0;
-				span:first-child { margin-right: 10px; }
+		.col-1 {
+			flex-wrap: wrap;
+			>div:nth-child(2) {
+				flex-wrap: wrap;
+				height: 46px;
+				align-items: flex-end;
+				>div:first-child { margin-right: 15px; }
+				:deep(.ant-statistic-content) {
+					display: flex;
+					.ant-statistic-content-prefix {
+						display: flex;
+						align-items: center;
+						span:first-child {
+							color: var(--text-color);
+							margin-right: 10px;
+						}
+					}
+				}
 			}
+			>div:last-child {
+				:deep(.ant-statistic-content-prefix) {
+					margin: 0;
+					span:first-child { margin-right: 10px; }
+				}
+			}
+		}
+	}
+
+	.row-2 {
+		.charts {
+			height: 350px;
 		}
 	}
 }
