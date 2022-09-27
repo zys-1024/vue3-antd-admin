@@ -110,9 +110,9 @@ const submit = async () => {
                         </div>
                     </a-form-item>
                     <a-form-item>
-                        <div class="flex" style="width: 100%;">
+                        <div class="login-methods flex flex-wrap" style="width: 100%;">
                             <a-button class="flex-grow">{{ $t('login.phoneLogin') }}</a-button>
-                            <a-button class="flex-grow" style="margin: 0 10px;">{{ $t('login.qrcodeLogin') }}</a-button>
+                            <a-button class="flex-grow">{{ $t('login.qrcodeLogin') }}</a-button>
                             <a-button class="flex-grow">{{ $t('login.register') }}</a-button>
                         </div>
                     </a-form-item>
@@ -147,6 +147,7 @@ const submit = async () => {
     background-image: var(--login-bg-img);
     background-color: var(--login-bg);
     background-size: cover;
+    overflow: auto;
     &::before {
         position: absolute;
         display: block;
@@ -169,10 +170,11 @@ const submit = async () => {
     }
     .login-form {
         position: absolute;
-        width: 800px;   
+        width: 80%;
+        max-width: 800px;   
         left: 50%;
-        top: 40%;
-        transform: translate(-50%, -40%);
+        top: 100px;
+        transform: translateX(-50%);
         box-sizing: border-box;
         .login-form-header {
             margin-bottom: 40px;
@@ -189,8 +191,9 @@ const submit = async () => {
         }
         .login-form-header+div {
             border-radius: var(--z-radius);
-            box-shadow: 0 0 0 1px var(--login-form-border-color);
-            background: linear-gradient(41deg, black, #3d4f774d);
+            box-shadow: 0 0 5px 0 var(--login-form-border-color);
+            background: var(--login-form-bg);
+            overflow: hidden;
         }
         .login-form-left {
             position: relative;
@@ -211,13 +214,14 @@ const submit = async () => {
             }
         }
         .ant-form {
-            width: 55%;
+            flex: 1;
+            width: 1px;
             padding: 20px;
             background: var(--login-form-right-bg);
             h2 { color: var(--text-color); }
             .verify-item  {
                 :deep(.ant-form-item-children-icon) {
-                    left: 198px;
+                    display: none;
                 }
             }
             .login-form-verify {
@@ -236,7 +240,9 @@ const submit = async () => {
             .forget-password {
                 color: var(--primary-color);
             }
-            
+            .login-methods {
+                button:nth-child(2) { margin: 0 10px; }
+            }
             .divider {
                 width: 100%;
                 color: #989898;
@@ -253,6 +259,29 @@ const submit = async () => {
                     cursor: pointer;
                 }
             }
+        }
+    }
+
+    @media screen and (min-width: 0) {
+        .login-form {
+            width: 95%;
+            .login-methods {
+                button:nth-child(2) { margin: 0 !important; }
+            }
+            .login-form-left { display: none; }
+        }
+    }
+    @media screen and (min-width: 576px) {
+        .login-form {
+            width: 80%;
+            .login-methods {
+                button:nth-child(2) { margin: 0 10px !important; }
+            }
+        }
+    }
+    @media screen and (min-width: 992px) {
+        .login-form {
+            .login-form-left { display: block; }
         }
     }
 }

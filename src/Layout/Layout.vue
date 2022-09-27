@@ -256,6 +256,7 @@ const smMenuToggle = () => {
     }
 
     .ant-layout-content {
+        overflow: auto;
         padding: 20px;
     }
 }
