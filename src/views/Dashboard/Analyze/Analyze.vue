@@ -1,30 +1,61 @@
 <script lang="ts" setup>
-import { reactive, onMounted, ref, nextTick, onUnmounted, shallowRef } from 'vue'
+import { reactive, onMounted, ref, nextTick, onUnmounted, shallowRef, watch } from 'vue'
 import * as echarts from 'echarts'
 import useMethod from '@/hooks/useMethod'
+import layoutStore from '@/store/layout'
 
+const layout = layoutStore()
 const methods = useMethod()
 const orderData = reactive<number[]>([120, 70, 110, 130, 100, 120, 160, 200, 110, 120, 90, 70, 100])
 const visitsData = reactive<number[]>([120, 70, 110, 130, 100, 120, 160, 200, 110, 120, 90, 70, 100])
-const salesData = reactive<number[]>([])
 const orderRef = ref<HTMLDivElement>()
 const visitsRef = ref<HTMLDivElement>()
 const otherRef = ref<HTMLDivElement>()
-const salesRef = ref<HTMLDivElement>()
+const otherRef2 = ref<HTMLDivElement>()
+const otherRef3 = ref<HTMLDivElement>()
+const otherRef4 = ref<HTMLDivElement>()
+const otherRef5 = ref<HTMLDivElement>()
+const timer = ref<NodeJS.Timer | null>()
 const orderCharts = shallowRef<echarts.ECharts>()
 const visitsCharts = shallowRef<echarts.ECharts>()
 const otherCharts = shallowRef<echarts.ECharts>()
-const salesCharts = shallowRef<echarts.ECharts>()
+const otherCharts2 = shallowRef<echarts.ECharts>()
+const otherCharts3 = shallowRef<echarts.ECharts>()
+const otherCharts4 = shallowRef<echarts.ECharts>()
+const otherCharts5 = shallowRef<echarts.ECharts>()
+const salesRanking = reactive<string[]>(['数码产品', '服饰配饰', '家居生活', '护肤保养', '零食小吃', '饮料酒水', '健康护理', '其他'])
 
 onMounted(() => {
 	initCharts()
 })
 
 onUnmounted(() => {
-	orderCharts.value!.dispose()
-	visitsCharts.value!.dispose()
-	otherCharts.value!.dispose()
-	salesCharts.value!.dispose()
+	orderCharts.value?.dispose()
+	visitsCharts.value?.dispose()
+	otherCharts.value?.dispose()
+	otherCharts2.value?.dispose()
+	otherCharts3.value?.dispose()
+	otherCharts4.value?.dispose()
+	otherCharts5.value?.dispose()
+})
+
+watch(() => layout.themeMode, newVal => {
+	otherCharts2.value?.setOption({ xAxis: {
+		axisLine: { lineStyle: { color: newVal === 'dark' ? '#686a72' : '#9fa0a6' } }
+	},  yAxis: {
+		splitLine: {
+			lineStyle: { color: newVal === 'dark' ? '#222' : '#e0e6f1' }
+		}
+	}, series: [{
+		name: 'dotted',
+		itemStyle: { color: newVal === 'dark' ? '#141414' : '#fff' }
+	}] } as echarts.EChartsOption)
+
+	otherCharts3.value?.setOption({ yAxis: {
+		splitLine: {
+			lineStyle: { color: newVal === 'dark' ? '#222' : '#e0e6f1' }
+		}
+	}} as echarts.EChartsOption)
 })
 
 const initCharts = () => {
@@ -32,16 +63,26 @@ const initCharts = () => {
 		initOrderCharts()
 		initVisitsCharts()
 		initOtherCharts()
-		initSalesCharts()
+		initOtherCharts2()
+		initOtherCharts3()
+		initOtherCharts4()
+		initOtherCharts5()
 		methods.setMethod('anlyzeResize', resize)
 	})
 }
 
 const resize = () => {
-	orderCharts.value!.resize()
-	visitsCharts.value!.resize()
-	otherCharts.value!.resize()
-	salesCharts.value!.resize()
+	if (timer.value) return
+	timer.value = setTimeout(() => {
+		orderCharts.value?.resize()
+		visitsCharts.value?.resize()
+		otherCharts.value?.resize()
+		otherCharts2.value?.resize()
+		otherCharts3.value?.resize()
+		otherCharts4.value?.resize()
+		otherCharts5.value?.resize()
+		timer.value = null
+	}, 400)
 }
 
 const initOrderCharts = () => {
@@ -136,155 +177,235 @@ const initOtherCharts = () => {
 	otherCharts.value.setOption(option)
 }
 
-const initSalesCharts = () => {
-	salesCharts.value = echarts.init(salesRef.value!)
+const initOtherCharts2 = () => {
+	otherCharts2.value = echarts.init(otherRef2.value!)
+	let category = [];
+	let dottedBase = +new Date();
+	let lineData = [125.54, 63.98, 268.48, 187.04, 210.32, 174, 298.49, 161.45, 52.91, 200.52, 174.67, 346, 203.96, 58.09, 259.42, 188.27, 234.13, 235.14, 204.43, 257.24];
+	let barData = [108, 41.03, 129.61, 122.41, 187.21, 111.76, 153.81, 12.99, 40.87, 111.73,147.41, 171.93, 64.53, 15.07, 110.91, 27.56, 93.35, 106.26, 60.25, 65.12];
+	for (let i = 0; i < 20; i++) {
+		let date = new Date((dottedBase += 3600 * 24 * 1000));
+		category.push(
+			[date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-')
+		)
+	}
 	const option: echarts.EChartsOption = {
-		color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
-		title: { text: '订单数' },
 		tooltip: {
 			trigger: 'axis',
 			axisPointer: {
-				type: 'cross',
-				label: {
-					backgroundColor: '#6a7985'
-				}
+				type: 'shadow'
 			}
 		},
 		legend: {
-			data: ['数码', '电器', '家具', '服饰', '食品']
+			data: ['line', 'bar'],
+			textStyle: {
+				color: '#ccc'
+			}
 		},
-		xAxis: [{
-			type: 'category',
-			boundaryGap: false,
-			data: new Array(12).fill('月').map((item, index) => (index + 1) + item)
-		}],
-		yAxis: { type: 'value' },
-		grid: { left: 0, right: '1.1%', bottom: 0, containLabel: true },
-		series: [{
-			name: '数码',
-			type: 'line',
-			stack: 'Total',
-			smooth: true,
-			lineStyle: {
-				width: 0
-			},
-			showSymbol: false,
-			areaStyle: {
-				opacity: 0.8,
-				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-				{
-					offset: 0,
-					color: 'rgb(128, 255, 165)'
-				},
-				{
-					offset: 1,
-					color: 'rgb(1, 191, 236)'
+		xAxis: {
+			data: category,
+			axisLine: {
+				lineStyle: {
+					color: layout.themeMode === 'dark' ? '#686a72' : '#9fa0a6'
 				}
-				])
+			}
+		},
+		yAxis: {
+			splitLine: {
+				lineStyle: {
+					type: 'dashed',
+					color: layout.themeMode === 'dark' ? '#222' : '#e0e6f1'
+				} 
 			},
-			emphasis: {
-				focus: 'series'
+		},
+		grid: { left: 0, right: 0, top: 25, bottom: 0, containLabel: true },
+		series: [
+			{
+				name: 'line',
+				type: 'line',
+				smooth: true,
+				showAllSymbol: true,
+				symbol: 'emptyCircle',
+				symbolSize: 10,
+				data: lineData,
+				itemStyle: {
+					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+						{ offset: 0, color: '#00bd74' },
+						{ offset: 1, color: 'rgb(55, 162, 255)' }
+					])
+				}
 			},
-			data: [140, 232, 101, 264, 90, 340, 250, 232, 101, 264, 90, 340]
-		}, {
-			name: '电器',
-			type: 'line',
-			stack: 'Total',
-			smooth: true,
-			lineStyle: {
-				width: 0
+			{
+				name: 'bar',
+				type: 'bar',
+				barWidth: 10,
+				itemStyle: {
+					borderRadius: 5,
+					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+						{ offset: 0, color: '#00bd74' },
+						{ offset: 1, color: 'rgb(55, 162, 255)' }
+					])
+				},
+				data: barData,
 			},
-			showSymbol: false,
-			areaStyle: {
-				opacity: 0.8,
-				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-					offset: 0,
-					color: 'rgb(0, 221, 255)'
-				}, {
-					offset: 1,
-					color: 'rgb(77, 119, 255)'
-				}])
+			{
+				name: 'line',
+				type: 'bar',
+				barGap: '-100%',
+				barWidth: 10,
+				itemStyle: {
+					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+						{ offset: 0, color: 'rgba(20,200,212,0.5)' },
+						{ offset: 0.2, color: 'rgba(20,200,212,0.2)' },
+						{ offset: 1, color: 'rgba(20,200,212,0)' }
+					])
+				},
+				z: -12,
+				data: lineData
 			},
-			emphasis: {
-				focus: 'series'
-			},
-			data: [120, 282, 111, 234, 220, 340, 310, 282, 111, 234, 220, 340]
-		}, {
-			name: '家具',
-			type: 'line',
-			stack: 'Total',
-			smooth: true,
-			lineStyle: {
-				width: 0
-			},
-			showSymbol: false,
-			areaStyle: {
-				opacity: 0.8,
-				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-					offset: 0,
-					color: 'rgb(55, 162, 255)'
-				}, {
-					offset: 1,
-					color: 'rgb(116, 21, 219)'
-				}])
-			},
-			emphasis: {
-				focus: 'series'
-			},
-			data: [320, 132, 201, 334, 190, 130, 220, 132, 201, 334, 190, 130]
-		}, {
-			name: '服饰',
-			type: 'line',
-			stack: 'Total',
-			smooth: true,
-			lineStyle: {
-				width: 0
-			},
-			showSymbol: false,
-			areaStyle: {
-				opacity: 0.8,
-				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-					offset: 0,
-					color: 'rgb(255, 0, 135)'
-				}, {
-					offset: 1,
-					color: 'rgb(135, 0, 157)'
-				}])
-			},
-			emphasis: {
-				focus: 'series'
-			},
-			data: [220, 402, 231, 134, 190, 230, 120, 402, 231, 134, 190, 230]
-		}, {
-			name: '食品',
-			type: 'line',
-			stack: 'Total',
-			smooth: true,
-			lineStyle: {
-				width: 0
-			},
-			showSymbol: false,
-			label: {
-				show: true,
-				position: 'top'
-			},
-			areaStyle: {
-				opacity: 0.8,
-				color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-					offset: 0,
-					color: 'rgb(255, 191, 0)'
-				}, {
-					offset: 1,
-					color: 'rgb(224, 62, 76)'
-				}])
-			},
-			emphasis: {
-				focus: 'series'
-			},
-			data: [220, 302, 181, 234, 210, 290, 150, 302, 181, 234, 210, 290]
-		}]
+			{
+				name: 'dotted',
+				type: 'pictorialBar',
+				symbol: 'rect',
+				itemStyle: {
+					color: layout.themeMode === 'dark' ? '#141414' : '#fff'
+				},
+				symbolRepeat: true,
+				symbolSize: [12, 4],
+				symbolMargin: 1,
+				z: -10,
+				data: lineData
+			}
+		]
 	}
-	salesCharts.value.setOption(option)
+	otherCharts2.value.setOption(option)
+}
+
+const initOtherCharts3 = () => {
+	otherCharts3.value = echarts.init(otherRef3.value!)
+	let xAxisData = []
+	let data1 = []
+	let data2 = []
+	for (let i = 0; i < 100; i++) {
+	xAxisData.push('A' + i)
+	data1.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 5)
+	data2.push((Math.cos(i / 5) * (i / 5 - 10) + i / 6) * 5)
+	}
+	const option: echarts.EChartsOption = {
+		legend: {
+			data: ['bar', 'bar2']
+		},
+		tooltip: {},
+		xAxis: {
+			data: xAxisData,
+			splitLine: {
+				show: false
+			}
+		},
+		yAxis: {
+			splitLine: {  
+				lineStyle: {
+					type: 'dashed',
+					color: layout.themeMode === 'dark' ? '#222' : '#e0e6f1'
+				} 
+			}
+		},
+		grid: { left: 0, right: 5, bottom: 0, top: 30, containLabel: true },
+		series: [
+			{
+				name: 'bar',
+				type: 'bar',
+				data: data1,
+				emphasis: {
+					focus: 'series'
+				},
+				animationDelay: function (idx) {
+					return idx * 10;
+				}
+			},
+			{
+				name: 'bar2',
+				type: 'bar',
+				data: data2,
+				emphasis: {
+					focus: 'series'
+				},
+				animationDelay: function (idx) {
+					return idx * 10 + 100;
+				}
+			}
+		],
+		animationEasing: 'elasticOut',
+		animationDelayUpdate: function (idx) {
+			return idx * 5;
+		}
+	}
+	otherCharts3.value?.setOption(option)
+}
+
+const initOtherCharts4 = () => {
+	otherCharts4.value = echarts.init(otherRef4.value!)
+	const option: echarts.EChartsOption = {
+		tooltip: {
+			trigger: 'item'
+		},
+		series: [
+			{
+				type: 'pie',
+				radius: [10, 100],
+				roseType: 'area',
+				itemStyle: {
+					borderRadius: 8
+				},
+				label: { color: '#bbb' },
+				data: [
+					{ value: 40, name: 'rose 1' },
+					{ value: 38, name: 'rose 2' },
+					{ value: 32, name: 'rose 3' },
+					{ value: 30, name: 'rose 4' },
+					{ value: 28, name: 'rose 5' },
+					{ value: 26, name: 'rose 6' },
+					{ value: 22, name: 'rose 7' },
+					{ value: 18, name: 'rose 8' }
+				]
+			}
+		]
+	}
+	otherCharts4.value?.setOption(option)
+}
+
+const initOtherCharts5 = () => {
+	otherCharts5.value = echarts.init(otherRef5.value!)
+	const option: echarts.EChartsOption = {
+		radar: {
+			// shape: 'circle',
+			indicator: [
+				{ name: 'Sales', max: 6500 },
+				{ name: 'Administration', max: 16000 },
+				{ name: 'Information Technology', max: 30000 },
+				{ name: 'Customer Support', max: 38000 },
+				{ name: 'Development', max: 52000 },
+				{ name: 'Marketing', max: 25000 }
+			]
+		},
+		series: [
+			{
+				name: 'Budget vs spending',
+				type: 'radar',
+				data: [
+					{
+						value: [4200, 3000, 20000, 35000, 50000, 18000],
+						name: 'Allocated Budget'
+					},
+					{
+						value: [5000, 14000, 28000, 26000, 42000, 21000],
+						name: 'Actual Spending'
+					}
+				]
+			}
+		]
+	}
+	otherCharts5.value?.setOption(option)
 }
 </script>
 
@@ -389,23 +510,43 @@ const initSalesCharts = () => {
 		</a-row>
 		<br>
 		<a-row :gutter="[20, 20]" class="row-2">
-			<a-col :xl="16" :xs="24">
+			<a-col :xl="17" :xs="24">
 				<a-card>
-					<div class="charts" ref="salesRef"></div>
+					<div class="charts" ref="otherRef2"></div>
 				</a-card>
 			</a-col>
-			<a-col :xl="8" :xs="24">
-				<a-card title="Card Title">
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
-					<a-card-grid style="width: 50%; text-align: center">Content</a-card-grid>
+			<a-col :xl="7" :xs="24">
+				<a-card title="销售额排名">
+					<template #extra>
+						<SvgIcon name="ellipsis" />
+					</template>
+					<ul class="sales-ranking flex-v flex-around">
+						<li v-for="(item, index) of salesRanking" :key="index" class="flex flex-between">
+							<div class="flex">
+								<span class="flex flex-center flex-middle">{{ index + 1 }}</span>
+								<span>{{ item }}</span>
+							</div>
+							<a-statistic :value="112893" :value-style="{ fontSize: '16px' }" />
+						</li>
+					</ul>
+				</a-card>
+			</a-col>
+		</a-row>
+		<br>
+		<a-row :gutter="[20, 20]" class="row-3">
+			<a-col :lg="8" :xs="24">
+				<a-card title="柱状图动画延迟">
+					<div class="charts" ref="otherRef3"></div>
+				</a-card>
+			</a-col>
+			<a-col :lg="8" :xs="24">
+				<a-card title="南丁格尔玫瑰图">
+					<div class="charts" ref="otherRef4"></div>
+				</a-card>
+			</a-col>
+			<a-col :lg="8" :xs="24">
+				<a-card title="雷达图">
+					<div class="charts" ref="otherRef5"></div>
 				</a-card>
 			</a-col>
 		</a-row>
@@ -418,6 +559,7 @@ const initSalesCharts = () => {
 	.ant-card {
 		height: 100%;
 	}
+	.charts { overflow: hidden; }
 	.row-1 {
 		.charts {
 			width: 100%;
@@ -462,6 +604,46 @@ const initSalesCharts = () => {
 	.row-2 {
 		.charts {
 			height: 350px;
+		}
+		.sales-ranking {
+			margin: 0;
+			li:not(li:last-child) {
+				margin-bottom: 10px;
+			}
+			li {
+				border-bottom: 1px dashed var(--border-color);
+				>div:first-child {
+					span:first-child {
+						margin-right: 20px;
+						width: 20px;
+						height: 20px;
+						color: #fff;
+						border-radius: 50%;
+						background-color: #444;
+					}
+				}
+			}
+			li:nth-child(1) { 
+				>div>span:first-child {
+					background-color: #ea005a;
+				}
+			 }
+			li:nth-child(2) { 
+				>div>span:first-child {
+					background-color: #00bd74;
+				}
+			 }
+			li:nth-child(3) { 
+				>div>span:first-child {
+					background-color: #1890ff;
+				}
+			 }
+		}
+	}
+
+	.row-3 {
+		.charts {
+			height: 200px;
 		}
 	}
 }
