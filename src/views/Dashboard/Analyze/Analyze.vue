@@ -15,7 +15,6 @@ const otherRef2 = ref<HTMLDivElement>()
 const otherRef3 = ref<HTMLDivElement>()
 const otherRef4 = ref<HTMLDivElement>()
 const otherRef5 = ref<HTMLDivElement>()
-const timer = ref<NodeJS.Timer | null>()
 const orderCharts = shallowRef<echarts.ECharts>()
 const visitsCharts = shallowRef<echarts.ECharts>()
 const otherCharts = shallowRef<echarts.ECharts>()
@@ -37,6 +36,7 @@ onUnmounted(() => {
 	otherCharts3.value?.dispose()
 	otherCharts4.value?.dispose()
 	otherCharts5.value?.dispose()
+	methods.setMethod('anlyzeChartsResize', null)
 })
 
 watch(() => layout.themeMode, newVal => {
@@ -67,22 +67,18 @@ const initCharts = () => {
 		initOtherCharts3()
 		initOtherCharts4()
 		initOtherCharts5()
-		methods.setMethod('anlyzeResize', resize)
-	})
+		methods.setMethod('anlyzeChartsResize', resize)
+	}, 0)
 }
 
 const resize = () => {
-	if (timer.value) return
-	timer.value = setTimeout(() => {
-		orderCharts.value?.resize()
-		visitsCharts.value?.resize()
-		otherCharts.value?.resize()
-		otherCharts2.value?.resize()
-		otherCharts3.value?.resize()
-		otherCharts4.value?.resize()
-		otherCharts5.value?.resize()
-		timer.value = null
-	}, 400)
+	orderCharts.value?.resize()
+	visitsCharts.value?.resize()
+	otherCharts.value?.resize()
+	otherCharts2.value?.resize()
+	otherCharts3.value?.resize()
+	otherCharts4.value?.resize()
+	otherCharts5.value?.resize()
 }
 
 const initOrderCharts = () => {
@@ -377,33 +373,55 @@ const initOtherCharts4 = () => {
 const initOtherCharts5 = () => {
 	otherCharts5.value = echarts.init(otherRef5.value!)
 	const option: echarts.EChartsOption = {
-		radar: {
-			// shape: 'circle',
+		radar: [{
 			indicator: [
-				{ name: 'Sales', max: 6500 },
-				{ name: 'Administration', max: 16000 },
-				{ name: 'Information Technology', max: 30000 },
-				{ name: 'Customer Support', max: 38000 },
-				{ name: 'Development', max: 52000 },
-				{ name: 'Marketing', max: 25000 }
-			]
-		},
-		series: [
-			{
-				name: 'Budget vs spending',
-				type: 'radar',
-				data: [
-					{
-						value: [4200, 3000, 20000, 35000, 50000, 18000],
-						name: 'Allocated Budget'
-					},
-					{
-						value: [5000, 14000, 28000, 26000, 42000, 21000],
-						name: 'Actual Spending'
-					}
-				]
+				{ name: 'Indicator1' },
+				{ name: 'Indicator2' },
+				{ name: 'Indicator3' },
+				{ name: 'Indicator4' },
+				{ name: 'Indicator5' }
+			],
+			radius: 70,
+			startAngle: 90,
+			splitNumber: 4,
+			shape: 'circle',
+			axisName: {
+				formatter: '{value}',
+				color: '#428BD4'
+			},
+			splitArea: {
+				areaStyle: {
+					color: ['#77EADF', '#26C3BE', '#64AFE9', '#428BD4'],
+					shadowColor: 'rgba(0, 0, 0, 0.2)',
+					shadowBlur: 10
+				}
+			},
+			axisLine: {
+				lineStyle: { color: 'rgba(211, 253, 250, 0.8)' }
+			},
+			splitLine: {
+				lineStyle: { color: 'rgba(211, 253, 250, 0.8)' }
 			}
-		]
+		}],
+		series: [ {
+			type: 'radar',
+			emphasis: {
+				lineStyle: { width: 4 }
+			},
+			data: [
+				{
+					value: [100, 8, 0.4, -80, 2000],
+					name: 'Data A'
+				},
+				{
+					value: [60, 5, 0.3, -100, 1500],
+					name: 'Data B',
+					areaStyle: {
+						color: 'rgba(255, 228, 52, 0.6)'
+					}
+				}
+			]
+		}]
 	}
 	otherCharts5.value?.setOption(option)
 }
