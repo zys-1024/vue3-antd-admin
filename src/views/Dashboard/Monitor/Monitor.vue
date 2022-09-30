@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted, reactive, ref, shallowRef, watch } from 'vue'
 import * as echarts from 'echarts'
+import 'echarts-wordcloud'
+import 'echarts-liquidfill'
 import layoutStore from '@/store/layout'
 import useMethod from '@/hooks/useMethod'
 
@@ -369,15 +371,86 @@ const initChart4 = () => {
 }
 
 const initChart5 = () => {
-	chart4.value = echarts.init(chartRef4.value!)
-	const option: echarts.EChartsOption = {}
-	chart4.value.setOption(option)
+	chart5.value = echarts.init(chartRef5.value!)
+	let data = [
+        {name: "国庆节快乐", value: "111"},
+        {name: "水润更贴肤", value: "222"},
+        {name: "持久不脱妆", value: "458"},
+        {name: "哪个分期有免息", value: "445"},
+        {name: "小黑瓶", value: "456"},
+        {name: "高度遮瑕", value: "647"},
+        {name: "非常舒适", value: "864"},
+        {name: "暗沉暗黄", value: "556"},
+        {name: "熬夜变老", value: "189"},
+        {name: "抢到了", value: "864"},
+        {name: "非常流畅", value: "864"},
+        {name: "小白管", value: "652"},
+        {name: "国庆节快乐", value: "111"},
+        {name: "水润更贴肤", value: "222"},
+        {name: "持久不脱妆", value: "458"},
+        {name: "哪个分期有免息", value: "445"},
+        {name: "小黑瓶", value: "456"},
+        {name: "高度遮瑕", value: "647"},
+        {name: "非常舒适", value: "864"},
+        {name: "暗沉暗黄", value: "556"},
+        {name: "熬夜变老", value: "189"},
+        {name: "抢到了", value: "864"},
+        {name: "非常流畅", value: "864"},
+        {name: "小白管", value: "652"},
+    ];
+	const option = {
+		series: [{
+			type: 'wordCloud',
+			width: '100%',
+			height: '100%',
+			sizeRange: [5, 25],
+			rotationRange: [-90, 90],
+			rotationStep: 45,
+			gridSize: 8,
+			drawOutOfBound: false,
+			layoutAnimation: true,
+			textStyle: {
+				fontFamily: 'sans-serif',
+				fontWeight: 'bold',
+				color: function () {
+					return 'rgb(' + [
+						Math.round(Math.random() * 160),
+						Math.round(Math.random() * 160),
+						Math.round(Math.random() * 160)
+					].join(',') + ')';
+				}
+			},
+			emphasis: {
+				focus: 'self',
+				textStyle: {
+					shadowBlur: 10,
+					shadowColor: '#333'
+				}
+			},
+			data
+		}]
+	}
+	chart5.value.setOption(option)
 }
 
 const initChart6 = () => {
-	chart4.value = echarts.init(chartRef4.value!)
-	const option: echarts.EChartsOption = {}
-	chart4.value.setOption(option)
+	chart6.value = echarts.init(chartRef6.value!)
+	const option = {
+		series: [{
+			type: 'liquidFill',
+			radius: '90%',
+			data: [0.4, 0.4, 0.4],
+			itemStyle: {
+					opacity: 0.6
+			},
+			emphasis: {
+				itemStyle: {
+					opacity: 0.9
+				}
+			}
+		}]
+	}
+	chart6.value.setOption(option)
 }
 </script>
 
@@ -483,7 +556,9 @@ const initChart6 = () => {
 		.chart3 { height: 195px; }
 	}
 	.row-2 {
-		.chart4 { height: 128px; }
+		.chart4 ,
+		.chart5,
+		.chart6 { height: 160px; }
 	}
 }
 </style>
