@@ -277,8 +277,8 @@ const initChart2 = () => {
 	let flag = true
 	chart2Timer.value = setInterval(() => {
 		chart2.value?.setOption({ series: [{ data: flag ? data2 : data }] })
-		money.a = '1383万元'
-		money.b = '757万元'
+		money.a = flag ? '1383万元' : '2369万元'
+		money.b = flag ? '757万元' : '980万元'
 		flag = !flag
 	}, 1000)
 }

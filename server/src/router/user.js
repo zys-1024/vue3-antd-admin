@@ -12,7 +12,7 @@ const userInfo = {
     username: 'admin',
     gender: 1,
     email: 'admin@163.com',
-    avatar: 'http://192.168.0.110:9999/avatar/avatar.png'
+    avatar: 'http://192.168.0.110:9999/avatar/avatar.jpg'
 }
 let verifyCode = void 0
 
