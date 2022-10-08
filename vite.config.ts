@@ -4,6 +4,7 @@ import path from 'path'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 const resolve = (dir: string) => {
     return path.resolve(__dirname, dir)
@@ -11,13 +12,14 @@ const resolve = (dir: string) => {
 
 const alias: Record<string, string> = {
     '@': resolve('./src'),
-    'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
+    'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
 }
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         vue(),
+        visualizer(),
         Components({
             // 自动导入文件夹下的组件
             dirs: ['src/components', 'src/views', 'src/Layout'],
@@ -44,5 +46,19 @@ export default defineConfig({
                 additionalData: ['@import "@/assets/style/mixin.less";']
             }
         }
-    }
+    },
+    build: {
+        cssCodeSplit: true,
+        assetsInlineLimit: 1024 * 4,
+        cssTarget: 'chrome61',
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vue: ['vue', 'vue-router', 'pinia'],
+                    antd: ['ant-design-vue'],
+                    echarts: ['echarts']
+                }
+            }
+        }
+    },
 })

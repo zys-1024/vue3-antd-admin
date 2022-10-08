@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, onMounted, ref, nextTick, onUnmounted, shallowRef, watch } from 'vue'
+import { reactive, onMounted, ref, onUnmounted, shallowRef, watch } from 'vue'
 import * as echarts from 'echarts'
 import useMethod from '@/hooks/useMethod'
 import layoutStore from '@/store/layout'

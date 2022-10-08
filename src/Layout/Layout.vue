@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import Vue, { onMounted, onUnmounted, ref, reactive } from 'vue'
+import { onMounted, onUnmounted, ref, reactive } from 'vue'
 import layoutStore from '@/store/layout'
 import ResizeObserver from 'resize-observer-polyfill'
 import useMethod from '@/hooks/useMethod'
+import { removeLoading } from '@/utils/tools'
 
 const methods = useMethod()
 const layout = layoutStore()
@@ -12,6 +13,7 @@ const tabs = ref<Tabs>({})
 const resizeTimer = ref<NodeJS.Timer | null>()
 
 onMounted(() => {
+    removeLoading()
     resize()
     window.addEventListener('resize', resize)
     const observer = new ResizeObserver((entries, observer) => {

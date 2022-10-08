@@ -4,6 +4,7 @@ import { getCode, ILoginForm } from '@/api/user'
 import UserStore from '@/store/user'
 import i18n from '@/locale'
 import { FormInstance } from 'ant-design-vue/es'
+import { removeLoading } from '@/utils/tools'
 
 const t = i18n.global.t
 const userStore = UserStore()
@@ -19,6 +20,7 @@ const formRef = ref<FormInstance>()
 const loading = ref<boolean>(false)
 
 onMounted(() => { 
+    removeLoading()
     getCode_()
     document.addEventListener('keyup', enter)
 })

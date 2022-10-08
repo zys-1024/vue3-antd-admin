@@ -5,9 +5,71 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Vue + TS</title>
+    <style>
+      @keyframes spin {
+        to{ transform:rotate(405deg); }
+      }
+      @keyframes spinColor {
+        to { background-color: #1890ff; }
+      }
+      #loading {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        transform: translate(-50%, -50%);
+      }
+      #loading>span:first-child {
+        font-size: 80px;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 150px;
+      }
+      #loading>span:last-child {
+        font-size: 16px;
+        margin-top: 60px;
+        color: #444;
+        padding: 20px 0 20px 40px;
+        background: url('./src/assets/svg/vite.svg') 0 50% no-repeat;
+      }
+      #loading .spin {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        transform: rotate(45deg);
+        animation: spin 1.2s infinite linear;
+      }
+      #loading .spin>div {
+        position: absolute;
+        width: 20px; 
+        height: 20px;
+        background-color: var();
+        border-radius: 50%;
+        background-color: #bae7ff;
+        animation: spinColor 1s infinite linear alternate;
+      }
+      #loading .spin>div:first-child { top: 0; left: 0; }
+      #loading .spin>div:nth-child(2) { top: 0; right: 0; animation-delay: .4s; }
+      #loading .spin>div:nth-child(3) { bottom: 0; left: 0; animation-delay: .8s; }
+      #loading .spin>div:last-child { bottom: 0; right: 0; animation-delay: 1.2s; }
+    </style>
   </head>
   <body>
     <div id="app"></div>
+    <div id="loading">
+      <span>Admin</span>
+      <div class="spin">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <span>vue3-antd-admin</span>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

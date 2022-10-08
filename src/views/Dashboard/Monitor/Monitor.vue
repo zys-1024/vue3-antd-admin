@@ -302,7 +302,7 @@ const initChart3 = () => {
 					}
 				},
 				pointer: {
-					itemStyle: { color: 'auto' }
+					itemStyle: { color: 'inherit' }
 				},
 				axisTick: {
 					distance: -30,
@@ -321,14 +321,14 @@ const initChart3 = () => {
 					}
 				},
 				axisLabel: {
-					color: 'auto',
+					color: 'inherit',
 					distance: 40,
 					fontSize: 14
 				},
 				detail: {
 					valueAnimation: true,
 					formatter: '{value}',
-					color: 'auto'
+					color: 'inherit'
 				},
 				data: [ { value: 70 } ],
 			}
@@ -458,7 +458,7 @@ const initChart6 = () => {
     <div class="monitor">
         <a-row :gutter="[20, 20]" class="row-1">
 			<a-col :xl="17" :xs="24">
-				<a-card title="活动实时交易情况">
+				<a-card title="活动实时交易情况" style="height: 100%;">
 					<a-row :gutter="[20, 20]">
 						<a-col :xs="24" :sm="12" :md="6">
 							<a-statistic title="今日交易额" :value="64939109">

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { } from 'vue'
 import userStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import { getAssets } from '@/utils/tools'

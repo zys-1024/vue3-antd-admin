@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { getToken } from '@/utils/token'
 import addRoutes from '.'
 import Login from '@/views/Login/Login.vue'
+import nprogress from '@/utils/nprogress'
 
 export type TRoutes = RouteRecordRaw & {
     children?: TRoutes[],
