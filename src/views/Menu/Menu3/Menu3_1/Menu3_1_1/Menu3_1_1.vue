@@ -5,7 +5,6 @@ import { } from 'vue'
 
 <template>
     <div>Menu3_1_1</div>
-    <RouterView />
 </template>
 
 <style lang="less" scoped>

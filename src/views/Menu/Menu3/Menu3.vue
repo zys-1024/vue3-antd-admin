@@ -3,7 +3,6 @@
 </script>
 
 <template>
-    <div>Menu3</div>
     <RouterView />
 </template>
 

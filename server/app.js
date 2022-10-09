@@ -25,7 +25,7 @@ app.all('/api/*', (req, res,next) => {
         }
     }
 })
-app.use(express.static(__dirname + '/public'))
+app.use('/public', express.static(__dirname + '/public'))
 app.use(express.static(__dirname + '/dist'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())

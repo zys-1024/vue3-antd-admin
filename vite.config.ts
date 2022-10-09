@@ -5,6 +5,7 @@ import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { visualizer } from 'rollup-plugin-visualizer'
+import viteCompression from 'vite-plugin-compression'
 
 const resolve = (dir: string) => {
     return path.resolve(__dirname, dir)
@@ -31,7 +32,8 @@ export default defineConfig({
             // Specify the icon folder to be cached
             iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
             symbolId: 'icon-[dir]-[name]',
-        })
+        }),
+        viteCompression()
     ],
     resolve: { alias },
     server: {

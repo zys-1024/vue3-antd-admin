@@ -26,6 +26,10 @@ export const routes: TRoutes[] = [{
     component: () => import('@/Layout/Layout.vue'),
     meta: {},
     children: []
+}, {
+    path: '/:pathMatch(.*)',
+    name: 'NotFound',
+    component: () => import('@/views/NotFound/NotFound.vue')
 }]
 
 const router = createRouter({
@@ -39,6 +43,7 @@ router.beforeEach(async (to, from ,next) => {
         next()
     } else {
         if (getToken()) {
+            nprogress.start()
             // 防止路由跳转死循环
             if (!isAdd) {
                 await addRoutes()
@@ -50,6 +55,10 @@ router.beforeEach(async (to, from ,next) => {
             next('/login')
         }
     }
+})
+
+router.afterEach(() => {
+    nprogress.done()
 })
 
 export default router

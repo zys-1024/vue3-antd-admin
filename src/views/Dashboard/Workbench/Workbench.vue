@@ -196,7 +196,7 @@ const { userInfo }  = storeToRefs(userStore())
 </template>
 
 <style lang="less" scoped>
-@gray: rgba(0,0,0,.45);
+@gray: var(--text-gray);
 .workbench {
 	a { color: var(--primary-color); }
 	margin: -20px -20px 0;
@@ -276,7 +276,7 @@ const { userInfo }  = storeToRefs(userStore())
 				}
 				>div:last-child {
 					.ellips();
-					span:first-child { color: #555; }
+					span:first-child { color: var(--text-gray2); }
 					span:last-child { color: @gray; }
 				}
 			}
