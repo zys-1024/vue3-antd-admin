@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia'
 const { userInfo } = storeToRefs(userStore())
 const list = new Array(10).fill({
     title: `ant design vue part`,
-    avatar: getAssets('/image/avatar.png'),
+    avatar: getAssets(`icon/groovy.png`),
     description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
     content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
 })
@@ -81,7 +81,7 @@ const list = new Array(10).fill({
 								<img
 									width="272"
 									alt="logo"
-									:src="getAssets('/image/cover.jpg')"
+									:src="getAssets('image/cover.jpg')"
 								/>
 							</template>
 							<a-list-item-meta :description="item.description">

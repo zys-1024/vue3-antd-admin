@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, onMounted, ref, onUnmounted, shallowRef, watch } from 'vue'
-import * as echarts from 'echarts'
+import echarts, { ECOption, chartInit, Charts } from '@/utils/charts'
 import useMethod from '@/hooks/useMethod'
 import layoutStore from '@/store/layout'
 
@@ -15,13 +15,13 @@ const otherRef2 = ref<HTMLDivElement>()
 const otherRef3 = ref<HTMLDivElement>()
 const otherRef4 = ref<HTMLDivElement>()
 const otherRef5 = ref<HTMLDivElement>()
-const orderCharts = shallowRef<echarts.ECharts>()
-const visitsCharts = shallowRef<echarts.ECharts>()
-const otherCharts = shallowRef<echarts.ECharts>()
-const otherCharts2 = shallowRef<echarts.ECharts>()
-const otherCharts3 = shallowRef<echarts.ECharts>()
-const otherCharts4 = shallowRef<echarts.ECharts>()
-const otherCharts5 = shallowRef<echarts.ECharts>()
+const orderCharts = shallowRef<Charts>()
+const visitsCharts = shallowRef<Charts>()
+const otherCharts = shallowRef<Charts>()
+const otherCharts2 = shallowRef<Charts>()
+const otherCharts3 = shallowRef<Charts>()
+const otherCharts4 = shallowRef<Charts>()
+const otherCharts5 = shallowRef<Charts>()
 const salesRanking = reactive<string[]>(['数码产品', '服饰配饰', '家居生活', '护肤保养', '零食小吃', '饮料酒水', '健康护理', '其他'])
 
 onMounted(() => {
@@ -49,13 +49,13 @@ watch(() => layout.themeMode, newVal => {
 	}, series: [{
 		name: 'dotted',
 		itemStyle: { color: newVal === 'dark' ? '#141414' : '#fff' }
-	}] } as echarts.EChartsOption)
+	}] } as ECOption)
 
 	otherCharts3.value?.setOption({ yAxis: {
 		splitLine: {
 			lineStyle: { color: newVal === 'dark' ? '#222' : '#e0e6f1' }
 		}
-	}} as echarts.EChartsOption)
+	}} as ECOption)
 })
 
 const initCharts = () => {
@@ -82,8 +82,8 @@ const resize = () => {
 }
 
 const initOrderCharts = () => {
-	orderCharts.value = echarts.init(orderRef.value!)
-	const option: echarts.EChartsOption = {
+	orderCharts.value = chartInit(orderRef.value!)
+	const option: ECOption = {
 		xAxis: { type: 'category', show: false },
 		yAxis: { type: 'value', show: false },
 		grid: { left: 0, right: 0, top: 0, bottom: 0},
@@ -104,12 +104,12 @@ const initOrderCharts = () => {
 			}
 		}]
 	}
-	orderCharts.value.setOption(option)
+	orderCharts.value!.setOption(option)
 }
 
 const initVisitsCharts = () => {
-	visitsCharts.value = echarts.init(visitsRef.value!)
-	const option: echarts.EChartsOption = {
+	visitsCharts.value = chartInit(visitsRef.value!)
+	const option: ECOption = {
 		xAxis: { type: 'category', show: false },
 		yAxis: { type: 'value', show: false },
 		grid: { left: 0, right: 0, top: 3, bottom: 0},
@@ -147,8 +147,8 @@ const initVisitsCharts = () => {
 }
 
 const initOtherCharts = () => {
-	otherCharts.value = echarts.init(otherRef.value!)
-	const option: echarts.EChartsOption = {
+	otherCharts.value = chartInit(otherRef.value!)
+	const option: ECOption = {
 		xAxis: { type: 'value', show: false },
 		yAxis: { type: 'category', show: false },
 		grid: { left: 0, right: 0, top: 0, bottom: 0},
@@ -174,7 +174,7 @@ const initOtherCharts = () => {
 }
 
 const initOtherCharts2 = () => {
-	otherCharts2.value = echarts.init(otherRef2.value!)
+	otherCharts2.value = chartInit(otherRef2.value!)
 	let category = [];
 	let dottedBase = +new Date();
 	let lineData = [125.54, 63.98, 268.48, 187.04, 210.32, 174, 298.49, 161.45, 52.91, 200.52, 174.67, 346, 203.96, 58.09, 259.42, 188.27, 234.13, 235.14, 204.43, 257.24];
@@ -185,7 +185,7 @@ const initOtherCharts2 = () => {
 			[date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-')
 		)
 	}
-	const option: echarts.EChartsOption = {
+	const option: ECOption = {
 		tooltip: {
 			trigger: 'axis',
 			axisPointer: {
@@ -278,7 +278,7 @@ const initOtherCharts2 = () => {
 }
 
 const initOtherCharts3 = () => {
-	otherCharts3.value = echarts.init(otherRef3.value!)
+	otherCharts3.value = chartInit(otherRef3.value!)
 	let xAxisData = []
 	let data1 = []
 	let data2 = []
@@ -287,7 +287,7 @@ const initOtherCharts3 = () => {
 	data1.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 5)
 	data2.push((Math.cos(i / 5) * (i / 5 - 10) + i / 6) * 5)
 	}
-	const option: echarts.EChartsOption = {
+	const option: ECOption = {
 		legend: {
 			data: ['bar', 'bar2']
 		},
@@ -332,7 +332,7 @@ const initOtherCharts3 = () => {
 			}
 		],
 		animationEasing: 'elasticOut',
-		animationDelayUpdate: function (idx) {
+		animationDelayUpdate: function (idx: number) {
 			return idx * 5;
 		}
 	}
@@ -340,8 +340,8 @@ const initOtherCharts3 = () => {
 }
 
 const initOtherCharts4 = () => {
-	otherCharts4.value = echarts.init(otherRef4.value!)
-	const option: echarts.EChartsOption = {
+	otherCharts4.value = chartInit(otherRef4.value!)
+	const option: ECOption = {
 		tooltip: {
 			trigger: 'item'
 		},
@@ -371,8 +371,8 @@ const initOtherCharts4 = () => {
 }
 
 const initOtherCharts5 = () => {
-	otherCharts5.value = echarts.init(otherRef5.value!)
-	const option: echarts.EChartsOption = {
+	otherCharts5.value = chartInit(otherRef5.value!)
+	const option: ECOption = {
 		radar: [{
 			indicator: [
 				{ name: 'Indicator1' },

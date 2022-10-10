@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted, reactive, ref, shallowRef, watch } from 'vue'
-import * as echarts from 'echarts'
+import echarts, { ECOption, chartInit, Charts } from '@/utils/charts'
 import 'echarts-wordcloud'
 import 'echarts-liquidfill'
 import layoutStore from '@/store/layout'
@@ -8,12 +8,12 @@ import useMethod from '@/hooks/useMethod'
 
 const layout = layoutStore()
 const methods = useMethod()
-const chart = shallowRef<echarts.ECharts>()
-const chart2 = shallowRef<echarts.ECharts>()
-const chart3 = shallowRef<echarts.ECharts>()
-const chart4 = shallowRef<echarts.ECharts>()
-const chart5 = shallowRef<echarts.ECharts>()
-const chart6 = shallowRef<echarts.ECharts>()
+const chart = shallowRef<Charts>()
+const chart2 = shallowRef<Charts>()
+const chart3 = shallowRef<Charts>()
+const chart4 = shallowRef<Charts>()
+const chart5 = shallowRef<Charts>()
+const chart6 = shallowRef<Charts>()
 const chartRef = ref<HTMLDivElement>()
 const chartRef2 = ref<HTMLDivElement>()
 const chartRef3 = ref<HTMLDivElement>()
@@ -48,7 +48,7 @@ watch(() => layout.themeMode, newVal => {
 		splitLine: {
 			lineStyle: { color: newVal === 'dark' ? '#222' : '#e0e6f1' }
 		}
-	}} as echarts.EChartsOption)
+	}} as ECOption)
 })
 
 const init = () => {
@@ -73,7 +73,7 @@ const resize = () => {
 }
 
 const initChart = () => {
-	chart.value = echarts.init(chartRef.value!)
+	chart.value = chartInit(chartRef.value!)
 	let app: Record<string, any> = {}
 	const categories = (function () {
 		let now = new Date()
@@ -110,7 +110,7 @@ const initChart = () => {
 		}
 		return res
 	})()
-	const option: echarts.EChartsOption = {
+	const option: ECOption = {
 		tooltip: {
 			trigger: 'axis',
 			axisPointer: {
@@ -229,10 +229,10 @@ const initChart = () => {
 }
 
 const initChart2 = () => {
-	chart2.value = echarts.init(chartRef2.value!)
+	chart2.value = chartInit(chartRef2.value!)
 	const data = [10, 14, 18, 16, 20, 38, 30, 34, 40, 39, 35, 58, 60, 65, 55, 50, 64, 60, 65, 70]
 	const data2 = [18, 16, 10, 14, 20, 30, 35, 34, 38, 40, 39, 48, 54, 60, 65, 55, 60, 60, 65, 65]
-	const option: echarts.EChartsOption = {
+	const option: ECOption = {
 		xAxis: {
 			type: 'category',
 			data: new Array(20).fill('').map((item, index) => index + 1),
@@ -284,8 +284,8 @@ const initChart2 = () => {
 }
 
 const initChart3 = () => {
-	chart3.value = echarts.init(chartRef3.value!)
-	const option: echarts.EChartsOption = {
+	chart3.value = chartInit(chartRef3.value!)
+	const option: ECOption = {
 		series: [
 			{
 				type: 'gauge',
@@ -338,13 +338,13 @@ const initChart3 = () => {
 }
 
 const initChart4 = () => {
-	chart4.value = echarts.init(chartRef4.value!)
+	chart4.value = chartInit(chartRef4.value!)
 	const data = [
 		{ value: 38, left: '15%', color: '#1890ff'}, 
 		{ value: 24, left: '50%', color: '#faad14' }, 
 		{ value: 60, left: '85%', color: '#00bd74'}
 	]
-	const option: echarts.EChartsOption = {
+	const option: ECOption = {
 		series: data.map(item => ({
 			type: 'gauge',
 			startAngle: 90,
@@ -371,7 +371,7 @@ const initChart4 = () => {
 }
 
 const initChart5 = () => {
-	chart5.value = echarts.init(chartRef5.value!)
+	chart5.value = chartInit(chartRef5.value!)
 	let data = [
         {name: "国庆节快乐", value: "111"},
         {name: "水润更贴肤", value: "222"},
@@ -434,7 +434,7 @@ const initChart5 = () => {
 }
 
 const initChart6 = () => {
-	chart6.value = echarts.init(chartRef6.value!)
+	chart6.value = chartInit(chartRef6.value!)
 	const option = {
 		series: [{
 			type: 'liquidFill',
