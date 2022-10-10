@@ -66,15 +66,15 @@ const menuToggle = () => {
 						</div>
 						<template #overlay>
 							<a-menu>
-								<a-menu-item>
+								<a-menu-item @click="$router.push('/')">
 									<SvgIcon name="home" />
 									{{ $t('header.home') }}
 								</a-menu-item>
-								<a-menu-item>
+								<a-menu-item @click="$router.push('/personal/info')">
 									<SvgIcon name="user" />
 									{{ $t('header.personalCenter') }}
 								</a-menu-item>
-								<a-menu-item>
+								<a-menu-item @click="$router.push('/system_setting')">
 									<SvgIcon name="setting" />
 									{{ $t('header.setting') }}
 								</a-menu-item>

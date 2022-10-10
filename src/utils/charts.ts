@@ -25,7 +25,8 @@ import {
   DatasetComponent,
   DatasetComponentOption,
   TransformComponent,
-  LegendComponent
+  LegendComponent,
+  DataZoomComponent
 } from 'echarts/components'
 import { LabelLayout, UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
@@ -51,6 +52,7 @@ echarts.use([
   DatasetComponent,
   TransformComponent,
   LegendComponent,
+  DataZoomComponent,
   BarChart,
   LineChart,
   PictorialBarChart,

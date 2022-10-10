@@ -1,6 +1,9 @@
 <script lang="ts" setup>
-import { } from 'vue'
+import { onMounted } from 'vue'
 
+onMounted(() => {
+    window.open('https://cn.vuejs.org/')
+})
 </script>
 
 <template>

@@ -19,12 +19,12 @@ import { } from 'vue'
 			<strong>The content you submitted has the following error:</strong>
 		</p>
 		<p>
-			<close-circle-outlined :style="{ color: 'red' }" />
+			<SvgIcon name="close_circle" style="color: red;" />
 			Your account has been frozen
 			<a>Thaw immediately &gt;</a>
 		</p>
 		<p>
-			<close-circle-outlined :style="{ color: 'red' }" />
+			<SvgIcon name="close_circle" style="color: red;" />
 			Your account is not yet eligible to apply
 			<a>Apply Unlock &gt;</a>
 		</p>
